@@ -312,7 +312,14 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-widest text-charcoal/40 font-bold mb-1">Llámenos</p>
-                  <p className="text-lg font-serif text-burgundy">(555) 123-4567</p>
+                  <a 
+                    href="https://wa.me/19154001099?text=Hola%20El%20Toro,%20necesito%20asesoría%20legal." 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-lg font-serif text-burgundy hover:text-gold transition-colors"
+                  >
+                    (915) 400-1099
+                  </a>
                 </div>
               </div>
               
@@ -322,7 +329,12 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-widest text-charcoal/40 font-bold mb-1">Email</p>
-                  <p className="text-lg font-serif text-burgundy">info@myr-law.com</p>
+                  <a 
+                    href="mailto:mario@myr-law.com" 
+                    className="text-lg font-serif text-burgundy hover:text-gold transition-colors"
+                  >
+                    mario@myr-law.com
+                  </a>
                 </div>
               </div>
               
@@ -332,7 +344,10 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-widest text-charcoal/40 font-bold mb-1">Ubicación</p>
-                  <p className="text-lg font-serif text-burgundy">123 Justice Way, Suite 100<br />Miami, FL 33101</p>
+                  <p className="text-lg font-serif text-burgundy">
+                    1521 E. Missouri Ave.<br />
+                    El Paso, Texas 79902
+                  </p>
                 </div>
               </div>
             </div>
@@ -364,7 +379,7 @@ const Contact = () => {
                   <option>Lesiones Personales</option>
                   <option>Defensa Criminal</option>
                   <option>Derecho Familiar</option>
-                  <option>Otro</option>
+                  <option>Derecho Mercantil</option>
                 </select>
               </div>
               <div className="md:col-span-2 space-y-2">
