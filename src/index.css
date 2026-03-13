@@ -11,6 +11,20 @@
   --font-display: "Anton", sans-serif;
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
+
+  --animate-pulse-white: pulse-white 2s infinite;
+
+  @keyframes pulse-white {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+  }
 }
 
 @layer base {

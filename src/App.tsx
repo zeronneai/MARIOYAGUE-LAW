@@ -147,7 +147,7 @@ const Hero = () => {
             We defend your rights with the tenacity of a bull. Mario Yague Law is the firm that protects your future with legal excellence and unwavering commitment.
           </p>
           <div className="flex flex-wrap gap-4">
-            <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group">
+            <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group animate-pulse-white">
               Speak with the Bull
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
@@ -158,13 +158,13 @@ const Hero = () => {
           
           <div className="mt-16 flex items-center gap-8">
             <div>
-              <p className="text-3xl font-serif text-burgundy font-bold">15+</p>
-              <p className="text-xs uppercase tracking-widest text-charcoal/60">Years of Excellence</p>
+              <p className="text-3xl font-serif text-white md:text-burgundy font-bold">15+</p>
+              <p className="text-xs uppercase tracking-widest text-white/70 md:text-charcoal/60">Years of Excellence</p>
             </div>
-            <div className="w-px h-10 bg-burgundy/10" />
+            <div className="w-px h-10 bg-white/20 md:bg-burgundy/10" />
             <div>
-              <p className="text-3xl font-serif text-burgundy font-bold">100%</p>
-              <p className="text-xs uppercase tracking-widest text-charcoal/60">Commitment</p>
+              <p className="text-3xl font-serif text-white md:text-burgundy font-bold">100%</p>
+              <p className="text-xs uppercase tracking-widest text-white/70 md:text-charcoal/60">Commitment</p>
             </div>
           </div>
         </motion.div>
