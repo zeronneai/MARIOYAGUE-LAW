@@ -19,7 +19,9 @@ import {
   X,
   ArrowRight,
   CheckCircle2,
-  Briefcase
+  Briefcase,
+  Facebook,
+  Instagram
 } from 'lucide-react';
 
 // --- Components ---
@@ -629,9 +631,24 @@ const Footer = () => {
         <div className="pt-12 border-t border-beige/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs uppercase tracking-widest">{t.footer.rights}</p>
           <div className="flex gap-6">
-            <div className="w-8 h-8 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all cursor-pointer">f</div>
-            <div className="w-8 h-8 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all cursor-pointer">in</div>
-            <div className="w-8 h-8 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all cursor-pointer">ig</div>
+            <a 
+              href="https://www.facebook.com/profile.php?id=61574563814369" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all"
+              aria-label="Facebook"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a 
+              href="https://www.instagram.com/yaguelaw/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-5 h-5" />
+            </a>
           </div>
         </div>
       </div>
