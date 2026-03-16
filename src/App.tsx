@@ -127,26 +127,39 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
   const { t } = useLanguage();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [videoEnded, setVideoEnded] = useState(false);
+
+  useEffect(() => {
+    if (startAnimation && videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.error("Video playback failed:", error);
+      });
+    }
+  }, [startAnimation]);
+
+  const handleVideoEnded = () => {
+    setVideoEnded(true);
+  };
 
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#fdfcfb]">
-      {/* Video Layer */}
-      <div className={`absolute inset-0 transition-all duration-1000 ${videoEnded ? 'z-0' : 'z-20'}`}>
+      {/* Background Video Layer */}
+      <div className="absolute inset-0 z-0">
         <video 
-          autoPlay 
+          ref={videoRef}
           muted 
-          playsInline
-          onEnded={() => setVideoEnded(true)}
+          playsInline 
+          onEnded={handleVideoEnded}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773682589/hf_20260316_173029_b6123ab2-7d29-4e7d-92bf-f37414eb4292_x0co70.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773691703/hf_20260316_200231_76b2bb35-04f7-4326-93d3-08fc9aef72d6_hhcyjz.mp4" type="video/mp4" />
         </video>
-        {/* Overlays that appear after video ends to ensure text readability */}
-        <div className={`absolute inset-0 bg-gradient-to-b from-[#fdfcfb]/60 via-transparent to-[#fdfcfb]/60 md:bg-gradient-to-r md:from-[#fdfcfb]/40 md:via-transparent md:to-[#fdfcfb]/20 transition-opacity duration-1000 ${videoEnded ? 'opacity-100' : 'opacity-0'}`} />
-        <div className={`absolute inset-0 bg-black/30 md:hidden transition-opacity duration-1000 ${videoEnded ? 'opacity-100' : 'opacity-0'}`} />
+        {/* Overlays for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#fdfcfb]/60 via-transparent to-[#fdfcfb]/60 md:bg-gradient-to-r md:from-[#fdfcfb]/40 md:via-transparent md:to-[#fdfcfb]/20" />
+        <div className="absolute inset-0 bg-black/30 md:hidden" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
@@ -156,38 +169,35 @@ const Hero = () => {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl mx-auto text-center"
         >
-          <span className="inline-block bg-gold/10 text-gold px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+          <span className="inline-block bg-gold/20 text-gold px-6 py-2 rounded-full text-sm md:text-base font-bold uppercase tracking-[0.3em] mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] border border-gold/30">
             {t.hero.badge}
           </span>
           <h1 className="text-burgundy mb-8 tracking-tighter uppercase">
-            <span className="block text-4xl md:text-6xl italic font-serif font-light text-gold normal-case mb-2">
+            <span className="block text-4xl md:text-6xl italic font-serif font-light text-white md:text-gold normal-case mb-2">
               {t.hero.title1}
             </span>
             <span className="block text-8xl md:text-[12rem] font-display leading-none text-white">
               {t.hero.title2}
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-white md:text-gold max-w-3xl mx-auto mb-12 leading-relaxed font-medium tracking-wide drop-shadow-sm">
-            {t.hero.desc}
-          </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group animate-pulse-white">
               {t.hero.cta1}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#services" className="border border-burgundy/20 md:border-gold md:text-gold px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-gold/10 transition-all">
+            <a href="#services" className="border border-white text-white md:border-gold md:text-gold px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-gold/10 transition-all">
               {t.hero.cta2}
             </a>
           </div>
           
           <div className="mt-20 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
             <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-              animate={videoEnded ? { opacity: 1, scale: 1, filter: "blur(0px)" } : { opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-              transition={{ duration: 1, delay: 1.5, type: "spring", stiffness: 100 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={videoEnded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+              transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 100 }}
               className="text-center group"
             >
-              <p className="text-6xl md:text-7xl font-serif text-white font-bold mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.5)] transition-all duration-500">
+              <p className="text-6xl md:text-7xl font-serif text-white font-bold mb-2 transition-all duration-500">
                 15+
               </p>
               <p className="text-sm uppercase tracking-[0.3em] text-white/80 font-light">
@@ -196,7 +206,7 @@ const Hero = () => {
               <motion.div 
                 initial={{ width: 0 }}
                 animate={videoEnded ? { width: "100%" } : { width: 0 }}
-                transition={{ duration: 1, delay: 2 }}
+                transition={{ duration: 1, delay: 1 }}
                 className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mt-4"
               />
             </motion.div>
@@ -204,12 +214,12 @@ const Hero = () => {
             <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-              animate={videoEnded ? { opacity: 1, scale: 1, filter: "blur(0px)" } : { opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-              transition={{ duration: 1, delay: 1.8, type: "spring", stiffness: 100 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={videoEnded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+              transition={{ duration: 1, delay: 0.8, type: "spring", stiffness: 100 }}
               className="text-center group"
             >
-              <p className="text-6xl md:text-7xl font-serif text-white font-bold mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.5)] transition-all duration-500">
+              <p className="text-6xl md:text-7xl font-serif text-white font-bold mb-2 transition-all duration-500">
                 100%
               </p>
               <p className="text-sm uppercase tracking-[0.3em] text-white/80 font-light">
@@ -218,7 +228,7 @@ const Hero = () => {
               <motion.div 
                 initial={{ width: 0 }}
                 animate={videoEnded ? { width: "100%" } : { width: 0 }}
-                transition={{ duration: 1, delay: 2.3 }}
+                transition={{ duration: 1, delay: 1.3 }}
                 className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mt-4"
               />
             </motion.div>
@@ -393,7 +403,7 @@ const About = () => {
               playsInline
               className="w-full h-full object-cover"
             >
-              <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773684137/hf_20260316_175911_b7461620-37f2-4dc5-a08c-b30e8594cc7d_1_ly88zn.mp4" type="video/mp4" />
+              <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773691955/hf_20260316_195425_e98fecdc-1182-4636-98bb-323da41420a4_mbup72.mp4" type="video/mp4" />
             </video>
           </div>
         </motion.div>
@@ -422,9 +432,6 @@ const About = () => {
             ))}
           </div>
 
-          <button className="bg-gold text-charcoal px-10 py-4 font-bold uppercase tracking-widest hover:bg-beige transition-all">
-            {t.about.cta}
-          </button>
         </motion.div>
       </div>
     </section>
@@ -658,12 +665,44 @@ const Marquee = () => {
   );
 };
 
+const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 5000); // Fallback
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1, ease: "easeInOut" }}
+      className="fixed inset-0 z-[100] bg-white flex items-center justify-center overflow-hidden"
+    >
+      <video
+        autoPlay
+        muted
+        playsInline
+        onEnded={onComplete}
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773690403/hf_20260316_194140_afd0f8b3-5ff4-4914-a8f1-7287b2d4b396_cpi2lf.mp4" type="video/mp4" />
+      </video>
+    </motion.div>
+  );
+};
+
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div className="selection:bg-gold selection:text-charcoal">
+      <AnimatePresence>
+        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+
       <Navbar />
       <main>
-        <Hero />
+        <Hero startAnimation={!isLoading} />
         <Marquee />
         <Services />
         <About />
