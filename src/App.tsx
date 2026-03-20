@@ -50,7 +50,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <div className="w-16 h-16 flex items-center justify-center">
              <img 
-               src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1774036245/TORO_wiossl.png" 
+               src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png" 
                alt="MY Law Logo" 
                className={`w-14 h-14 object-contain transition-all duration-300 ${isScrolled ? '' : 'brightness-0 invert'}`}
                referrerPolicy="no-referrer"
@@ -143,7 +143,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://res.cloudinary.com/dsprn0ew4/image/upload/q_auto/ELIMINA_LA_FRASE__202603201443_mbd4gm.jpg" 
+          src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/ELIMINA_LA_FRASE__202603201443_mbd4gm.jpg" 
           alt="Legal Excellence" 
           className="absolute inset-0 w-full h-full object-cover"
           referrerPolicy="no-referrer"
@@ -241,25 +241,25 @@ const Services = () => {
       title: t.services.items[0].title,
       desc: t.services.items[0].desc,
       icon: <Shield className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/v1773684397/Cinematic_fotorrealista_closeup_photograph_of_the__delpmaspu_ec8mbr.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684397/Cinematic_fotorrealista_closeup_photograph_of_the__delpmaspu_ec8mbr.jpg"
     },
     {
       title: t.services.items[1].title,
       desc: t.services.items[1].desc,
       icon: <Scale className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/v1773684750/Ultrarealistic_gritty_closeup_shot_of_a_highstakes_delpmaspu_jg1vtz.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/Ultrarealistic_gritty_closeup_shot_of_a_highstakes_delpmaspu_jg1vtz.jpg"
     },
     {
       title: t.services.items[2].title,
       desc: t.services.items[2].desc,
       icon: <Users className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/v1773684750/A_raw_documentarystyle_fotorrealista_photograph_of_delpmaspu_iw2zi3.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/A_raw_documentarystyle_fotorrealista_photograph_of_delpmaspu_iw2zi3.jpg"
     },
     {
       title: t.services.items[3].title,
       desc: t.services.items[3].desc,
       icon: <Briefcase className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/v1773684830/A_fotorrealista_powerful_closeup_shot_of_a_handsha_delpmaspu_b79b7j.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684830/A_fotorrealista_powerful_closeup_shot_of_a_handsha_delpmaspu_b79b7j.jpg"
     },
   ];
 
@@ -323,6 +323,7 @@ const Services = () => {
                 <img 
                   src={service.image} 
                   alt={service.title}
+                  loading="lazy"
                   className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                 />
@@ -381,7 +382,7 @@ const About = () => {
       <div className="absolute top-0 right-0 w-1/2 h-full bg-burgundy/10 -skew-x-12 translate-x-32" />
       <div 
         className="absolute inset-0 opacity-10 pointer-events-none bg-center bg-no-repeat bg-contain"
-        style={{ backgroundImage: 'url(https://res.cloudinary.com/dsprn0ew4/image/upload/v1773424907/my_law_logo_transparent_gvtvdw.png)' }}
+        style={{ backgroundImage: 'url(https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773424907/my_law_logo_transparent_gvtvdw.png)' }}
       />
       
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center relative z-10">
@@ -396,9 +397,10 @@ const About = () => {
               ref={videoRef}
               muted 
               playsInline
+              preload="metadata"
               className="w-full h-full object-cover"
             >
-              <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773691955/hf_20260316_195425_e98fecdc-1182-4636-98bb-323da41420a4_mbup72.mp4" type="video/mp4" />
+              <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/f_auto,q_auto/v1773691955/hf_20260316_195425_e98fecdc-1182-4636-98bb-323da41420a4_mbup72.mp4" type="video/mp4" />
             </video>
           </div>
         </motion.div>
@@ -513,9 +515,10 @@ const Contact = () => {
           ref={videoRef}
           muted
           playsInline
+          preload="metadata"
           className="w-full h-full object-cover opacity-90"
         >
-          <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773684872/hf_20260316_181202_b4b0a9f5-ec11-4a93-9aaa-fdde00de4eeb_kb252m.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/f_auto,q_auto/v1773684872/hf_20260316_181202_b4b0a9f5-ec11-4a93-9aaa-fdde00de4eeb_kb252m.mp4" type="video/mp4" />
         </video>
         {/* Overlay: Darker on mobile for readability, lighter on desktop */}
         <div className="absolute inset-0 bg-black/40 lg:bg-[#fdfcfb]/10 z-10" />
@@ -715,8 +718,9 @@ const Footer = () => {
             <div className="flex items-center gap-2 mb-6">
               <div className="w-14 h-14 flex items-center justify-center">
                 <img 
-                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1774036245/TORO_wiossl.png" 
+                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png" 
                   alt="MY Law Logo" 
+                  loading="lazy"
                   className="w-12 h-12 object-contain"
                   referrerPolicy="no-referrer"
                 />
@@ -824,7 +828,7 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
         onEnded={onComplete}
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773690403/hf_20260316_194140_afd0f8b3-5ff4-4914-a8f1-7287b2d4b396_cpi2lf.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/f_auto,q_auto/v1773690403/hf_20260316_194140_afd0f8b3-5ff4-4914-a8f1-7287b2d4b396_cpi2lf.mp4" type="video/mp4" />
       </video>
     </motion.div>
   );
