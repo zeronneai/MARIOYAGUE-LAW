@@ -52,11 +52,11 @@ const Navbar = () => {
              <img 
                src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1774036245/TORO_wiossl.png" 
                alt="MY Law Logo" 
-               className="w-14 h-14 object-contain"
+               className={`w-14 h-14 object-contain transition-all duration-300 ${isScrolled ? '' : 'brightness-0 invert'}`}
                referrerPolicy="no-referrer"
              />
           </div>
-          <span className={`text-xl font-serif tracking-tighter transition-colors text-burgundy`}>
+          <span className={`text-xl font-serif tracking-tighter transition-colors ${isScrolled ? 'text-burgundy' : 'text-white'}`}>
             MARIO YAGUE <span className="font-light">LAW</span>
           </span>
         </div>
@@ -67,7 +67,7 @@ const Navbar = () => {
             <a 
               key={link.name} 
               href={link.href} 
-              className="text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors"
+              className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors ${isScrolled ? 'text-burgundy' : 'text-white'}`}
             >
               {link.name}
             </a>
@@ -76,7 +76,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4 border-l border-burgundy/10 pl-8">
             <button 
               onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
-              className="text-[10px] uppercase tracking-[0.2em] font-bold text-burgundy/60 hover:text-burgundy transition-colors"
+              className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-colors ${isScrolled ? 'text-burgundy/60 hover:text-burgundy' : 'text-white/60 hover:text-white'}`}
             >
               {language === 'en' ? 'ES' : 'EN'}
             </button>
@@ -93,11 +93,11 @@ const Navbar = () => {
         <div className="flex items-center gap-4 md:hidden">
           <button 
             onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
-            className="text-[10px] uppercase tracking-[0.2em] font-bold text-burgundy/60"
+            className={`text-[10px] uppercase tracking-[0.2em] font-bold ${isScrolled ? 'text-burgundy/60' : 'text-white/60'}`}
           >
             {language === 'en' ? 'ES' : 'EN'}
           </button>
-          <button className="text-burgundy" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <button className={`${isScrolled ? 'text-burgundy' : 'text-white'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
