@@ -48,11 +48,11 @@ const Navbar = () => {
     <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-burgundy flex items-center justify-center rounded-sm">
+          <div className="w-16 h-16 flex items-center justify-center">
              <img 
-               src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1773424907/my_law_logo_transparent_gvtvdw.png" 
+               src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1774036245/TORO_wiossl.png" 
                alt="MY Law Logo" 
-               className="w-9 h-9 object-contain"
+               className="w-14 h-14 object-contain"
                referrerPolicy="no-referrer"
              />
           </div>
@@ -441,11 +441,28 @@ const About = () => {
 };
 
 const Contact = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const sectionRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const [showContent, setShowContent] = useState(false);
+  
+  // Form state
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    caseType: '',
+    message: ''
+  });
+
+  // Initialize caseType when translations are available
+  useEffect(() => {
+    if (t.contact.form.options && formData.caseType === '') {
+      setFormData(prev => ({ ...prev, caseType: t.contact.form.options[0] }));
+    }
+  }, [t, formData.caseType]);
 
   useEffect(() => {
     if (isInView && videoRef.current) {
@@ -455,6 +472,45 @@ const Contact = () => {
       return () => clearTimeout(timer);
     }
   }, [isInView]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    try {
+      const response = await fetch('https://formspree.io/f/xvzwyvjd', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          caseType: t.contact.form.options[0],
+          message: ''
+        });
+        // Reset status after 5 seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setStatus('error');
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   return (
     <section id="contact" ref={sectionRef} className="bg-charcoal lg:bg-[#fdfcfb] relative overflow-hidden">
@@ -545,37 +601,110 @@ const Contact = () => {
           </div>
 
           <div className="lg:col-span-2 bg-white p-10 shadow-2xl rounded-sm border-t-4 border-burgundy">
-            <form className="grid md:grid-cols-2 gap-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.name}</label>
-                <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" placeholder={t.contact.form.placeholderName} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.phone}</label>
-                <input type="tel" className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" placeholder={t.contact.form.placeholderPhone} />
-              </div>
-              <div className="md:col-span-2 space-y-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.email}</label>
-                <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" placeholder={t.contact.form.placeholderEmail} />
-              </div>
-              <div className="md:col-span-2 space-y-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.caseType}</label>
-                <select className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all">
-                  {t.contact.form.options.map((opt: string) => (
-                    <option key={opt}>{opt}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="md:col-span-2 space-y-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.message}</label>
-                <textarea rows={4} className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" placeholder={t.contact.form.placeholderMessage}></textarea>
-              </div>
-              <div className="md:col-span-2">
-                <button className="w-full bg-burgundy text-beige py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-lg shadow-burgundy/20">
-                  {t.contact.form.submit}
+            {status === 'success' ? (
+              <div className="h-full flex flex-col items-center justify-center text-center py-12">
+                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+                  <CheckCircle2 className="w-10 h-10" />
+                </div>
+                <h3 className="text-3xl font-serif font-bold text-charcoal mb-4">
+                  {t.contact.form.successTitle || (language === 'es' ? '¡Mensaje Enviado!' : 'Message Sent!')}
+                </h3>
+                <p className="text-charcoal/60 max-w-md">
+                  {t.contact.form.successDesc || (language === 'es' ? 'Gracias por contactarnos. El Toro revisará tu caso personalmente y te contactaremos a la brevedad.' : 'Thank you for contacting us. The Bull will review your case personally and we will contact you shortly.')}
+                </p>
+                <button 
+                  onClick={() => setStatus('idle')}
+                  className="mt-8 text-burgundy font-bold uppercase tracking-widest hover:underline"
+                >
+                  {language === 'es' ? 'Enviar otro mensaje' : 'Send another message'}
                 </button>
               </div>
-            </form>
+            ) : (
+              <form className="grid md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.name}</label>
+                  <input 
+                    type="text" 
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" 
+                    placeholder={t.contact.form.placeholderName} 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.phone}</label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" 
+                    placeholder={t.contact.form.placeholderPhone} 
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.email}</label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" 
+                    placeholder={t.contact.form.placeholderEmail} 
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.caseType}</label>
+                  <select 
+                    name="caseType"
+                    value={formData.caseType}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all"
+                  >
+                    {t.contact.form.options.map((opt: string) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-xs uppercase tracking-widest font-bold text-charcoal/60">{t.contact.form.message}</label>
+                  <textarea 
+                    name="message"
+                    required
+                    rows={4} 
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-100 focus:border-gold outline-none transition-all" 
+                    placeholder={t.contact.form.placeholderMessage}
+                  ></textarea>
+                </div>
+                <div className="md:col-span-2">
+                  <button 
+                    type="submit"
+                    disabled={status === 'loading'}
+                    className={`w-full bg-burgundy text-beige py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-lg shadow-burgundy/20 flex items-center justify-center gap-3 ${status === 'loading' ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  >
+                    {status === 'loading' ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-beige/30 border-t-beige rounded-full animate-spin" />
+                        {language === 'es' ? 'Enviando...' : 'Sending...'}
+                      </>
+                    ) : (
+                      t.contact.form.submit
+                    )}
+                  </button>
+                  {status === 'error' && (
+                    <p className="mt-4 text-red-600 text-sm text-center font-medium">
+                      {language === 'es' ? 'Hubo un error al enviar el mensaje. Por favor intenta de nuevo.' : 'There was an error sending the message. Please try again.'}
+                    </p>
+                  )}
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </motion.div>
@@ -591,11 +720,11 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-burgundy flex items-center justify-center rounded-sm">
+              <div className="w-14 h-14 flex items-center justify-center">
                 <img 
-                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1773424907/my_law_logo_transparent_gvtvdw.png" 
+                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/v1774036245/TORO_wiossl.png" 
                   alt="MY Law Logo" 
-                  className="w-7 h-7 object-contain"
+                  className="w-12 h-12 object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>
