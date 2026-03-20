@@ -9,8 +9,8 @@ export const translations = {
     },
     hero: {
       badge: "The People's Bull",
-      title1: 'Protecting your future,',
-      title2: 'Today',
+      title1: 'The Bull',
+      title2: 'Resolves',
       desc: 'We defend your rights with the tenacity of a bull. Mario Yague Law is the firm that protects your future with legal excellence and unwavering commitment.',
       cta1: 'Speak with the Bull',
       cta2: 'Our Services',
@@ -98,8 +98,8 @@ export const translations = {
     },
     hero: {
       badge: 'El Toro de la Gente',
-      title1: 'Protegiendo tu futuro,',
-      title2: 'Hoy',
+      title1: 'El Toro',
+      title2: 'Resuelve',
       desc: 'Defendemos tus derechos con la tenacidad de un toro. Mario Yague Law es la firma que protege tu futuro con excelencia legal y compromiso inquebrantable.',
       cta1: 'Habla con el Toro',
       cta2: 'Nuestros Servicios',

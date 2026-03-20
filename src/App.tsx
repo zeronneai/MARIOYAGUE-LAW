@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useInView } from 'motion/react';
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
 import { useLanguage } from './context/LanguageContext';
 import { 
   Shield, 
@@ -131,56 +131,49 @@ const Navbar = () => {
 
 const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
   const { t } = useLanguage();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoEnded, setVideoEnded] = useState(false);
-
-  useEffect(() => {
-    if (startAnimation && videoRef.current) {
-      videoRef.current.play().catch(error => {
-        console.error("Video playback failed:", error);
-      });
-    }
-  }, [startAnimation]);
-
-  const handleVideoEnded = () => {
-    setVideoEnded(true);
-  };
+  const { scrollY } = useScroll();
+  
+  const xLeft = useTransform(scrollY, [0, 500], [0, -800]);
+  const xRight = useTransform(scrollY, [0, 500], [0, 800]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const scale = useTransform(scrollY, [0, 500], [1, 0.8]);
 
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#fdfcfb]">
-      {/* Background Video Layer */}
+      {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
-        <video 
-          ref={videoRef}
-          muted 
-          playsInline 
-          onEnded={handleVideoEnded}
+        <img 
+          src="https://res.cloudinary.com/dsprn0ew4/image/upload/q_auto/ELIMINA_LA_FRASE__202603201443_mbd4gm.jpg" 
+          alt="Legal Excellence" 
           className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1773691703/hf_20260316_200231_76b2bb35-04f7-4326-93d3-08fc9aef72d6_hhcyjz.mp4" type="video/mp4" />
-        </video>
+          referrerPolicy="no-referrer"
+        />
         {/* Overlays for readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#fdfcfb]/60 via-transparent to-[#fdfcfb]/60 md:bg-gradient-to-r md:from-[#fdfcfb]/40 md:via-transparent md:to-[#fdfcfb]/20" />
-        <div className="absolute inset-0 bg-black/30 md:hidden" />
+        <div className="absolute inset-0 bg-black/40 md:bg-black/20" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={videoEnded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          animate={startAnimation ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          style={{ opacity, scale }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl mx-auto text-center"
         >
-          <span className="inline-block bg-gold/20 text-gold px-6 py-2 rounded-full text-sm md:text-base font-bold uppercase tracking-[0.3em] mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] border border-gold/30">
-            {t.hero.badge}
-          </span>
-          <h1 className="text-burgundy mb-8 tracking-tighter uppercase">
-            <span className="block text-4xl md:text-6xl italic font-serif font-light text-white md:text-gold normal-case mb-2">
+          <h1 className="text-white mb-8 tracking-tighter uppercase overflow-hidden">
+            <motion.span 
+              style={{ x: xLeft }}
+              className="block text-6xl md:text-9xl italic font-serif font-light text-gold normal-case mb-4"
+            >
               {t.hero.title1}
-            </span>
-            <span className="block text-8xl md:text-[12rem] font-display leading-none text-white">
+            </motion.span>
+            <motion.span 
+              style={{ x: xRight }}
+              className="block text-7xl md:text-[13vw] font-display leading-none text-white whitespace-nowrap"
+            >
               {t.hero.title2}
-            </span>
+            </motion.span>
           </h1>
           <div className="flex flex-wrap gap-4 justify-center">
             <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group animate-pulse-white">
@@ -195,7 +188,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
           <div className="mt-20 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
-              animate={videoEnded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+              animate={startAnimation ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
               transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 100 }}
               className="text-center group"
             >
@@ -207,7 +200,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
               </p>
               <motion.div 
                 initial={{ width: 0 }}
-                animate={videoEnded ? { width: "100%" } : { width: 0 }}
+                animate={startAnimation ? { width: "100%" } : { width: 0 }}
                 transition={{ duration: 1, delay: 1 }}
                 className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mt-4"
               />
@@ -217,7 +210,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
 
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
-              animate={videoEnded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+              animate={startAnimation ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
               transition={{ duration: 1, delay: 0.8, type: "spring", stiffness: 100 }}
               className="text-center group"
             >
@@ -229,7 +222,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
               </p>
               <motion.div 
                 initial={{ width: 0 }}
-                animate={videoEnded ? { width: "100%" } : { width: 0 }}
+                animate={startAnimation ? { width: "100%" } : { width: 0 }}
                 transition={{ duration: 1, delay: 1.3 }}
                 className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mt-4"
               />
