@@ -139,7 +139,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
   const scale = useTransform(scrollY, [0, 500], [1, 0.8]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#fdfcfb]">
+    <section id="home" className="relative min-h-screen flex items-end pb-32 overflow-hidden bg-[#fdfcfb]">
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <img 
@@ -149,7 +149,6 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
           referrerPolicy="no-referrer"
         />
         {/* Overlays for readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fdfcfb]/60 via-transparent to-[#fdfcfb]/60 md:bg-gradient-to-r md:from-[#fdfcfb]/40 md:via-transparent md:to-[#fdfcfb]/20" />
         <div className="absolute inset-0 bg-black/40 md:bg-black/20" />
       </div>
 
@@ -175,60 +174,13 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
               {t.hero.title2}
             </motion.span>
           </h1>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group animate-pulse-white">
-              {t.hero.cta1}
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="#services" className="border border-white text-white md:border-gold md:text-gold px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-gold/10 transition-all">
-              {t.hero.cta2}
-            </a>
-          </div>
-          
-          <div className="mt-20 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={startAnimation ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-              transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 100 }}
-              className="text-center group"
-            >
-              <p className="text-6xl md:text-7xl font-serif text-white font-bold mb-2 transition-all duration-500">
-                15+
-              </p>
-              <p className="text-sm uppercase tracking-[0.3em] text-white/80 font-light">
-                {t.hero.stat1}
-              </p>
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={startAnimation ? { width: "100%" } : { width: 0 }}
-                transition={{ duration: 1, delay: 1 }}
-                className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mt-4"
-              />
-            </motion.div>
-
-            <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={startAnimation ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-              transition={{ duration: 1, delay: 0.8, type: "spring", stiffness: 100 }}
-              className="text-center group"
-            >
-              <p className="text-6xl md:text-7xl font-serif text-white font-bold mb-2 transition-all duration-500">
-                100%
-              </p>
-              <p className="text-sm uppercase tracking-[0.3em] text-white/80 font-light">
-                {t.hero.stat2}
-              </p>
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={startAnimation ? { width: "100%" } : { width: 0 }}
-                transition={{ duration: 1, delay: 1.3 }}
-                className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mt-4"
-              />
-            </motion.div>
-          </div>
-        </motion.div>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group border border-gold/50 animate-pulse-gold">
+                {t.hero.cta1}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </div>
+          </motion.div>
       </div>
     </section>
   );
