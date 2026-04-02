@@ -117,7 +117,7 @@ export const translations = {
       disclaimer: 'Disclaimer',
       rights: '© 2026 Mario Yague Law. All rights reserved.',
     },
-    whatsapp: 'Chat with The Bull',
+    whatsapp: 'Call The Bull',
   },
   es: {
     nav: {
@@ -237,6 +237,6 @@ export const translations = {
       disclaimer: 'Descargo de Responsabilidad',
       rights: '© 2026 Mario Yague Law. Todos los derechos reservados.',
     },
-    whatsapp: 'Chatea con El Toro',
+    whatsapp: 'Llama a El Toro',
   },
 };

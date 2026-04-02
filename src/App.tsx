@@ -147,13 +147,15 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/ELIMINA_LA_FRASE__202603201443_mbd4gm.jpg"
+          src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1775165505/genera_esa_misma_202604021530_cqegpo.jpg"
           alt="Legal Excellence"
           className="absolute inset-0 w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
-        {/* Gradient overlay: darker at bottom for text, lighter at top */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+        {/* Strong gradient: fades image toward bottom where text lives */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+        {/* Subtle blur vignette on the bottom half to reduce noise behind CTAs */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3" style={{ backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)', maskImage: 'linear-gradient(to top, black 40%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to top, black 40%, transparent 100%)' }} />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
@@ -208,12 +210,10 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-6"
           >
             <a
-              href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
-              target="_blank"
-              rel="noopener noreferrer"
+              href="tel:+19154001099"
               className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center justify-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 group border border-gold/50 animate-pulse-gold"
             >
-              <MessageCircle className="w-5 h-5" />
+              <Phone className="w-5 h-5" />
               {t.hero.cta1}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
@@ -518,7 +518,7 @@ const About = () => {
               preload="metadata"
               className="w-full h-full object-cover"
             >
-              <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/f_auto,q_auto/v1773691955/hf_20260316_195425_e98fecdc-1182-4636-98bb-323da41420a4_mbup72.mp4" type="video/mp4" />
+              <source src="https://res.cloudinary.com/dsprn0ew4/video/upload/v1775164758/Mario_Yague_El_Toro_Final_ohedjn.mp4" type="video/mp4" />
             </video>
           </div>
         </motion.div>
@@ -548,12 +548,10 @@ const About = () => {
           </div>
 
           <a
-            href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
-            target="_blank"
-            rel="noopener noreferrer"
+            href="tel:+19154001099"
             className="inline-flex items-center gap-3 bg-gold text-charcoal px-8 py-4 font-bold uppercase tracking-widest hover:bg-gold/90 transition-all shadow-xl shadow-gold/20 rounded-sm"
           >
-            <MessageCircle className="w-5 h-5" />
+            <Phone className="w-5 h-5" />
             {t.about.cta}
           </a>
 
@@ -1011,15 +1009,13 @@ const FloatingCTA = () => {
 
           {/* Button */}
           <a
-            href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
-            target="_blank"
-            rel="noopener noreferrer"
+            href="tel:+19154001099"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
-            className="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl shadow-black/30 hover:scale-110 transition-transform duration-300 animate-pulse-white"
-            aria-label="WhatsApp"
+            className="w-16 h-16 bg-burgundy rounded-full flex items-center justify-center shadow-2xl shadow-black/30 hover:scale-110 transition-transform duration-300 animate-pulse-gold border-2 border-gold/40"
+            aria-label="Call us"
           >
-            <MessageCircle className="w-8 h-8 text-white fill-white" />
+            <Phone className="w-7 h-7 text-beige" />
           </a>
         </motion.div>
       )}
