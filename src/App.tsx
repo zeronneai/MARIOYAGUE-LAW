@@ -6,22 +6,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
 import { useLanguage } from './context/LanguageContext';
-import { 
-  Shield, 
-  Scale, 
-  Gavel, 
-  Users, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  ChevronRight, 
-  Menu, 
+import {
+  Shield,
+  Scale,
+  Gavel,
+  Users,
+  Phone,
+  Mail,
+  MapPin,
+  ChevronRight,
+  Menu,
   X,
   ArrowRight,
   CheckCircle2,
   Briefcase,
   Facebook,
-  Instagram
+  Instagram,
+  Star,
+  MessageCircle,
+  Clock,
+  Lock
 } from 'lucide-react';
 
 // --- Components ---
@@ -132,24 +136,24 @@ const Navbar = () => {
 const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
   const { t } = useLanguage();
   const { scrollY } = useScroll();
-  
+
   const xLeft = useTransform(scrollY, [0, 500], [0, -800]);
   const xRight = useTransform(scrollY, [0, 500], [0, 800]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const scale = useTransform(scrollY, [0, 500], [1, 0.8]);
+  const scale = useTransform(scrollY, [0, 500], [1, 0.85]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-end pb-32 overflow-hidden bg-[#fdfcfb]">
+    <section id="home" className="relative min-h-screen flex items-end pb-16 md:pb-24 overflow-hidden bg-[#fdfcfb]">
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/ELIMINA_LA_FRASE__202603201443_mbd4gm.jpg" 
-          alt="Legal Excellence" 
+        <img
+          src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/ELIMINA_LA_FRASE__202603201443_mbd4gm.jpg"
+          alt="Legal Excellence"
           className="absolute inset-0 w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
-        {/* Overlays for readability */}
-        <div className="absolute inset-0 bg-black/40 md:bg-black/20" />
+        {/* Gradient overlay: darker at bottom for text, lighter at top */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
@@ -158,29 +162,98 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
           animate={startAnimation ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           style={{ opacity, scale }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl mx-auto text-center"
+          className="max-w-5xl mx-auto text-center"
         >
-          <h1 className="text-white mb-8 tracking-tighter uppercase overflow-hidden">
-            <motion.span 
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={startAnimation ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center gap-2 bg-gold/20 border border-gold/40 backdrop-blur-sm px-5 py-2 mb-8 rounded-sm"
+          >
+            <span className="text-gold font-bold text-xs uppercase tracking-[0.3em]">{t.hero.badge}</span>
+          </motion.div>
+
+          {/* Main Title */}
+          <h1 className="text-white mb-6 tracking-tighter uppercase overflow-hidden">
+            <motion.span
               style={{ x: xLeft }}
-              className="block text-6xl md:text-9xl italic font-serif font-light text-gold normal-case mb-4"
+              className="block text-6xl md:text-9xl italic font-serif font-light text-gold normal-case mb-2"
             >
               {t.hero.title1}
             </motion.span>
-            <motion.span 
+            <motion.span
               style={{ x: xRight }}
               className="block text-7xl md:text-[13vw] font-display leading-none text-white whitespace-nowrap"
             >
               {t.hero.title2}
             </motion.span>
           </h1>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a href="#contact" className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 group border border-gold/50 animate-pulse-gold">
-                {t.hero.cta1}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={startAnimation ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, delay: 0.5 }}
+            className="text-white/80 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed"
+          >
+            {t.hero.desc}
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={startAnimation ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, delay: 0.7 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-6"
+          >
+            <a
+              href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center justify-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 group border border-gold/50 animate-pulse-gold"
+            >
+              <MessageCircle className="w-5 h-5" />
+              {t.hero.cta1}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a
+              href="#services"
+              className="bg-white/10 backdrop-blur-sm text-white border border-white/30 px-8 py-4 rounded-sm flex items-center justify-center gap-3 font-bold uppercase tracking-widest hover:bg-white/20 transition-all"
+            >
+              {t.hero.cta2}
+            </a>
           </motion.div>
+
+          {/* Urgency line */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={startAnimation ? { opacity: 1 } : {}}
+            transition={{ duration: 1, delay: 0.9 }}
+            className="text-white/50 text-xs uppercase tracking-widest mb-12"
+          >
+            {t.hero.urgency}
+          </motion.p>
+
+          {/* Stats Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={startAnimation ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1, delay: 1.1 }}
+            className="grid grid-cols-3 gap-px bg-white/10 rounded-sm overflow-hidden border border-white/10 backdrop-blur-sm max-w-2xl mx-auto"
+          >
+            {[
+              { val: t.hero.stat1Val, label: t.hero.stat1 },
+              { val: t.hero.stat2Val, label: t.hero.stat2 },
+              { val: t.hero.stat3Val, label: t.hero.stat3 },
+            ].map((stat, i) => (
+              <div key={i} className="bg-black/20 py-4 px-4 text-center">
+                <div className="text-2xl md:text-3xl font-display text-gold leading-none mb-1">{stat.val}</div>
+                <div className="text-white/60 text-[10px] uppercase tracking-widest">{stat.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
@@ -318,6 +391,99 @@ const Services = () => {
   );
 };
 
+const Testimonials = () => {
+  const { t } = useLanguage();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <section ref={ref} className="py-24 bg-charcoal relative overflow-hidden">
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-center bg-no-repeat bg-contain"
+        style={{ backgroundImage: 'url(https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773424907/my_law_logo_transparent_gvtvdw.png)' }}
+      />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7 }}
+            className="inline-flex items-center gap-2 mb-6"
+          >
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-5 h-5 fill-gold text-gold" />
+            ))}
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-4xl md:text-6xl font-serif text-beige mb-4 tracking-tight"
+          >
+            {t.testimonials.title}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-beige/50 max-w-xl mx-auto"
+          >
+            {t.testimonials.subtitle}
+          </motion.p>
+        </div>
+
+        {/* Cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-14">
+          {t.testimonials.items.map((item: { name: string; type: string; text: string }, idx: number) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.15 * idx, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-white/5 border border-white/10 p-8 rounded-sm hover:bg-white/8 hover:border-gold/30 transition-all duration-500 flex flex-col"
+            >
+              {/* Stars */}
+              <div className="flex gap-1 mb-5">
+                {[...Array(5)].map((_, s) => (
+                  <Star key={s} className="w-4 h-4 fill-gold text-gold" />
+                ))}
+              </div>
+              {/* Quote */}
+              <p className="text-beige/80 leading-relaxed text-sm mb-6 flex-1 italic">
+                "{item.text}"
+              </p>
+              {/* Author */}
+              <div className="border-t border-white/10 pt-5">
+                <p className="text-beige font-bold font-serif">{item.name}</p>
+                <p className="text-gold text-xs uppercase tracking-widest mt-1">{item.type}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="text-center"
+        >
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-3 bg-burgundy text-beige px-10 py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 border border-gold/40 animate-pulse-gold rounded-sm"
+          >
+            {t.testimonials.cta}
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
 const About = () => {
   const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -375,11 +541,21 @@ const About = () => {
           <div className="space-y-4 mb-10">
             {t.about.list.map((item: string, i: number) => (
               <div key={i} className="flex items-center gap-3">
-                <CheckCircle2 className="w-5 h-5 text-gold" />
+                <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
                 <span className="text-sm font-medium tracking-wide">{item}</span>
               </div>
             ))}
           </div>
+
+          <a
+            href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-gold text-charcoal px-8 py-4 font-bold uppercase tracking-widest hover:bg-gold/90 transition-all shadow-xl shadow-gold/20 rounded-sm"
+          >
+            <MessageCircle className="w-5 h-5" />
+            {t.about.cta}
+          </a>
 
         </motion.div>
       </div>
@@ -484,10 +660,15 @@ const Contact = () => {
       >
         <div className="grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-1">
-            <h2 className="text-5xl font-serif text-white mb-6">{t.contact.title}</h2>
-            <p className="text-white/90 mb-10 text-xl leading-relaxed">
+            <h2 className="text-5xl font-serif text-white mb-4">{t.contact.title}</h2>
+            <p className="text-white/90 mb-5 text-lg leading-relaxed">
               {t.contact.desc}
             </p>
+            {/* Urgency badge */}
+            <div className="inline-flex items-center gap-2 bg-gold/20 border border-gold/30 px-4 py-2 rounded-sm mb-8">
+              <Clock className="w-4 h-4 text-gold flex-shrink-0" />
+              <span className="text-gold text-xs font-bold uppercase tracking-wider">{t.contact.urgency}</span>
+            </div>
             
             <div className="space-y-10">
               <div className="flex items-start gap-5">
@@ -631,10 +812,10 @@ const Contact = () => {
                   ></textarea>
                 </div>
                 <div className="md:col-span-2">
-                  <button 
+                  <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className={`w-full bg-burgundy text-beige py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-lg shadow-burgundy/20 flex items-center justify-center gap-3 ${status === 'loading' ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    className={`w-full bg-burgundy text-beige py-5 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-lg shadow-burgundy/20 flex items-center justify-center gap-3 text-sm animate-pulse-gold ${status === 'loading' ? 'opacity-70 cursor-not-allowed' : ''}`}
                   >
                     {status === 'loading' ? (
                       <>
@@ -642,9 +823,17 @@ const Contact = () => {
                         {language === 'es' ? 'Enviando...' : 'Sending...'}
                       </>
                     ) : (
-                      t.contact.form.submit
+                      <>
+                        {t.contact.form.submit}
+                        <ArrowRight className="w-4 h-4" />
+                      </>
                     )}
                   </button>
+                  {/* Privacy assurance */}
+                  <div className="flex items-center justify-center gap-2 mt-3">
+                    <Lock className="w-3 h-3 text-charcoal/40" />
+                    <p className="text-charcoal/40 text-xs">{t.contact.form.privacy}</p>
+                  </div>
                   {status === 'error' && (
                     <p className="mt-4 text-red-600 text-sm text-center font-medium">
                       {language === 'es' ? 'Hubo un error al enviar el mensaje. Por favor intenta de nuevo.' : 'There was an error sending the message. Please try again.'}
@@ -786,6 +975,58 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   );
 };
 
+const FloatingCTA = () => {
+  const { t } = useLanguage();
+  const [visible, setVisible] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+          className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2"
+        >
+          {/* Tooltip */}
+          <AnimatePresence>
+            {showTooltip && (
+              <motion.div
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                className="bg-charcoal text-beige text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-sm shadow-xl whitespace-nowrap"
+              >
+                {t.whatsapp}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Button */}
+          <a
+            href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            className="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl shadow-black/30 hover:scale-110 transition-transform duration-300 animate-pulse-white"
+            aria-label="WhatsApp"
+          >
+            <MessageCircle className="w-8 h-8 text-white fill-white" />
+          </a>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -800,10 +1041,12 @@ export default function App() {
         <Hero startAnimation={!isLoading} />
         <Marquee />
         <Services />
+        <Testimonials />
         <About />
         <Contact />
       </main>
       <Footer />
+      <FloatingCTA />
     </div>
   );
 }
