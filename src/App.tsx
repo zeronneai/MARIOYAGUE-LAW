@@ -25,7 +25,11 @@ import {
   Star,
   MessageCircle,
   Clock,
-  Lock
+  Lock,
+  DollarSign,
+  Stethoscope,
+  FileCheck,
+  ClipboardList
 } from 'lucide-react';
 
 // --- Components ---
@@ -265,25 +269,25 @@ const Services = () => {
     {
       title: t.services.items[0].title,
       desc: t.services.items[0].desc,
-      icon: <Shield className="w-8 h-8" />,
+      icon: <DollarSign className="w-8 h-8" />,
       image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684397/Cinematic_fotorrealista_closeup_photograph_of_the__delpmaspu_ec8mbr.jpg"
     },
     {
       title: t.services.items[1].title,
       desc: t.services.items[1].desc,
-      icon: <Scale className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/Ultrarealistic_gritty_closeup_shot_of_a_highstakes_delpmaspu_jg1vtz.jpg"
+      icon: <Stethoscope className="w-8 h-8" />,
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/A_raw_documentarystyle_fotorrealista_photograph_of_delpmaspu_iw2zi3.jpg"
     },
     {
       title: t.services.items[2].title,
       desc: t.services.items[2].desc,
-      icon: <Users className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/A_raw_documentarystyle_fotorrealista_photograph_of_delpmaspu_iw2zi3.jpg"
+      icon: <Shield className="w-8 h-8" />,
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/Ultrarealistic_gritty_closeup_shot_of_a_highstakes_delpmaspu_jg1vtz.jpg"
     },
     {
       title: t.services.items[3].title,
       desc: t.services.items[3].desc,
-      icon: <Briefcase className="w-8 h-8" />,
+      icon: <ClipboardList className="w-8 h-8" />,
       image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684830/A_fotorrealista_powerful_closeup_shot_of_a_handsha_delpmaspu_b79b7j.jpg"
     },
   ];
@@ -292,10 +296,21 @@ const Services = () => {
     <section id="services" className="py-24 bg-[#fdfcfb] bg-paper-texture relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
-      
+
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-20 relative">
-          <motion.h2 
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 bg-burgundy/10 border border-burgundy/20 px-5 py-2 mb-6 rounded-sm"
+          >
+            <span className="text-burgundy font-bold text-xs uppercase tracking-[0.3em]">{t.services.badge}</span>
+          </motion.div>
+
+          <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -303,7 +318,7 @@ const Services = () => {
           >
             {t.services.title}
             {/* Golden drawing line */}
-            <motion.div 
+            <motion.div
               initial={{ width: 0, left: "50%" }}
               whileInView={{ width: "100%", left: 0 }}
               viewport={{ once: true }}
@@ -311,12 +326,12 @@ const Services = () => {
               className="absolute -bottom-2 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_10px_rgba(162,141,110,0.8)]"
             />
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="text-charcoal/60 max-w-2xl mx-auto mt-6"
+            className="text-charcoal/60 max-w-2xl mx-auto mt-6 text-lg"
           >
             {t.services.desc}
           </motion.p>
