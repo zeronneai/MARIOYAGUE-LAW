@@ -24,24 +24,25 @@ export const translations = {
     },
     marquee: 'No Fees Unless We Win! · Free Consultation · ',
     services: {
-      title: 'Practice Areas',
-      desc: 'Every case is a battle. We fight so you don\'t have to face it alone.',
+      badge: 'Personal Injury',
+      title: 'You Focus on Healing. We Handle Everything.',
+      desc: 'When you hire The Bull, you stop worrying. Period.',
       items: [
         {
-          title: 'Personal Injury',
-          desc: 'Car accidents, slips, and negligence. We maximize your compensation and fight for every dollar you deserve.',
+          title: 'You Pay Nothing Upfront',
+          desc: 'Zero out-of-pocket costs — ever. We front every expense. If we don\'t win, you don\'t owe us a single dollar.',
         },
         {
-          title: 'Criminal Defense',
-          desc: 'Aggressive protection against state and federal charges. Your freedom is our mission.',
+          title: 'We Cover Your Medical Bills',
+          desc: 'Don\'t let unpaid bills stress your recovery. We coordinate directly with your doctors and providers so you can heal.',
         },
         {
-          title: 'Family Law',
-          desc: 'Divorces, custody, and mediation. We protect your family with a human and professional approach.',
+          title: 'We Fight the Insurance Company',
+          desc: 'Their lawyers work against you. Ours work for you. We negotiate aggressively until you get every dollar you deserve.',
         },
         {
-          title: 'Business Law',
-          desc: 'Strategic counsel for companies, contracts, and commercial litigation.',
+          title: 'We Handle Every Detail',
+          desc: 'Paperwork, calls, deadlines, court — all of it. Your only job is to get better. We take care of the rest.',
         },
       ],
       learnMore: 'Get Help Now',
@@ -144,24 +145,25 @@ export const translations = {
     },
     marquee: '¡No cobramos si no ganamos! · Consulta Gratis · ',
     services: {
-      title: 'Áreas de Práctica',
-      desc: 'Cada caso es una batalla. Peleamos para que no enfrentes esto solo.',
+      badge: 'Lesiones Personales',
+      title: 'Tú Te Recuperas. Nosotros Nos Encargamos de Todo.',
+      desc: 'Cuando contratas a El Toro, dejas de preocuparte. Así de simple.',
       items: [
         {
-          title: 'Lesiones Personales',
-          desc: 'Accidentes de auto, caídas y negligencia. Maximizamos tu compensación y peleamos por cada dólar que mereces.',
+          title: 'No Pagas Nada Por Adelantado',
+          desc: 'Cero gastos de tu bolsillo — nunca. Nosotros cubrimos todo. Si no ganamos, no nos debes un solo centavo.',
         },
         {
-          title: 'Defensa Criminal',
-          desc: 'Protección agresiva contra cargos estatales y federales. Tu libertad es nuestra misión.',
+          title: 'Nosotros Pagamos los Medical Bills',
+          desc: 'No dejes que las facturas médicas afecten tu recuperación. Coordinamos directamente con tus doctores para que tú solo te cures.',
         },
         {
-          title: 'Derecho de Familia',
-          desc: 'Divorcios, custodia y mediación. Protegemos a tu familia con un enfoque humano y profesional.',
+          title: 'Nosotros Peleamos con el Seguro',
+          desc: 'Sus abogados trabajan en tu contra. Los nuestros trabajan para ti. Negociamos agresivamente hasta que recibas cada dólar que mereces.',
         },
         {
-          title: 'Derecho Comercial',
-          desc: 'Asesoría estratégica para empresas, contratos y litigios comerciales.',
+          title: 'Nosotros Manejamos Todo',
+          desc: 'Papeleo, llamadas, fechas, corte — todo. Tu único trabajo es recuperarte. Nosotros nos encargamos del resto.',
         },
       ],
       learnMore: 'Pide Ayuda Ahora',
