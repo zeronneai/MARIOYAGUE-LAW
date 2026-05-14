@@ -22,7 +22,6 @@ import {
   Briefcase,
   Facebook,
   Instagram,
-  Star,
   MessageCircle,
   Clock,
   Lock,
@@ -401,99 +400,6 @@ const Services = () => {
             </motion.div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-};
-
-const Testimonials = () => {
-  const { t } = useLanguage();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  return (
-    <section ref={ref} className="py-24 bg-charcoal relative overflow-hidden">
-      {/* Subtle background texture */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none bg-center bg-no-repeat bg-contain"
-        style={{ backgroundImage: 'url(https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773424907/my_law_logo_transparent_gvtvdw.png)' }}
-      />
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2 mb-6"
-          >
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-5 h-5 fill-gold text-gold" />
-            ))}
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-serif text-beige mb-4 tracking-tight"
-          >
-            {t.testimonials.title}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-beige/50 max-w-xl mx-auto"
-          >
-            {t.testimonials.subtitle}
-          </motion.p>
-        </div>
-
-        {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-14">
-          {t.testimonials.items.map((item: { name: string; type: string; text: string }, idx: number) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.15 * idx, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-white/5 border border-white/10 p-8 rounded-sm hover:bg-white/8 hover:border-gold/30 transition-all duration-500 flex flex-col"
-            >
-              {/* Stars */}
-              <div className="flex gap-1 mb-5">
-                {[...Array(5)].map((_, s) => (
-                  <Star key={s} className="w-4 h-4 fill-gold text-gold" />
-                ))}
-              </div>
-              {/* Quote */}
-              <p className="text-beige/80 leading-relaxed text-sm mb-6 flex-1 italic">
-                "{item.text}"
-              </p>
-              {/* Author */}
-              <div className="border-t border-white/10 pt-5">
-                <p className="text-beige font-bold font-serif">{item.name}</p>
-                <p className="text-gold text-xs uppercase tracking-widest mt-1">{item.type}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center"
-        >
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-3 bg-burgundy text-beige px-10 py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/20 border border-gold/40 animate-pulse-gold rounded-sm"
-          >
-            {t.testimonials.cta}
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </motion.div>
       </div>
     </section>
   );
@@ -1052,7 +958,6 @@ export default function App() {
         <Hero startAnimation={!isLoading} />
         <Marquee />
         <Services />
-        <Testimonials />
         <About />
         <Contact />
       </main>
