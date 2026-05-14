@@ -28,7 +28,10 @@ import {
   DollarSign,
   Stethoscope,
   FileCheck,
-  ClipboardList
+  ClipboardList,
+  GraduationCap,
+  Award,
+  Languages
 } from 'lucide-react';
 
 // --- Components ---
@@ -400,6 +403,91 @@ const Services = () => {
             </motion.div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+};
+
+const MeetMario = () => {
+  const { t } = useLanguage();
+  const credentialIcons = [GraduationCap, Scale, Award, Languages];
+
+  return (
+    <section id="meet-mario" className="py-24 bg-charcoal text-beige overflow-hidden relative">
+      <div
+        className="absolute inset-0 opacity-5 pointer-events-none bg-center bg-no-repeat bg-contain"
+        style={{ backgroundImage: 'url(https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773424907/my_law_logo_transparent_gvtvdw.png)' }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+        {/* Photo */}
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mx-auto w-full max-w-[400px]"
+        >
+          <div className="aspect-[4/5] rounded-lg overflow-hidden border-2 border-gold/60 shadow-2xl shadow-black/50 bg-black">
+            <img
+              src="/mario.jpg"
+              alt={t.meetMario.photoAlt}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          {/* Decorative gold accent line */}
+          <div className="absolute -bottom-4 -right-4 w-24 h-24 border-r-2 border-b-2 border-gold/40 pointer-events-none" />
+        </motion.div>
+
+        {/* Content */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="text-gold uppercase tracking-[0.3em] text-xs font-bold mb-5 block">
+            {t.meetMario.eyebrow}
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif font-bold mb-3 leading-tight tracking-tight text-beige">
+            {t.meetMario.name}
+          </h2>
+          <p className="text-gold text-sm uppercase tracking-widest font-bold mb-8">
+            {t.meetMario.subtitle}
+          </p>
+
+          <p className="text-beige/75 mb-5 leading-relaxed">{t.meetMario.paragraph1}</p>
+          <p className="text-beige/75 mb-10 leading-relaxed">{t.meetMario.paragraph2}</p>
+
+          {/* Credentials grid 2x2 */}
+          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+            {t.meetMario.credentials.map((c: { title: string; subtitle: string }, i: number) => {
+              const Icon = credentialIcons[i];
+              return (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 border border-gold/15 bg-white/5 p-4 rounded-sm"
+                >
+                  <Icon className="w-6 h-6 text-gold flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-beige font-serif text-base leading-tight mb-1">{c.title}</p>
+                    <p className="text-beige/55 text-xs leading-snug">{c.subtitle}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-3 bg-burgundy text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 border border-gold/40 animate-pulse-gold rounded-sm"
+          >
+            <Phone className="w-5 h-5" />
+            {t.meetMario.cta}
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </motion.div>
       </div>
     </section>
   );
@@ -958,6 +1046,7 @@ export default function App() {
         <Hero startAnimation={!isLoading} />
         <Marquee />
         <Services />
+        <MeetMario />
         <About />
         <Contact />
       </main>
