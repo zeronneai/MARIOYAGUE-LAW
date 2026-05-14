@@ -20,7 +20,6 @@ import {
   ArrowRight,
   CheckCircle2,
   Briefcase,
-  Facebook,
   Instagram,
   MessageCircle,
   Clock,
@@ -859,17 +858,18 @@ const Contact = () => {
 const Footer = () => {
   const { t } = useLanguage();
   return (
-    <footer className="bg-charcoal text-beige/40 py-16 border-t border-beige/5">
+    <footer className="bg-[#1A1310] text-beige/70 py-12 md:py-16 border-t border-gold/20">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
-          <div className="col-span-2">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-14 h-14 flex items-center justify-center">
-                <img 
-                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png" 
-                  alt="MY Law Logo" 
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img
+                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png"
+                  alt="MY Law Logo"
                   loading="lazy"
-                  className="w-12 h-12 object-contain"
+                  className="w-10 h-10 object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -877,54 +877,101 @@ const Footer = () => {
                 MARIO YAGUE <span className="font-light">LAW</span>
               </span>
             </div>
-            <p className="max-w-sm text-sm leading-relaxed">
-              {t.footer.desc}
+            <p className="text-gold text-xs uppercase tracking-[0.2em] font-bold mb-4">
+              {t.footer.tagline}
             </p>
+            <p className="text-beige/80 text-sm leading-relaxed mb-5">
+              {t.footer.brandDesc}
+            </p>
+            <a
+              href="https://www.instagram.com/yaguelaw/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-beige/70 hover:text-gold transition-colors"
+            >
+              <Instagram className="w-4 h-4" />
+              <span>@yaguelaw</span>
+            </a>
           </div>
-          
+
+          {/* Contact */}
           <div>
-            <h4 className="text-beige text-xs uppercase tracking-widest font-bold mb-6">{t.footer.links}</h4>
+            <h4 className="text-gold text-xs uppercase tracking-[0.2em] font-bold mb-5">
+              {t.footer.contact}
+            </h4>
             <ul className="space-y-4 text-sm">
-              <li><a href="#home" className="hover:text-gold transition-colors">{t.nav.home}</a></li>
-              <li><a href="#services" className="hover:text-gold transition-colors">{t.nav.services}</a></li>
-              <li><a href="#about" className="hover:text-gold transition-colors">{t.nav.about}</a></li>
-              <li><a href="#contact" className="hover:text-gold transition-colors">{t.nav.contact}</a></li>
+              <li>
+                <a
+                  href="https://www.google.com/maps/place/1521+E+Missouri+Ave,+El+Paso,+TX+79902"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 hover:text-gold transition-colors"
+                >
+                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span className="leading-snug">
+                    1521 E Missouri Ave
+                    <br />
+                    El Paso, TX 79902
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+19154001099"
+                  className="flex items-center gap-3 hover:text-gold transition-colors"
+                >
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span>(915) 400-1099</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:mario@marioyaguelaw.com"
+                  className="flex items-center gap-3 hover:text-gold transition-colors"
+                >
+                  <Mail className="w-4 h-4 flex-shrink-0" />
+                  <span>mario@marioyaguelaw.com</span>
+                </a>
+              </li>
             </ul>
           </div>
-          
+
+          {/* Hours */}
           <div>
-            <h4 className="text-beige text-xs uppercase tracking-widest font-bold mb-6">{t.footer.legal}</h4>
-            <ul className="space-y-4 text-sm">
-              <li><a href="#" className="hover:text-gold transition-colors">{t.footer.privacy}</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors">{t.footer.terms}</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors">{t.footer.disclaimer}</a></li>
+            <h4 className="text-gold text-xs uppercase tracking-[0.2em] font-bold mb-5">
+              {t.footer.hours}
+            </h4>
+            <ul className="space-y-2 text-sm">
+              <li>{t.footer.hoursWeekdays}</li>
+              <li>{t.footer.hoursSaturday}</li>
+              <li>{t.footer.hoursSunday}</li>
+            </ul>
+            <p className="text-gold/80 text-xs italic mt-4">{t.footer.hoursNote}</p>
+          </div>
+
+          {/* Practice Areas */}
+          <div>
+            <h4 className="text-gold text-xs uppercase tracking-[0.2em] font-bold mb-5">
+              {t.footer.practiceAreas}
+            </h4>
+            <ul className="space-y-2 text-sm">
+              {t.footer.practiceAreaList.map((area: string) => (
+                <li key={area}>{area}</li>
+              ))}
             </ul>
           </div>
         </div>
-        
-        <div className="pt-12 border-t border-beige/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs uppercase tracking-widest">{t.footer.rights}</p>
-          <div className="flex gap-6">
-            <a 
-              href="https://www.facebook.com/profile.php?id=61574563814369" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all"
-              aria-label="Facebook"
-            >
-              <Facebook className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://www.instagram.com/yaguelaw/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full border border-beige/10 flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-          </div>
+
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-gold/30 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-beige/60">
+          <p>{t.footer.copyright}</p>
+          <p>{t.footer.barCard}</p>
         </div>
+
+        {/* Disclaimer */}
+        <p className="mt-6 text-[11px] leading-relaxed text-beige/40">
+          <span className="font-bold">{t.footer.disclaimerLabel}:</span> {t.footer.disclaimerText}
+        </p>
       </div>
     </footer>
   );
