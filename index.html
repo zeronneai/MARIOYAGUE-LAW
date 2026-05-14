@@ -55,7 +55,10 @@
             {"@type": "State", "name": "Texas"},
             {"@type": "AdministrativeArea", "name": "El Paso County"}
           ],
-          "availableLanguage": ["English", "Spanish", "es", "en"],
+          "availableLanguage": [
+            {"@type": "Language", "name": "English", "alternateName": "en"},
+            {"@type": "Language", "name": "Spanish", "alternateName": "es"}
+          ],
           "openingHoursSpecification": [
             {
               "@type": "OpeningHoursSpecification",
@@ -64,15 +67,68 @@
               "closes": "18:00"
             }
           ],
-          "serviceType": [
-            "Personal Injury Law",
-            "Criminal Defense",
-            "Family Law",
-            "DWI Defense",
-            "Car Accident Law",
-            "Wrongful Death",
-            "Workers' Compensation"
-          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Legal Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Personal Injury Law",
+                  "description": "Representation for victims of car accidents, slip and fall, wrongful death, and other personal injury cases in El Paso, Texas."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Criminal Defense",
+                  "description": "Aggressive criminal defense representation in El Paso, Texas. Felonies, misdemeanors, and DWI cases."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Family Law",
+                  "description": "Divorce, child custody, child support, and family law representation in El Paso, Texas."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "DWI Defense",
+                  "description": "DWI and DUI defense for Texas drivers facing criminal charges in El Paso."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Car Accident Law",
+                  "description": "Legal representation for car accident victims seeking compensation in El Paso, Texas."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Wrongful Death",
+                  "description": "Compassionate legal representation for families pursuing wrongful death claims in Texas."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Workers' Compensation",
+                  "description": "Workers' compensation claims and representation for injured workers in El Paso, Texas."
+                }
+              }
+            ]
+          },
           "founder": {"@id": "https://www.myr-law.com/#mario-yague"},
           "employee": {"@id": "https://www.myr-law.com/#mario-yague"}
         },
