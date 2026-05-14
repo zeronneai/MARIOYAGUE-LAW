@@ -926,11 +926,11 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:mario@marioyaguelaw.com"
+                  href="mailto:mario@myr-law.com"
                   className="flex items-center gap-3 hover:text-gold transition-colors"
                 >
                   <Mail className="w-4 h-4 flex-shrink-0" />
-                  <span>mario@marioyaguelaw.com</span>
+                  <span>mario@myr-law.com</span>
                 </a>
               </li>
             </ul>
