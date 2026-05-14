@@ -133,7 +133,8 @@
           "employee": {"@id": "https://www.myr-law.com/#mario-yague"}
         },
         {
-          "@type": "Attorney",
+          "@type": "Person",
+          "additionalType": "https://schema.org/Attorney",
           "@id": "https://www.myr-law.com/#mario-yague",
           "name": "Mario Yague",
           "givenName": "Mario",
@@ -145,10 +146,18 @@
           "telephone": "+1-915-400-1099",
           "email": "mario@myr-law.com",
           "knowsLanguage": ["English", "Spanish"],
-          "memberOf": {
-            "@type": "Organization",
-            "name": "State Bar of Texas"
-          },
+          "memberOf": [
+            {
+              "@type": "Organization",
+              "name": "State Bar of Texas",
+              "url": "https://www.texasbar.com/"
+            },
+            {
+              "@type": "Organization",
+              "name": "National Trial Lawyers Association",
+              "url": "https://www.thenationaltriallawyers.org/"
+            }
+          ],
           "hasCredential": [
             {
               "@type": "EducationalOccupationalCredential",
@@ -173,6 +182,23 @@
             "addressRegion": "TX",
             "postalCode": "79902",
             "addressCountry": "US"
+          },
+          "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Texas Law School"
+          },
+          "nationality": "American",
+          "workLocation": {
+            "@type": "Place",
+            "name": "Mario Yague Law Office",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1521 E Missouri Ave",
+              "addressLocality": "El Paso",
+              "addressRegion": "TX",
+              "postalCode": "79902",
+              "addressCountry": "US"
+            }
           }
         },
         {
