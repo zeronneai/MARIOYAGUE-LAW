@@ -1,0 +1,50 @@
+# Mario Yague Law - robots.txt
+# Última actualización: 14 mayo 2026
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.marioyaguelaw.com/sitemap.xml
+
+# Permitir crawlers de IA (importante para ChatGPT, Perplexity, Claude)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Permitir bots de buscadores tradicionales
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+# Bloquear scrapers maliciosos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
