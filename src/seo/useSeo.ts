@@ -8,9 +8,25 @@ interface SeoOpts {
   jsonLd?: object | object[];
 }
 
-const RUNTIME_SCHEMA_ID = 'page-jsonld-runtime';
 const RUNTIME_META_DESC_ID = 'page-meta-desc-runtime';
 const RUNTIME_CANONICAL_ID = 'page-canonical-runtime';
+const RUNTIME_SCHEMA_PREFIX = 'page-jsonld-runtime-';
+
+function getExistingSchemaTypes(): Set<string> {
+  const types = new Set<string>();
+  document.querySelectorAll('script[type="application/ld+json"]').forEach((el) => {
+    if (el.id.startsWith(RUNTIME_SCHEMA_PREFIX)) return; // ignore our own previous runtime injections
+    try {
+      const parsed = JSON.parse(el.textContent || '');
+      if (parsed && typeof parsed['@type'] === 'string') {
+        types.add(parsed['@type']);
+      }
+    } catch {
+      // ignore non-JSON scripts
+    }
+  });
+  return types;
+}
 
 export function useSeo({ title, description, canonical, jsonLd }: SeoOpts) {
   useEffect(() => {
@@ -37,23 +53,43 @@ export function useSeo({ title, description, canonical, jsonLd }: SeoOpts) {
     }
     canonicalEl.setAttribute('href', canonical);
 
-    const previousScript = document.getElementById(RUNTIME_SCHEMA_ID);
-    if (previousScript) previousScript.remove();
+    // Remove any runtime-injected schemas from a previous route render
+    document
+      .querySelectorAll(`script[id^="${RUNTIME_SCHEMA_PREFIX}"]`)
+      .forEach((el) => el.remove());
 
+    // If this page already has equivalent schemas in the static HTML
+    // (from the prerender postbuild script), skip injecting duplicates.
+    const injected: HTMLScriptElement[] = [];
     if (jsonLd) {
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.id = RUNTIME_SCHEMA_ID;
-      script.text = JSON.stringify(jsonLd);
-      document.head.appendChild(script);
+      const schemas = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+      const existingTypes = getExistingSchemaTypes();
+
+      schemas.forEach((schema, idx) => {
+        const type =
+          schema && typeof (schema as Record<string, unknown>)['@type'] === 'string'
+            ? ((schema as Record<string, unknown>)['@type'] as string)
+            : undefined;
+
+        if (type && existingTypes.has(type)) {
+          // Already present from prerender — leave the static one alone.
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = `${RUNTIME_SCHEMA_PREFIX}${idx}`;
+        script.text = JSON.stringify(schema);
+        document.head.appendChild(script);
+        injected.push(script);
+      });
     }
 
     return () => {
       document.title = prevTitle;
       if (metaDesc) metaDesc.setAttribute('content', prevDesc);
       if (canonicalEl && prevCanonical) canonicalEl.setAttribute('href', prevCanonical);
-      const script = document.getElementById(RUNTIME_SCHEMA_ID);
-      if (script) script.remove();
+      injected.forEach((s) => s.remove());
     };
   }, [title, description, canonical, jsonLd]);
 }
