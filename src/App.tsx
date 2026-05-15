@@ -5,7 +5,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useLanguage } from './context/LanguageContext';
+import { HomePage } from './pages/HomePage';
+import { FAQPage } from './pages/FAQPage';
+import { PersonalInjuryPage } from './pages/PersonalInjuryPage';
+import { CriminalDefensePage } from './pages/CriminalDefensePage';
+import { FamilyLawPage } from './pages/FamilyLawPage';
+import { DWIDefensePage } from './pages/DWIDefensePage';
 import {
   Shield,
   Scale,
@@ -30,7 +37,8 @@ import {
   ClipboardList,
   GraduationCap,
   Award,
-  Languages
+  Languages,
+  ChevronDown
 } from 'lucide-react';
 
 // --- Components ---
@@ -39,6 +47,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -46,51 +56,84 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: t.nav.home, href: '#home' },
-    { name: t.nav.services, href: '#services' },
-    { name: t.nav.about, href: '#about' },
-    { name: t.nav.contact, href: '#contact' },
+  // On non-home routes always use solid styling
+  const showSolid = isScrolled || !isHome;
+
+  const practiceAreas = [
+    { slug: '/personal-injury', label: language === 'es' ? 'Lesiones Personales' : 'Personal Injury' },
+    { slug: '/criminal-defense', label: language === 'es' ? 'Defensa Criminal' : 'Criminal Defense' },
+    { slug: '/family-law', label: language === 'es' ? 'Derecho Familiar' : 'Family Law' },
+    { slug: '/dwi-defense', label: language === 'es' ? 'Defensa DWI' : 'DWI Defense' },
   ];
 
+  const faqLabel = language === 'es' ? 'FAQ' : 'FAQ';
+
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${showSolid ? 'bg-white/95 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <div className="w-16 h-16 flex items-center justify-center">
-             <img 
-               src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png" 
-               alt="MY Law Logo" 
-               className={`w-14 h-14 object-contain transition-all duration-300 ${isScrolled ? '' : 'brightness-0 invert'}`}
+             <img
+               src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png"
+               alt="MY Law Logo"
+               className={`w-14 h-14 object-contain transition-all duration-300 ${showSolid ? '' : 'brightness-0 invert'}`}
                referrerPolicy="no-referrer"
              />
           </div>
-          <span className={`text-xl font-serif tracking-tighter transition-colors ${isScrolled ? 'text-burgundy' : 'text-white'}`}>
+          <span className={`text-xl font-serif tracking-tighter transition-colors ${showSolid ? 'text-burgundy' : 'text-white'}`}>
             MARIO YAGUE <span className="font-light">LAW</span>
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href} 
-              className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors ${isScrolled ? 'text-burgundy' : 'text-white'}`}
+          <a href="/#home" className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors ${showSolid ? 'text-burgundy' : 'text-white'}`}>
+            {t.nav.home}
+          </a>
+
+          {/* Services dropdown */}
+          <div className="relative group">
+            <a
+              href="/#services"
+              className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors flex items-center gap-1 ${showSolid ? 'text-burgundy' : 'text-white'}`}
             >
-              {link.name}
+              {t.nav.services}
+              <ChevronDown className="w-3 h-3" />
             </a>
-          ))}
-          
+            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div className="bg-white shadow-2xl border border-burgundy/10 rounded-sm py-2 min-w-[220px]">
+                {practiceAreas.map((area) => (
+                  <Link
+                    key={area.slug}
+                    to={area.slug}
+                    className="block px-5 py-2.5 text-sm text-charcoal hover:bg-beige hover:text-burgundy transition-colors"
+                  >
+                    {area.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <a href="/#about" className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors ${showSolid ? 'text-burgundy' : 'text-white'}`}>
+            {t.nav.about}
+          </a>
+          <Link to="/faq" className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors ${showSolid ? 'text-burgundy' : 'text-white'}`}>
+            {faqLabel}
+          </Link>
+          <a href="/#contact" className={`text-sm uppercase tracking-widest font-medium hover:text-gold transition-colors ${showSolid ? 'text-burgundy' : 'text-white'}`}>
+            {t.nav.contact}
+          </a>
+
           <div className="flex items-center gap-4 border-l border-burgundy/10 pl-8">
-            <button 
+            <button
               onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
-              className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-colors ${isScrolled ? 'text-burgundy/60 hover:text-burgundy' : 'text-white/60 hover:text-white'}`}
+              className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-colors ${showSolid ? 'text-burgundy/60 hover:text-burgundy' : 'text-white/60 hover:text-white'}`}
             >
               {language === 'en' ? 'ES' : 'EN'}
             </button>
-            <a 
-              href="#contact" 
+            <a
+              href="/#contact"
               className="bg-burgundy text-beige px-6 py-2.5 text-xs uppercase tracking-widest font-bold hover:bg-burgundy-dark transition-all animate-pulse-white"
             >
               {t.nav.consultation}
@@ -100,13 +143,13 @@ const Navbar = () => {
 
         {/* Mobile Toggle */}
         <div className="flex items-center gap-4 md:hidden">
-          <button 
+          <button
             onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
-            className={`text-[10px] uppercase tracking-[0.2em] font-bold ${isScrolled ? 'text-burgundy/60' : 'text-white/60'}`}
+            className={`text-[10px] uppercase tracking-[0.2em] font-bold ${showSolid ? 'text-burgundy/60' : 'text-white/60'}`}
           >
             {language === 'en' ? 'ES' : 'EN'}
           </button>
-          <button className={`${isScrolled ? 'text-burgundy' : 'text-white'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <button className={`${showSolid ? 'text-burgundy' : 'text-white'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Menu">
             {isMobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
@@ -115,22 +158,39 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-white shadow-xl py-8 px-6 flex flex-col gap-6 md:hidden"
+            className="absolute top-full left-0 w-full bg-white shadow-xl py-6 px-6 flex flex-col gap-4 md:hidden max-h-[80vh] overflow-y-auto"
           >
-            {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-serif border-b border-gray-100 pb-2"
-              >
-                {link.name}
-              </a>
-            ))}
+            <a href="/#home" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-serif border-b border-gray-100 pb-2">
+              {t.nav.home}
+            </a>
+            <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-serif">
+              {t.nav.services}
+            </a>
+            <div className="pl-4 flex flex-col gap-2 border-l-2 border-gold/30 ml-2 -mt-2 mb-2">
+              {practiceAreas.map((area) => (
+                <Link
+                  key={area.slug}
+                  to={area.slug}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-sm text-charcoal/75 hover:text-burgundy py-1"
+                >
+                  {area.label}
+                </Link>
+              ))}
+            </div>
+            <a href="/#about" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-serif border-b border-gray-100 pb-2">
+              {t.nav.about}
+            </a>
+            <Link to="/faq" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-serif border-b border-gray-100 pb-2">
+              {faqLabel}
+            </Link>
+            <a href="/#contact" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-serif border-b border-gray-100 pb-2">
+              {t.nav.contact}
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -138,7 +198,7 @@ const Navbar = () => {
   );
 };
 
-const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
+export const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
   const { t } = useLanguage();
   const { scrollY } = useScroll();
 
@@ -264,7 +324,7 @@ const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
   );
 };
 
-const Services = () => {
+export const Services = () => {
   const { t } = useLanguage();
   const services = [
     {
@@ -407,7 +467,7 @@ const Services = () => {
   );
 };
 
-const MeetMario = () => {
+export const MeetMario = () => {
   const { t } = useLanguage();
   const credentialIcons = [GraduationCap, Scale, Award, Languages];
 
@@ -492,7 +552,7 @@ const MeetMario = () => {
   );
 };
 
-const About = () => {
+export const About = () => {
   const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(videoRef, { once: true, margin: "-100px" });
@@ -569,7 +629,7 @@ const About = () => {
   );
 };
 
-const Contact = () => {
+export const Contact = () => {
   const { language, t } = useLanguage();
   const sectionRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -955,9 +1015,16 @@ const Footer = () => {
               {t.footer.practiceAreas}
             </h4>
             <ul className="space-y-2 text-sm">
-              {t.footer.practiceAreaList.map((area: string) => (
-                <li key={area}>{area}</li>
+              <li><Link to="/personal-injury" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[0]}</Link></li>
+              <li><Link to="/criminal-defense" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[1]}</Link></li>
+              <li><Link to="/family-law" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[2]}</Link></li>
+              <li><Link to="/dwi-defense" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[3]}</Link></li>
+              {t.footer.practiceAreaList.slice(4).map((area: string) => (
+                <li key={area} className="text-beige/55">{area}</li>
               ))}
+              <li className="pt-2 border-t border-gold/15 mt-2">
+                <Link to="/faq" className="hover:text-gold transition-colors text-gold/80 uppercase tracking-wider text-xs font-bold">FAQ</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -977,7 +1044,7 @@ const Footer = () => {
   );
 };
 
-const Marquee = () => {
+export const Marquee = () => {
   const { t } = useLanguage();
   return (
     <div className="bg-burgundy py-4 overflow-hidden whitespace-nowrap border-y border-gold/20">
@@ -1081,22 +1148,24 @@ const FloatingCTA = () => {
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   return (
     <div className="selection:bg-gold selection:text-charcoal">
       <AnimatePresence>
-        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+        {isHome && isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
 
       <Navbar />
-      <main>
-        <Hero startAnimation={!isLoading} />
-        <Marquee />
-        <Services />
-        <MeetMario />
-        <About />
-        <Contact />
-      </main>
+      <Routes>
+        <Route path="/" element={<HomePage isLoading={isLoading} />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/personal-injury" element={<PersonalInjuryPage />} />
+        <Route path="/criminal-defense" element={<CriminalDefensePage />} />
+        <Route path="/family-law" element={<FamilyLawPage />} />
+        <Route path="/dwi-defense" element={<DWIDefensePage />} />
+      </Routes>
       <Footer />
       <FloatingCTA />
     </div>
