@@ -5,6 +5,7 @@ import { PageHero } from '../components/PageHero';
 import { FAQAccordion } from '../components/FAQAccordion';
 import { faqQuestions, faqPageSeo } from '../seo/pageContent';
 import { useSeo, buildFaqJsonLd } from '../seo/useSeo';
+import { trackPhoneClick } from '../lib/analytics';
 
 export const FAQPage = () => {
   const { language } = useLanguage();
@@ -55,6 +56,7 @@ export const FAQPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="tel:+19154001099"
+              onClick={() => trackPhoneClick('faq_cta')}
               className="inline-flex items-center justify-center gap-3 bg-burgundy text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 border border-gold/40 rounded-sm text-sm"
             >
               <Phone className="w-4 h-4" />

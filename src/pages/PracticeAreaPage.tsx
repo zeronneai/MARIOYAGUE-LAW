@@ -6,6 +6,7 @@ import { PageHero } from '../components/PageHero';
 import { FAQAccordion } from '../components/FAQAccordion';
 import type { PracticeAreaContent } from '../seo/pageContent';
 import { useSeo, buildPracticeAreaJsonLd } from '../seo/useSeo';
+import { trackPhoneClick, trackEmailClick } from '../lib/analytics';
 
 const iconMap = {
   Stethoscope,
@@ -159,6 +160,7 @@ export const PracticeAreaPage = ({ page }: PracticeAreaPageProps) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="tel:+19154001099"
+              onClick={() => trackPhoneClick(`practice_area_cta:${page.slug}`)}
               className="inline-flex items-center justify-center gap-3 bg-charcoal text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-black transition-all border border-gold/40 rounded-sm text-sm"
             >
               <Phone className="w-4 h-4" />
@@ -166,6 +168,7 @@ export const PracticeAreaPage = ({ page }: PracticeAreaPageProps) => {
             </a>
             <a
               href="mailto:mario@myr-law.com"
+              onClick={() => trackEmailClick(`practice_area_cta:${page.slug}`)}
               className="inline-flex items-center justify-center gap-3 bg-beige text-burgundy px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-all rounded-sm text-sm"
             >
               {labels.emailCta}

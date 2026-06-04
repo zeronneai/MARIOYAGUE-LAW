@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowRight, Phone } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { trackPhoneClick } from '../lib/analytics';
 
 interface PageHeroProps {
   title: string;
@@ -66,6 +67,7 @@ export const PageHero = ({ title, subtitle, eyebrow }: PageHeroProps) => {
           </a>
           <a
             href="tel:+19154001099"
+            onClick={() => trackPhoneClick('page_hero')}
             className="inline-flex items-center gap-3 border border-gold/40 text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-white/5 transition-all rounded-sm text-sm"
           >
             <Phone className="w-4 h-4" />

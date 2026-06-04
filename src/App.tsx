@@ -13,6 +13,15 @@ import { PersonalInjuryPage } from './pages/PersonalInjuryPage';
 import { CriminalDefensePage } from './pages/CriminalDefensePage';
 import { FamilyLawPage } from './pages/FamilyLawPage';
 import { DWIDefensePage } from './pages/DWIDefensePage';
+import { useAnalytics } from './hooks/useAnalytics';
+import {
+  trackPhoneClick,
+  trackEmailClick,
+  trackWhatsAppClick,
+  trackFormSubmit,
+  trackLanguageToggle,
+  trackServiceCardClick,
+} from './lib/analytics';
 import {
   Shield,
   Scale,
@@ -106,6 +115,7 @@ const Navbar = () => {
                   <Link
                     key={area.slug}
                     to={area.slug}
+                    onClick={() => trackServiceCardClick(area.slug.replace('/', ''), 'navbar_desktop')}
                     className="block px-5 py-2.5 text-sm text-charcoal hover:bg-beige hover:text-burgundy transition-colors"
                   >
                     {area.label}
@@ -127,7 +137,11 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4 border-l border-burgundy/10 pl-8">
             <button
-              onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
+              onClick={() => {
+                const next = language === 'en' ? 'es' : 'en';
+                trackLanguageToggle(language, next);
+                setLanguage(next);
+              }}
               className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-colors ${showSolid ? 'text-burgundy/60 hover:text-burgundy' : 'text-white/60 hover:text-white'}`}
             >
               {language === 'en' ? 'ES' : 'EN'}
@@ -144,7 +158,11 @@ const Navbar = () => {
         {/* Mobile Toggle */}
         <div className="flex items-center gap-4 md:hidden">
           <button
-            onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
+            onClick={() => {
+              const next = language === 'en' ? 'es' : 'en';
+              trackLanguageToggle(language, next);
+              setLanguage(next);
+            }}
             className={`text-[10px] uppercase tracking-[0.2em] font-bold ${showSolid ? 'text-burgundy/60' : 'text-white/60'}`}
           >
             {language === 'en' ? 'ES' : 'EN'}
@@ -175,7 +193,10 @@ const Navbar = () => {
                 <Link
                   key={area.slug}
                   to={area.slug}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    trackServiceCardClick(area.slug.replace('/', ''), 'navbar_mobile');
+                    setIsMobileMenuOpen(false);
+                  }}
                   className="text-sm text-charcoal/75 hover:text-burgundy py-1"
                 >
                   {area.label}
@@ -276,6 +297,7 @@ export const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
           >
             <a
               href="tel:+19154001099"
+              onClick={() => trackPhoneClick('hero')}
               className="bg-burgundy text-beige px-8 py-4 rounded-sm flex items-center justify-center gap-3 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 group border border-gold/50 animate-pulse-gold"
             >
               <Phone className="w-5 h-5" />
@@ -617,6 +639,7 @@ export const About = () => {
 
           <a
             href="tel:+19154001099"
+            onClick={() => trackPhoneClick('meet_mario')}
             className="inline-flex items-center gap-3 bg-gold text-charcoal px-8 py-4 font-bold uppercase tracking-widest hover:bg-gold/90 transition-all shadow-xl shadow-gold/20 rounded-sm"
           >
             <Phone className="w-5 h-5" />
@@ -677,6 +700,7 @@ export const Contact = () => {
       });
 
       if (response.ok) {
+        trackFormSubmit('contact_form', { case_type: formData.caseType });
         setStatus('success');
         setFormData({
           name: '',
@@ -743,10 +767,11 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm uppercase tracking-widest text-white/60 font-bold mb-2">{t.contact.call}</p>
-                  <a 
-                    href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice." 
-                    target="_blank" 
+                  <a
+                    href="https://wa.me/19154001099?text=Hello%20The%20Bull,%20I%20need%20legal%20advice."
+                    target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick('contact_section')}
                     className="text-2xl font-serif text-white hover:text-gold transition-colors"
                   >
                     (915) 400-1099
@@ -760,8 +785,9 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm uppercase tracking-widest text-white/60 font-bold mb-2">{t.contact.email}</p>
-                  <a 
-                    href="mailto:mario@myr-law.com" 
+                  <a
+                    href="mailto:mario@myr-law.com"
+                    onClick={() => trackEmailClick('contact_section')}
                     className="text-2xl font-serif text-white hover:text-gold transition-colors"
                   >
                     mario@myr-law.com
@@ -978,6 +1004,7 @@ const Footer = () => {
               <li>
                 <a
                   href="tel:+19154001099"
+                  onClick={() => trackPhoneClick('footer')}
                   className="flex items-center gap-3 hover:text-gold transition-colors"
                 >
                   <Phone className="w-4 h-4 flex-shrink-0" />
@@ -987,6 +1014,7 @@ const Footer = () => {
               <li>
                 <a
                   href="mailto:mario@myr-law.com"
+                  onClick={() => trackEmailClick('footer')}
                   className="flex items-center gap-3 hover:text-gold transition-colors"
                 >
                   <Mail className="w-4 h-4 flex-shrink-0" />
@@ -1015,10 +1043,10 @@ const Footer = () => {
               {t.footer.practiceAreas}
             </h4>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/personal-injury" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[0]}</Link></li>
-              <li><Link to="/criminal-defense" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[1]}</Link></li>
-              <li><Link to="/family-law" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[2]}</Link></li>
-              <li><Link to="/dwi-defense" className="hover:text-gold transition-colors">{t.footer.practiceAreaList[3]}</Link></li>
+              <li><Link to="/personal-injury" onClick={() => trackServiceCardClick('personal-injury', 'footer')} className="hover:text-gold transition-colors">{t.footer.practiceAreaList[0]}</Link></li>
+              <li><Link to="/criminal-defense" onClick={() => trackServiceCardClick('criminal-defense', 'footer')} className="hover:text-gold transition-colors">{t.footer.practiceAreaList[1]}</Link></li>
+              <li><Link to="/family-law" onClick={() => trackServiceCardClick('family-law', 'footer')} className="hover:text-gold transition-colors">{t.footer.practiceAreaList[2]}</Link></li>
+              <li><Link to="/dwi-defense" onClick={() => trackServiceCardClick('dwi-defense', 'footer')} className="hover:text-gold transition-colors">{t.footer.practiceAreaList[3]}</Link></li>
               {t.footer.practiceAreaList.slice(4).map((area: string) => (
                 <li key={area} className="text-beige/55">{area}</li>
               ))}
@@ -1135,6 +1163,7 @@ const FloatingCTA = () => {
             href="tel:+19154001099"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
+            onClick={() => trackPhoneClick('floating_cta')}
             className="w-16 h-16 bg-burgundy rounded-full flex items-center justify-center shadow-2xl shadow-black/30 hover:scale-110 transition-transform duration-300 animate-pulse-gold border-2 border-gold/40"
             aria-label="Call us"
           >
@@ -1150,6 +1179,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const isHome = location.pathname === '/';
+  useAnalytics();
 
   return (
     <div className="selection:bg-gold selection:text-charcoal">
