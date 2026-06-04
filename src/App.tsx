@@ -270,25 +270,25 @@ const Services = () => {
       title: t.services.items[0].title,
       desc: t.services.items[0].desc,
       icon: <DollarSign className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684397/Cinematic_fotorrealista_closeup_photograph_of_the__delpmaspu_ec8mbr.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1775513586/A_hyper-realistic__high-definition_202604061611_crvk12.jpg"
     },
     {
       title: t.services.items[1].title,
       desc: t.services.items[1].desc,
       icon: <Stethoscope className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/A_raw_documentarystyle_fotorrealista_photograph_of_delpmaspu_iw2zi3.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1775513704/A_hyper-realistic__high-definition_202604061614_bsw0og.jpg"
     },
     {
       title: t.services.items[2].title,
       desc: t.services.items[2].desc,
       icon: <Shield className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684750/Ultrarealistic_gritty_closeup_shot_of_a_highstakes_delpmaspu_jg1vtz.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1775513616/A_hyper-realistic__high-definition__202604061612_f3edtl.jpg"
     },
     {
       title: t.services.items[3].title,
       desc: t.services.items[3].desc,
       icon: <ClipboardList className="w-8 h-8" />,
-      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773684830/A_fotorrealista_powerful_closeup_shot_of_a_handsha_delpmaspu_b79b7j.jpg"
+      image: "https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1775513859/ENLACE_A_LA_202604061615_q2gowo.jpg"
     },
   ];
 
