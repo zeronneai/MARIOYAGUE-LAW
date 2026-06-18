@@ -13,6 +13,7 @@ import { PersonalInjuryPage } from './pages/PersonalInjuryPage';
 import { CriminalDefensePage } from './pages/CriminalDefensePage';
 import { FamilyLawPage } from './pages/FamilyLawPage';
 import { DWIDefensePage } from './pages/DWIDefensePage';
+import { DeChoqueAChequePage } from './pages/DeChoqueAChequePage';
 import { useAnalytics } from './hooks/useAnalytics';
 import {
   trackPhoneClick,
@@ -21,6 +22,7 @@ import {
   trackFormSubmit,
   trackLanguageToggle,
   trackServiceCardClick,
+  trackEvent,
 } from './lib/analytics';
 import {
   Shield,
@@ -339,6 +341,32 @@ export const Hero = ({ startAnimation }: { startAnimation: boolean }) => {
                 <div className="text-white/60 text-[10px] uppercase tracking-widest">{stat.label}</div>
               </div>
             ))}
+          </motion.div>
+
+          {/* Texas Bar compliance disclaimer */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={startAnimation ? { opacity: 1 } : {}}
+            transition={{ duration: 1, delay: 1.3 }}
+            className="text-white/40 text-[10px] uppercase tracking-widest text-center mt-3 max-w-2xl mx-auto"
+          >
+            {t.hero.statsDisclaimer}
+          </motion.p>
+
+          {/* De Choque a Cheque — secondary tagline */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={startAnimation ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, delay: 1.5 }}
+            className="text-center mt-6"
+          >
+            <Link
+              to="/de-choque-a-cheque"
+              onClick={() => trackEvent('de_choque_a_cheque_link_click', { location: 'home_hero' })}
+              className="inline-block text-gold/80 hover:text-gold text-xs md:text-sm tracking-widest font-bold uppercase border-b border-gold/30 hover:border-gold/70 pb-0.5 transition-colors"
+            >
+              {t.hero.sloganTagline}
+            </Link>
           </motion.div>
         </motion.div>
       </div>
@@ -1053,6 +1081,15 @@ const Footer = () => {
               <li className="pt-2 border-t border-gold/15 mt-2">
                 <Link to="/faq" className="hover:text-gold transition-colors text-gold/80 uppercase tracking-wider text-xs font-bold">FAQ</Link>
               </li>
+              <li>
+                <Link
+                  to="/de-choque-a-cheque"
+                  onClick={() => trackEvent('de_choque_a_cheque_link_click', { location: 'footer' })}
+                  className="hover:text-gold transition-colors text-gold/80 uppercase tracking-wider text-xs font-bold"
+                >
+                  {t.footer.ourCampaign}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -1195,6 +1232,7 @@ export default function App() {
         <Route path="/criminal-defense" element={<CriminalDefensePage />} />
         <Route path="/family-law" element={<FamilyLawPage />} />
         <Route path="/dwi-defense" element={<DWIDefensePage />} />
+        <Route path="/de-choque-a-cheque" element={<DeChoqueAChequePage />} />
       </Routes>
       <Footer />
       <FloatingCTA />

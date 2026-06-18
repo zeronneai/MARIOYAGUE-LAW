@@ -164,8 +164,8 @@ export const personalInjuryPage: PracticeAreaContent = {
     },
   },
   overview: {
-    en: "Personal injury law allows people injured by another's negligence to recover compensation for their losses. At Mario Yague Law, we represent clients across El Paso who have been injured in car accidents, truck accidents, motorcycle accidents, pedestrian accidents, slip and falls, and other incidents where someone else's carelessness caused harm. Our firm operates on contingency fees — you pay nothing unless we win your case.",
-    es: 'La ley de lesiones personales permite a las personas heridas por la negligencia de otro recuperar compensación por sus pérdidas. En Mario Yague Law, representamos a clientes en El Paso que han resultado heridos en accidentes de auto, accidentes de camiones, accidentes de motocicleta, accidentes peatonales, resbalones y otros incidentes donde el descuido de alguien más causó daño. Nuestra firma opera con honorarios de contingencia — no pagas nada a menos que ganemos tu caso.',
+    en: "Personal injury law allows people injured by another's negligence to recover compensation for their losses. At Mario Yague Law, we represent clients across El Paso who have been injured in car accidents, truck accidents, motorcycle accidents, pedestrian accidents, slip and falls, and other incidents where someone else's carelessness caused harm. This is the heart of our “De Choque a Cheque” campaign — turning your crash into your check. Our firm operates on contingency fees: you pay nothing unless we win your case.",
+    es: 'La ley de lesiones personales permite a las personas heridas por la negligencia de otro recuperar compensación por sus pérdidas. En Mario Yague Law, representamos a clientes en El Paso que han resultado heridos en accidentes de auto, accidentes de camiones, accidentes de motocicleta, accidentes peatonales, resbalones y otros incidentes donde el descuido de alguien más causó daño. Este es el corazón de nuestra campaña “De Choque a Cheque” — convertir tu choque en tu cheque. Nuestra firma opera con honorarios de contingencia: no pagas nada a menos que ganemos tu caso.',
   },
   cases: {
     en: [

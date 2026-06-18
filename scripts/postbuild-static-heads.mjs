@@ -189,9 +189,73 @@ const routes = [
       faqSchema(dwiDefenseFaq),
     ],
   },
+  {
+    slug: 'de-choque-a-cheque',
+    title: 'De Choque a Cheque — Mario Yague Law | El Paso Accident Attorney',
+    description: "De Choque a Cheque: Mario Yague turns your crash into your check. $10M+ recovered. Bilingual attorney in El Paso, TX. No fee unless we win. (915) 400-1099.",
+    extraMeta: {
+      keywords: 'de choque a cheque, abogado accidentes el paso, mario yague, personal injury el paso, abogado bilingüe',
+      ogLocale: 'es_MX',
+      ogLocaleAlternate: 'en_US',
+    },
+    hreflang: [
+      { lang: 'en', href: `${SITE}/de-choque-a-cheque` },
+      { lang: 'es', href: `${SITE}/de-choque-a-cheque` },
+      { lang: 'x-default', href: `${SITE}/de-choque-a-cheque` },
+    ],
+    schemas: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'LegalService',
+        name: 'De Choque a Cheque by Mario Yague Law',
+        alternateName: ['De Choque a Cheque', 'From Crash to Cash', 'From Crash to Check'],
+        description:
+          'De Choque a Cheque is the Mario Yague Law campaign that turns your crash into your check. Bilingual personal injury attorney in El Paso, Texas. No fees unless we win. $10M+ recovered for clients.',
+        url: `${SITE}/de-choque-a-cheque`,
+        slogan: 'De Choque a Cheque',
+        inLanguage: ['en-US', 'es-MX'],
+        provider: { '@id': `${SITE}/#legalservice` },
+        areaServed: {
+          '@type': 'City',
+          name: 'El Paso',
+          containedInPlace: { '@type': 'State', name: 'Texas' },
+        },
+      },
+      faqSchema([
+        {
+          q: 'What does "De Choque a Cheque" mean?',
+          a: '"De Choque a Cheque" is Spanish for "From Crash to Check." It is the campaign promise of Mario Yague Law: when you have been hurt in an accident in El Paso, we turn your crash into a check — the compensation you deserve. The phrase captures our entire process, from the moment of the accident to the moment you receive your settlement, with no fee unless we win.',
+        },
+        {
+          q: 'How long does the De Choque a Cheque process take?',
+          a: 'Most personal injury cases in El Paso resolve in 6 months to 3 years, depending on the severity of the injuries, the insurance company\'s response, and whether the case settles or goes to trial. Simple cases with clear liability and minor injuries can settle in 4–6 months. Complex cases with serious injuries or disputed liability can take 1–3 years. We move as fast as the medical and legal facts allow, and we keep you updated at every stage.',
+        },
+        {
+          q: 'What are the attorney fees for De Choque a Cheque?',
+          a: 'You pay nothing upfront. Mario Yague Law works on a contingency fee — we only get paid if we win your case, typically 33–40% of the final settlement. The initial consultation is free and confidential. If we do not recover compensation for you, you owe us nothing. No fee unless we win.',
+        },
+        {
+          q: 'What types of accidents qualify for De Choque a Cheque?',
+          a: "Car accidents, truck and 18-wheeler accidents, motorcycle accidents, pedestrian and bicycle accidents, slip and fall injuries, workplace injuries, wrongful death, and other incidents where someone else's negligence caused you harm. If you are not sure whether your situation qualifies, call us — the consultation is free and we will tell you straight.",
+        },
+        {
+          q: 'Does Mario Yague speak Spanish?',
+          a: "Yes. Mario Yague Law is fully bilingual. Mario himself is bilingual, and our entire team handles consultations, court representation, document review, and client communication in both English and Spanish. Given El Paso's location on the U.S.-Mexico border, bilingual representation is essential to make sure you understand every step of your case. Llámanos en español o inglés al (915) 400-1099.",
+        },
+      ]),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'De Choque a Cheque', item: `${SITE}/de-choque-a-cheque` },
+        ],
+      },
+    ],
+  },
 ];
 
-function renderRouteHtml({ slug, title, description, schemas }) {
+function renderRouteHtml({ slug, title, description, schemas, extraMeta, hreflang }) {
   let html = baseHtml;
   const canonical = `${SITE}/${slug}`;
 
@@ -228,6 +292,46 @@ function renderRouteHtml({ slug, title, description, schemas }) {
     `<meta property="og:description" content="${description.replace(/"/g, '&quot;')}">`,
   );
 
+  // Replace twitter:title and twitter:description if present
+  html = html.replace(
+    /<meta name="twitter:title" content="[^"]*"\s*\/?>/,
+    `<meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}">`,
+  );
+  html = html.replace(
+    /<meta name="twitter:description" content="[^"]*"\s*\/?>/,
+    `<meta name="twitter:description" content="${description.replace(/"/g, '&quot;')}">`,
+  );
+
+  // Replace meta keywords if extraMeta.keywords provided
+  if (extraMeta && extraMeta.keywords) {
+    html = html.replace(
+      /<meta name="keywords" content="[^"]*"\s*\/?>/,
+      `<meta name="keywords" content="${extraMeta.keywords.replace(/"/g, '&quot;')}">`,
+    );
+  }
+
+  // Replace og:locale + og:locale:alternate if extraMeta provided
+  if (extraMeta && extraMeta.ogLocale) {
+    html = html.replace(
+      /<meta property="og:locale" content="[^"]*"\s*\/?>/,
+      `<meta property="og:locale" content="${extraMeta.ogLocale}">`,
+    );
+  }
+  if (extraMeta && extraMeta.ogLocaleAlternate) {
+    html = html.replace(
+      /<meta property="og:locale:alternate" content="[^"]*"\s*\/?>/,
+      `<meta property="og:locale:alternate" content="${extraMeta.ogLocaleAlternate}">`,
+    );
+  }
+
+  // Build hreflang block
+  let hreflangTags = '';
+  if (Array.isArray(hreflang) && hreflang.length > 0) {
+    hreflangTags = hreflang
+      .map((entry) => `    <link rel="alternate" hreflang="${entry.lang}" href="${entry.href}" />`)
+      .join('\n');
+  }
+
   // Append schemas before </head>
   const schemaTags = schemas
     .map(
@@ -235,7 +339,9 @@ function renderRouteHtml({ slug, title, description, schemas }) {
         `    <script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n    </script>`,
     )
     .join('\n');
-  html = html.replace('</head>', `${schemaTags}\n  </head>`);
+
+  const headInjection = [hreflangTags, schemaTags].filter(Boolean).join('\n');
+  html = html.replace('</head>', `${headInjection}\n  </head>`);
 
   return html;
 }
