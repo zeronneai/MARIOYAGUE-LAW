@@ -115,7 +115,7 @@ function serviceSchema({ name, description, slug }) {
       email: 'mario@myr-law.com',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: '1521 E Missouri Ave',
+        streetAddress: '1331 Wyoming Ave',
         addressLocality: 'El Paso',
         addressRegion: 'TX',
         postalCode: '79902',

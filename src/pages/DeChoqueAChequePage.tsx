@@ -15,6 +15,7 @@ import {
   Mail,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useDrawer } from '../context/DrawerContext';
 import { FAQAccordion } from '../components/FAQAccordion';
 import { useSeo } from '../seo/useSeo';
 import type { LocalizedQA } from '../seo/pageContent';
@@ -126,6 +127,7 @@ const buildJsonLd = (lang: 'en' | 'es') => [
 
 export const DeChoqueAChequePage = () => {
   const { language } = useLanguage();
+  const { openDrawer } = useDrawer();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -353,13 +355,16 @@ export const DeChoqueAChequePage = () => {
               <Phone className="w-4 h-4" />
               {callCta}
             </a>
-            <a
-              href="/#contact"
+            <button
+              onClick={() => {
+                trackEvent('form_drawer_open', { location: 'de_choque_a_cheque_hero' });
+                openDrawer('de_choque_a_cheque_hero');
+              }}
               className="inline-flex items-center justify-center gap-3 border border-gold/40 text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-white/5 transition-all rounded-sm text-sm"
             >
               {freeCta}
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
           </motion.div>
         </div>
       </section>

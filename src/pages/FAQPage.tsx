@@ -5,10 +5,12 @@ import { PageHero } from '../components/PageHero';
 import { FAQAccordion } from '../components/FAQAccordion';
 import { faqQuestions, faqPageSeo } from '../seo/pageContent';
 import { useSeo, buildFaqJsonLd } from '../seo/useSeo';
-import { trackPhoneClick } from '../lib/analytics';
+import { useDrawer } from '../context/DrawerContext';
+import { trackPhoneClick, trackEvent } from '../lib/analytics';
 
 export const FAQPage = () => {
   const { language } = useLanguage();
+  const { openDrawer } = useDrawer();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,13 +64,16 @@ export const FAQPage = () => {
               <Phone className="w-4 h-4" />
               {ctaButton}
             </a>
-            <a
-              href="/#contact"
+            <button
+              onClick={() => {
+                trackEvent('form_drawer_open', { location: 'faq_cta' });
+                openDrawer('faq_cta');
+              }}
               className="inline-flex items-center justify-center gap-3 border border-gold/40 text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-white/5 transition-all rounded-sm text-sm"
             >
               {language === 'es' ? 'Formulario de Contacto' : 'Contact Form'}
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
           </div>
         </div>
       </section>

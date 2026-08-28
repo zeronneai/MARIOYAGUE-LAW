@@ -7,6 +7,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useLanguage } from './context/LanguageContext';
+import { DrawerProvider, useDrawer } from './context/DrawerContext';
+import { ContactDrawer } from './components/ContactDrawer';
+import { NewOfficeModal } from './components/NewOfficeModal';
 import { HomePage } from './pages/HomePage';
 import { FAQPage } from './pages/FAQPage';
 import { PersonalInjuryPage } from './pages/PersonalInjuryPage';
@@ -58,6 +61,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const { openDrawer } = useDrawer();
   const location = useLocation();
   const isHome = location.pathname === '/';
 
@@ -148,12 +152,15 @@ const Navbar = () => {
             >
               {language === 'en' ? 'ES' : 'EN'}
             </button>
-            <a
-              href="/#contact"
+            <button
+              onClick={() => {
+                trackEvent('form_drawer_open', { location: 'navbar' });
+                openDrawer('navbar');
+              }}
               className="bg-burgundy text-beige px-6 py-2.5 text-xs uppercase tracking-widest font-bold hover:bg-burgundy-dark transition-all animate-pulse-white"
             >
               {t.nav.consultation}
-            </a>
+            </button>
           </div>
         </div>
 
@@ -830,18 +837,19 @@ export const Contact = () => {
                 <div>
                   <p className="text-sm uppercase tracking-widest text-white/60 font-bold mb-2">{t.contact.location}</p>
                   <p className="text-2xl font-serif text-white leading-snug">
-                    1521 E. Missouri Ave.<br />
+                    1331 Wyoming Ave.<br />
                     El Paso, Texas 79902
                   </p>
                   <div className="mt-6 rounded-sm overflow-hidden border border-white/20 shadow-2xl">
-                    <iframe 
-                      src="https://www.google.com/maps/embed?pb=!4v1773437865543!6m8!1m7!1sK68mRS5pkLIjAbNX48fJ_A!2m2!1d31.77054052438731!2d-106.4761808145814!3f3.5237698282924015!4f-5.393087608392349!5f0.7820865974627469" 
-                      width="100%" 
-                      height="180" 
-                      style={{ border: 0 }} 
-                      allowFullScreen 
-                      loading="lazy" 
-                      referrerPolicy="no-referrer-when-downgrade"
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13568.096645308871!2d-106.478896992469!3d31.7698269402202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e759a9110041f7%3A0x24784b5b07e07eeb!2s1331%20Wyoming%20Ave%2C%20El%20Paso%2C%20TX%2079902%2C%20EE.%20UU.!5e0!3m2!1ses-419!2smx!4v1787936455554!5m2!1ses-419!2smx"
+                      width="100%"
+                      height="180"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      title="Mario Yague Law — 1331 Wyoming Ave, El Paso, TX"
                     ></iframe>
                   </div>
                 </div>
@@ -1016,14 +1024,14 @@ const Footer = () => {
             <ul className="space-y-4 text-sm">
               <li>
                 <a
-                  href="https://www.google.com/maps/place/1521+E+Missouri+Ave,+El+Paso,+TX+79902"
+                  href="https://www.google.com/maps/place/1331+Wyoming+Ave,+El+Paso,+TX+79902"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 hover:text-gold transition-colors"
                 >
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                   <span className="leading-snug">
-                    1521 E Missouri Ave
+                    1331 Wyoming Ave
                     <br />
                     El Paso, TX 79902
                   </span>
@@ -1219,23 +1227,27 @@ export default function App() {
   useAnalytics();
 
   return (
-    <div className="selection:bg-gold selection:text-charcoal">
-      <AnimatePresence>
-        {isHome && isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
-      </AnimatePresence>
+    <DrawerProvider>
+      <div className="selection:bg-gold selection:text-charcoal">
+        <AnimatePresence>
+          {isHome && isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+        </AnimatePresence>
 
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage isLoading={isLoading} />} />
-        <Route path="/faq" element={<FAQPage />} />
-        <Route path="/personal-injury" element={<PersonalInjuryPage />} />
-        <Route path="/criminal-defense" element={<CriminalDefensePage />} />
-        <Route path="/family-law" element={<FamilyLawPage />} />
-        <Route path="/dwi-defense" element={<DWIDefensePage />} />
-        <Route path="/de-choque-a-cheque" element={<DeChoqueAChequePage />} />
-      </Routes>
-      <Footer />
-      <FloatingCTA />
-    </div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage isLoading={isLoading} />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/personal-injury" element={<PersonalInjuryPage />} />
+          <Route path="/criminal-defense" element={<CriminalDefensePage />} />
+          <Route path="/family-law" element={<FamilyLawPage />} />
+          <Route path="/dwi-defense" element={<DWIDefensePage />} />
+          <Route path="/de-choque-a-cheque" element={<DeChoqueAChequePage />} />
+        </Routes>
+        <Footer />
+        <FloatingCTA />
+        <ContactDrawer />
+        <NewOfficeModal />
+      </div>
+    </DrawerProvider>
   );
 }

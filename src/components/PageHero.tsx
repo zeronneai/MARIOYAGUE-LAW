@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
 import { ArrowRight, Phone } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { trackPhoneClick } from '../lib/analytics';
+import { useDrawer } from '../context/DrawerContext';
+import { trackPhoneClick, trackEvent } from '../lib/analytics';
 
 interface PageHeroProps {
   title: string;
@@ -11,6 +12,7 @@ interface PageHeroProps {
 
 export const PageHero = ({ title, subtitle, eyebrow }: PageHeroProps) => {
   const { language } = useLanguage();
+  const { openDrawer } = useDrawer();
   const ctaLabel =
     language === 'es' ? 'Agenda una Consulta Gratuita' : 'Schedule a Free Consultation';
   const phoneLabel = language === 'es' ? 'Llama Ahora' : 'Call Now';
@@ -58,13 +60,16 @@ export const PageHero = ({ title, subtitle, eyebrow }: PageHeroProps) => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <a
-            href="/#contact"
+          <button
+            onClick={() => {
+              trackEvent('form_drawer_open', { location: 'page_hero' });
+              openDrawer('page_hero');
+            }}
             className="inline-flex items-center gap-3 bg-burgundy text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 border border-gold/40 rounded-sm text-sm"
           >
             {ctaLabel}
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
           <a
             href="tel:+19154001099"
             onClick={() => trackPhoneClick('page_hero')}
