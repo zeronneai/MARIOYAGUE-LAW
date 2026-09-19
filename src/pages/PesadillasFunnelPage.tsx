@@ -9,7 +9,19 @@ import { trackEvent, trackPhoneClick } from '../lib/analytics';
 // Fabian: paste the deployed web app URL here (Deploy > New deployment >
 // Web app > Execute as: Me > Who has access: Anyone).
 // ─────────────────────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'REEMPLAZAR_CON_URL_DE_APPS_SCRIPT';
+const APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbx5emrpg1BFymXBJHn4oQEYr-b3xacCA1Mci5DAsVOhDJE8HPazf8O5nE2XCFLhkuUh4Q/exec';
+
+// Field order used to scroll to the first invalid input on a failed submit
+const FIELD_ORDER = [
+  'name',
+  'phone',
+  'email',
+  'accident_type',
+  'accident_date',
+  'preferred_day',
+  'preferred_time',
+] as const;
 
 const HERO_IMAGE =
   'https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1789850641/Man_panicking_after_car_crash_2K_20260919144322_nhkatl.jpg';
@@ -231,9 +243,11 @@ const VideoPlayer = ({ lang }: { lang: Lang }) => (
 interface FormProps {
   lang: Lang;
   checkedIds: number[];
+  /** Called after a successful submit so the parent can scroll the thank-you into view. */
+  onSubmitted?: () => void;
 }
 
-const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
+const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const startedRef = useRef(false);
@@ -283,6 +297,8 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
     const req = label('Campo obligatorio', 'Required field');
 
     if (!form.name.trim()) next.name = req;
+    else if (form.name.trim().length < 2)
+      next.name = label('Nombre demasiado corto', 'Name is too short');
 
     const digits = form.phone.replace(/\D/g, '');
     if (!form.phone.trim()) next.phone = req;
@@ -302,12 +318,24 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
     if (!form.preferred_time) next.preferred_time = req;
 
     setErrors(next);
+
+    // Move the viewport to the first field that needs attention
+    const firstBad = FIELD_ORDER.find((f) => next[f]);
+    if (firstBad) {
+      const el = document.querySelector<HTMLElement>(`[name="${firstBad}"]`);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => el?.focus({ preventScroll: true }), 400);
+    }
+
     return Object.keys(next).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    trackEvent('pesadillas_form_submit_attempt', { checked_count: checkedIds.length });
+    trackEvent('pesadillas_form_submit_attempt', {
+      accident_type: form.accident_type,
+      checked_count: checkedIds.length,
+    });
 
     if (!validate()) {
       trackEvent('pesadillas_form_submit_error', { reason: 'validation' });
@@ -330,35 +358,45 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
       language: lang,
     });
 
-    if (APPS_SCRIPT_URL === 'REEMPLAZAR_CON_URL_DE_APPS_SCRIPT') {
-      console.error(
-        '[pesadillas] APPS_SCRIPT_URL is still the placeholder. Paste the deployed Apps Script web app URL in src/pages/PesadillasFunnelPage.tsx before running ads.',
-      );
-      setStatus('error');
-      trackEvent('pesadillas_form_submit_error', { reason: 'endpoint_not_configured' });
-      return;
-    }
-
     try {
-      // urlencoded body keeps this a CORS "simple request" (no preflight),
-      // which is what Apps Script web apps handle reliably.
+      // Apps Script sends no CORS headers, so the request goes out opaque.
+      // urlencoded is one of the few Content-Types no-cors allows, and it is
+      // what Apps Script reads most reliably via e.parameter.
+      //
+      // Tradeoff: an opaque response exposes no status, so a server-side
+      // failure is indistinguishable from success and only a network-level
+      // failure (offline, DNS) rejects. We optimistically report success —
+      // preferable here to the alternative, where a CORS rejection would show
+      // an error for a lead that Apps Script had in fact already saved, and
+      // push the person into submitting twice.
       await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: payload.toString(),
       });
 
       setStatus('success');
+      onSubmitted?.();
       trackEvent('pesadillas_form_submit_success', {
-        checked_count: checkedIds.length,
         accident_type: form.accident_type,
+        preferred_day: form.preferred_day,
+        preferred_time: form.preferred_time,
+        checked_count: checkedIds.length,
         language: lang,
       });
     } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
       console.error('[pesadillas] submit failed', err);
       setStatus('error');
-      trackEvent('pesadillas_form_submit_error', { reason: 'network' });
+      trackEvent('pesadillas_form_submit_error', { reason: 'network', error_message: message });
+      trackEvent('pesadillas_error_shown', {});
     }
+  };
+
+  const retry = () => {
+    setStatus('idle');
+    trackEvent('pesadillas_form_retry', {});
   };
 
   // ── Thank you state ──
@@ -418,6 +456,40 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      {/* Submit failed — the entered data is kept so retrying costs nothing */}
+      {status === 'error' && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="border border-[#E06565]/50 bg-[#E06565]/10 rounded-sm p-5"
+        >
+          <p className="flex items-start gap-2.5 text-[#F5EFE6] text-sm leading-relaxed mb-4">
+            <AlertCircle className="w-5 h-5 text-[#E06565] flex-shrink-0 mt-0.5" />
+            {label(
+              `Hubo un problema al enviar tu información. Por favor llámanos directamente al ${PHONE_DISPLAY} o intenta de nuevo.`,
+              `There was an issue submitting your information. Please call us directly at ${PHONE_DISPLAY} or try again.`,
+            )}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={PHONE_HREF}
+              onClick={() => trackPhoneClick('pesadillas_form_error')}
+              className="flex-1 inline-flex items-center justify-center gap-2 min-h-[52px] bg-[#A03838] text-[#F5EFE6] px-6 py-3 font-bold uppercase tracking-widest text-sm rounded-sm shadow-[0_0_30px_rgba(160,56,56,0.45)] hover:bg-[#B54242] transition-all duration-200"
+            >
+              <Phone className="w-4 h-4" />
+              {label(`LLAMAR AHORA ${PHONE_DISPLAY}`, `CALL NOW ${PHONE_DISPLAY}`)}
+            </a>
+            <button
+              type="button"
+              onClick={retry}
+              className="sm:flex-none inline-flex items-center justify-center min-h-[52px] border border-[#C9A87C]/40 text-[#C9A87C] px-6 py-3 font-bold uppercase tracking-widest text-xs rounded-sm hover:bg-[#C9A87C]/10 transition-all duration-200"
+            >
+              {label('Intentar de nuevo', 'Try again')}
+            </button>
+          </div>
+        </motion.div>
+      )}
+
       <div>
         <Lbl>{label('Nombre completo', 'Full name')}</Lbl>
         <input
@@ -566,25 +638,6 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
           </>
         )}
       </button>
-
-      {status === 'error' && (
-        <div className="border border-[#E06565]/40 bg-[#E06565]/10 rounded-sm p-5 text-center">
-          <p className="text-[#F5EFE6] text-sm mb-4">
-            {label(
-              'Hubo un error al enviar tu caso. Llámanos directamente y te atendemos de inmediato.',
-              'There was an error submitting your case. Call us directly and we will help you right away.',
-            )}
-          </p>
-          <a
-            href={PHONE_HREF}
-            onClick={() => trackPhoneClick('pesadillas_form_error')}
-            className="inline-flex items-center justify-center gap-2 min-h-[48px] bg-[#A03838] text-[#F5EFE6] px-8 py-3 font-bold uppercase tracking-widest text-xs rounded-sm hover:bg-[#B54242] transition-all duration-200"
-          >
-            <Phone className="w-4 h-4" />
-            {PHONE_DISPLAY}
-          </a>
-        </div>
-      )}
 
       <p className="text-center text-[#B8AA9A]/60 text-xs">
         {label(
@@ -898,7 +951,13 @@ const PesadillasFunnelPage = () => {
           >
             {label('Cuéntanos tu caso', 'Tell us your case')}
           </motion.h2>
-          <ApplicationForm lang={lang} checkedIds={checked} />
+          <ApplicationForm
+            lang={lang}
+            checkedIds={checked}
+            onSubmitted={() =>
+              formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+          />
         </div>
       </section>
 
