@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 
 interface NoIndexSeoOpts {
   title: string;
+  /** Overrides the global meta description while this page is mounted. */
+  description?: string;
   /** Optional image URL to preload for LCP. */
   preloadImage?: string;
 }
@@ -17,7 +19,7 @@ interface NoIndexSeoOpts {
  * Note: crawlers that do NOT execute JS still receive the static index.html
  * head. robots.txt Disallow is the authoritative block for those.
  */
-export function useNoIndexSeo({ title, preloadImage }: NoIndexSeoOpts) {
+export function useNoIndexSeo({ title, description, preloadImage }: NoIndexSeoOpts) {
   useEffect(() => {
     const prevTitle = document.title;
     document.title = title;
@@ -38,6 +40,13 @@ export function useNoIndexSeo({ title, preloadImage }: NoIndexSeoOpts) {
     addMeta('name', 'robots', 'noindex, nofollow, noarchive, nosnippet, noimageindex');
     addMeta('name', 'googlebot', 'noindex, nofollow, noarchive');
     addMeta('name', 'bingbot', 'noindex, nofollow');
+
+    // Swap the global description for this page's own, restoring it on unmount
+    const metaDesc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (description && metaDesc) {
+      suppressed.push([metaDesc, 'content', metaDesc.getAttribute('content')]);
+      metaDesc.setAttribute('content', description);
+    }
 
     // Neutralize canonical so this URL never claims to be a canonical target
     const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
@@ -73,5 +82,5 @@ export function useNoIndexSeo({ title, preloadImage }: NoIndexSeoOpts) {
         else el.setAttribute(attr, value);
       });
     };
-  }, [title, preloadImage]);
+  }, [title, description, preloadImage]);
 }

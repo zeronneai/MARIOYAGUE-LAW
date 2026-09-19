@@ -1,7 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Play, Check, ArrowRight, Phone, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
 import { useNoIndexSeo } from '../hooks/useNoIndexSeo';
 import { trackEvent, trackPhoneClick } from '../lib/analytics';
 
@@ -31,6 +30,18 @@ const PHONE_DISPLAY = '(915) 400-1099';
 const PHONE_HREF = 'tel:+19154001099';
 
 type Lang = 'en' | 'es';
+
+/**
+ * This funnel owns its language locally instead of reading LanguageContext.
+ *
+ * Ads for this page are aimed at a Spanish-speaking audience, so it must open
+ * in Spanish on the very first paint regardless of what the rest of the site
+ * is set to. Driving it from context would mean rendering once in English and
+ * correcting it in an effect — a visible flash on the headline. Owning the
+ * state here also means the toggle never mutates the global language, so the
+ * main site keeps whatever it had with nothing to restore on unmount.
+ */
+const DEFAULT_FUNNEL_LANG: Lang = 'es';
 
 // ─────────────────────────────────────────────────────────────
 // Requirements checklist
@@ -70,6 +81,42 @@ const TIMES = [
   { value: 'Afternoon 12pm-5pm', es: 'Tarde 12pm-5pm', en: 'Afternoon 12pm-5pm' },
   { value: 'Evening 5pm-8pm', es: 'Noche 5pm-8pm', en: 'Evening 5pm-8pm' },
 ];
+
+// ─────────────────────────────────────────────────────────────
+// Language toggle — scoped to this page, never touches global state
+// ─────────────────────────────────────────────────────────────
+const LanguageToggle = ({
+  lang,
+  onChange,
+}: {
+  lang: Lang;
+  onChange: (next: Lang) => void;
+}) => {
+  const opt = (value: Lang, text: string) => {
+    const active = lang === value;
+    return (
+      <button
+        type="button"
+        onClick={() => !active && onChange(value)}
+        aria-pressed={active}
+        aria-label={value === 'es' ? 'Español' : 'English'}
+        className={`min-w-[44px] min-h-[44px] px-2 text-xs font-bold tracking-[0.2em] transition-colors duration-200 ${
+          active ? 'text-[#C9A87C]' : 'text-[#B8AA9A]/40 hover:text-[#B8AA9A]/70'
+        }`}
+      >
+        {text}
+      </button>
+    );
+  };
+
+  return (
+    <div className="flex items-center rounded-sm bg-black/30 backdrop-blur-sm border border-[#C9A87C]/15">
+      {opt('es', 'ES')}
+      <span className="text-[#B8AA9A]/25 text-xs select-none">·</span>
+      {opt('en', 'EN')}
+    </div>
+  );
+};
 
 // ─────────────────────────────────────────────────────────────
 // Hero media — image placeholder now, <video> once the file lands
@@ -401,7 +448,7 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
           <Err k="phone" />
         </div>
         <div>
-          <Lbl>Email</Lbl>
+          <Lbl>{label('Correo electrónico', 'Email')}</Lbl>
           <input
             type="email"
             name="email"
@@ -409,7 +456,7 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
             onChange={handleChange}
             autoComplete="email"
             inputMode="email"
-            placeholder="tu@email.com"
+            placeholder={label('tu@correo.com', 'you@email.com')}
             className={`${fieldBase} ${errCls('email')}`}
           />
           <Err k="email" />
@@ -553,8 +600,7 @@ const ApplicationForm = ({ lang, checkedIds }: FormProps) => {
 // Page
 // ─────────────────────────────────────────────────────────────
 const PesadillasFunnelPage = () => {
-  const { language } = useLanguage();
-  const lang = language as Lang;
+  const [lang, setLang] = useState<Lang>(DEFAULT_FUNNEL_LANG);
   const [checked, setChecked] = useState<number[]>([]);
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -565,10 +611,19 @@ const PesadillasFunnelPage = () => {
   useNoIndexSeo({
     title:
       lang === 'es'
-        ? 'Pesadillas en los Seguros — Mario Yague Law'
-        : 'Insurance Nightmares — Mario Yague Law',
+        ? 'Pesadillas en los Seguros - Mario Yague Law | Aplicación'
+        : 'Insurance Nightmares - Mario Yague Law | Application',
+    description:
+      lang === 'es'
+        ? 'Aplica ahora. Convertimos tu choque en una pesadilla para los seguros. Consulta gratis en El Paso.'
+        : 'Apply now. We turn your crash into a nightmare for the insurance companies. Free consultation in El Paso.',
     preloadImage: HERO_IMAGE,
   });
+
+  const changeLang = (next: Lang) => {
+    trackEvent('pesadillas_language_toggle', { from: lang, to: next });
+    setLang(next);
+  };
 
   const label = (es: string, en: string) => (lang === 'es' ? es : en);
   const count = checked.length;
@@ -603,8 +658,8 @@ const PesadillasFunnelPage = () => {
           className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
           style={{ backgroundImage: NOISE_TEXTURE }}
         />
-        {/* Standalone brand mark — no navbar on this page */}
-        <div className="relative z-10 flex justify-center pt-7 pb-5">
+        {/* Standalone brand mark + language toggle — no navbar on this page */}
+        <div className="relative z-20 flex items-center justify-center pt-7 pb-5 px-4">
           <img
             src={BULL_LOGO}
             alt="Mario Yague Law"
@@ -613,6 +668,9 @@ const PesadillasFunnelPage = () => {
             className="w-12 h-12 object-contain opacity-80"
             referrerPolicy="no-referrer"
           />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <LanguageToggle lang={lang} onChange={changeLang} />
+          </div>
         </div>
         <HeroMedia lang={lang} />
       </section>
@@ -714,7 +772,9 @@ const PesadillasFunnelPage = () => {
                   key={r.id}
                   type="button"
                   onClick={() => toggle(r.id)}
-                  aria-pressed={on}
+                  role="checkbox"
+                  aria-checked={on}
+                  data-requirement={r.id}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
