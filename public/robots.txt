@@ -1,8 +1,14 @@
 # Mario Yague Law - robots.txt
-# Última actualización: 14 mayo 2026
+# Última actualización: 19 septiembre 2026
+
+# NOTA: /pesadillas es una landing privada de campañas pagadas.
+# El Disallow se repite en CADA grupo porque los crawlers solo obedecen
+# el grupo más específico que coincide con su user-agent — un Disallow
+# únicamente bajo "User-agent: *" no aplicaría a Googlebot ni a Bingbot.
 
 User-agent: *
 Allow: /
+Disallow: /pesadillas
 
 # Sitemap
 Sitemap: https://www.marioyaguelaw.com/sitemap.xml
@@ -10,37 +16,48 @@ Sitemap: https://www.marioyaguelaw.com/sitemap.xml
 # Permitir crawlers de IA (importante para ChatGPT, Perplexity, Claude)
 User-agent: GPTBot
 Allow: /
+Disallow: /pesadillas
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /pesadillas
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /pesadillas
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /pesadillas
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /pesadillas
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /pesadillas
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /pesadillas
 
 # Permitir bots de buscadores tradicionales
 User-agent: Googlebot
 Allow: /
+Disallow: /pesadillas
 
 User-agent: Bingbot
 Allow: /
+Disallow: /pesadillas
 
 User-agent: DuckDuckBot
 Allow: /
+Disallow: /pesadillas
 
 User-agent: Yandex
 Allow: /
+Disallow: /pesadillas
 
 # Bloquear scrapers maliciosos
 User-agent: AhrefsBot

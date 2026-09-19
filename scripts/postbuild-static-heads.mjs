@@ -346,8 +346,18 @@ function renderRouteHtml({ slug, title, description, schemas, extraMeta, hreflan
   return html;
 }
 
+// Hidden routes must never be prerendered: a static file here would be a
+// crawlable, indexable copy of a page that is meant to be reachable only via
+// paid-ad URLs. Keeping them out means Vercel serves the SPA shell instead,
+// and robots.txt Disallow is what blocks compliant crawlers.
+const NEVER_PRERENDER = ['pesadillas'];
+
 let written = 0;
 for (const route of routes) {
+  if (NEVER_PRERENDER.includes(route.slug)) {
+    console.warn(`[postbuild] SKIPPED hidden route "${route.slug}" — must not be prerendered`);
+    continue;
+  }
   const html = renderRouteHtml(route);
   const outDir = join(distDir, route.slug);
   mkdirSync(outDir, { recursive: true });

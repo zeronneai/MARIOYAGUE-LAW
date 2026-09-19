@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useLanguage } from './context/LanguageContext';
@@ -17,6 +17,8 @@ import { CriminalDefensePage } from './pages/CriminalDefensePage';
 import { FamilyLawPage } from './pages/FamilyLawPage';
 import { DWIDefensePage } from './pages/DWIDefensePage';
 import { DeChoqueAChequePage } from './pages/DeChoqueAChequePage';
+// Hidden paid-ads funnel — lazy so its bundle never loads for normal visitors
+const PesadillasFunnelPage = lazy(() => import('./pages/PesadillasFunnelPage'));
 import { useAnalytics } from './hooks/useAnalytics';
 import {
   trackPhoneClick,
@@ -1224,6 +1226,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const isHome = location.pathname === '/';
+  // Standalone ad funnel: renders without any of the site chrome
+  const isStandalone = location.pathname === '/pesadillas';
   useAnalytics();
 
   return (
@@ -1233,20 +1237,27 @@ export default function App() {
           {isHome && isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
         </AnimatePresence>
 
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage isLoading={isLoading} />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/personal-injury" element={<PersonalInjuryPage />} />
-          <Route path="/criminal-defense" element={<CriminalDefensePage />} />
-          <Route path="/family-law" element={<FamilyLawPage />} />
-          <Route path="/dwi-defense" element={<DWIDefensePage />} />
-          <Route path="/de-choque-a-cheque" element={<DeChoqueAChequePage />} />
-        </Routes>
-        <Footer />
-        <FloatingCTA />
-        <ContactDrawer />
-        <NewOfficeModal />
+        {!isStandalone && <Navbar />}
+        <Suspense fallback={<div className="min-h-screen bg-[#0F0806]" />}>
+          <Routes>
+            <Route path="/" element={<HomePage isLoading={isLoading} />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/personal-injury" element={<PersonalInjuryPage />} />
+            <Route path="/criminal-defense" element={<CriminalDefensePage />} />
+            <Route path="/family-law" element={<FamilyLawPage />} />
+            <Route path="/dwi-defense" element={<DWIDefensePage />} />
+            <Route path="/de-choque-a-cheque" element={<DeChoqueAChequePage />} />
+            <Route path="/pesadillas" element={<PesadillasFunnelPage />} />
+          </Routes>
+        </Suspense>
+        {!isStandalone && (
+          <>
+            <Footer />
+            <FloatingCTA />
+            <ContactDrawer />
+            <NewOfficeModal />
+          </>
+        )}
       </div>
     </DrawerProvider>
   );
