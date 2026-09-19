@@ -1,13 +1,11 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, Check, ArrowRight, Phone, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Play, Check, ArrowRight, Phone, AlertCircle, CheckCircle2, ChevronDown } from 'lucide-react';
 import { useNoIndexSeo } from '../hooks/useNoIndexSeo';
 import { trackEvent, trackPhoneClick } from '../lib/analytics';
 
 // ─────────────────────────────────────────────────────────────
-// Google Apps Script endpoint.
-// Fabian: paste the deployed web app URL here (Deploy > New deployment >
-// Web app > Execute as: Me > Who has access: Anyone).
+// Google Apps Script endpoint (live)
 // ─────────────────────────────────────────────────────────────
 const APPS_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbx5emrpg1BFymXBJHn4oQEYr-b3xacCA1Mci5DAsVOhDJE8HPazf8O5nE2XCFLhkuUh4Q/exec';
@@ -25,14 +23,8 @@ const FIELD_ORDER = [
 
 const HERO_IMAGE =
   'https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1789850641/Man_panicking_after_car_crash_2K_20260919144322_nhkatl.jpg';
-const BULL_LOGO =
-  'https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1774036245/TORO_wiossl.png';
 
-// Videos land here once Fabian delivers them; the media components switch
-// from image placeholder to <video> when these files exist.
-const HERO_VIDEO = '/videos/pesadillas.mp4';
-const REQUISITOS_VIDEO = '/videos/requisitos.mp4';
-const HERO_VIDEO_READY = false;
+const REQUISITOS_VIDEO = '/videos/pesadillas-requisitos.mp4';
 const REQUISITOS_VIDEO_READY = false;
 
 const NOISE_TEXTURE =
@@ -40,6 +32,17 @@ const NOISE_TEXTURE =
 
 const PHONE_DISPLAY = '(915) 400-1099';
 const PHONE_HREF = 'tel:+19154001099';
+
+const DISPLAY_FONT = "'Anton', 'Arial Narrow', 'Helvetica Neue', Impact, sans-serif";
+
+// Offsets are in em so the 3D stack keeps the same proportions from the
+// 3rem mobile size up to the 8rem desktop size.
+const TEXT_3D = `
+  0.025em 0.025em 0 #7C2D2D,
+  0.05em 0.05em 0 #5A1F1F,
+  0.075em 0.075em 0 #2B1F1A,
+  0.1em 0.1em 0.16em rgba(0,0,0,0.6)
+`;
 
 type Lang = 'en' | 'es';
 
@@ -95,15 +98,73 @@ const TIMES = [
 ];
 
 // ─────────────────────────────────────────────────────────────
-// Language toggle — scoped to this page, never touches global state
+// Anton (display face) — injected only on this route.
+//
+// The effect runs after first paint, but every headline starts at opacity 0
+// and fades in, so the swap from the fallback face is never on screen.
 // ─────────────────────────────────────────────────────────────
-const LanguageToggle = ({
-  lang,
-  onChange,
+function useDisplayFont() {
+  useEffect(() => {
+    const added: HTMLLinkElement[] = [];
+    const add = (rel: string, href: string, cross?: boolean) => {
+      if (document.querySelector(`link[href="${href}"]`)) return;
+      const l = document.createElement('link');
+      l.rel = rel;
+      l.href = href;
+      if (cross) l.crossOrigin = 'anonymous';
+      document.head.appendChild(l);
+      added.push(l);
+    };
+    add('preconnect', 'https://fonts.googleapis.com');
+    add('preconnect', 'https://fonts.gstatic.com', true);
+    add('stylesheet', 'https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    return () => added.forEach((l) => l.remove());
+  }, []);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Shared bits
+// ─────────────────────────────────────────────────────────────
+const Grain = ({ opacity = 0.12 }: { opacity?: number }) => (
+  <div
+    aria-hidden
+    className="absolute inset-0 pointer-events-none mix-blend-overlay"
+    style={{ backgroundImage: NOISE_TEXTURE, opacity }}
+  />
+);
+
+const ScrollCue = ({
+  label,
+  onClick,
+  delay = 1.2,
 }: {
-  lang: Lang;
-  onChange: (next: Lang) => void;
-}) => {
+  label: string;
+  onClick: () => void;
+  delay?: number;
+}) => (
+  <motion.button
+    type="button"
+    onClick={onClick}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.6, delay }}
+    className="group absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 min-h-[44px] px-4 cursor-pointer"
+    aria-label={label}
+  >
+    <span className="text-[#C9A87C]/60 group-hover:text-[#C9A87C] text-[10px] uppercase tracking-[0.3em] transition-colors">
+      {label}
+    </span>
+    <motion.span
+      animate={{ y: [0, 7, 0] }}
+      transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+      className="text-[#C9A87C]/60 group-hover:text-[#C9A87C] transition-colors"
+    >
+      <ChevronDown className="w-5 h-5" />
+    </motion.span>
+  </motion.button>
+);
+
+const LanguageToggle = ({ lang, onChange }: { lang: Lang; onChange: (n: Lang) => void }) => {
   const opt = (value: Lang, text: string) => {
     const active = lang === value;
     return (
@@ -112,17 +173,19 @@ const LanguageToggle = ({
         onClick={() => !active && onChange(value)}
         aria-pressed={active}
         aria-label={value === 'es' ? 'Español' : 'English'}
-        className={`min-w-[44px] min-h-[44px] px-2 text-xs font-bold tracking-[0.2em] transition-colors duration-200 ${
-          active ? 'text-[#C9A87C]' : 'text-[#B8AA9A]/40 hover:text-[#B8AA9A]/70'
+        className={`min-w-[44px] min-h-[44px] px-1 text-xs font-bold tracking-[0.2em] transition-colors duration-200 ${
+          active ? 'text-[#C9A87C]' : 'text-[#B8AA9A]/45 hover:text-[#B8AA9A]/80'
         }`}
       >
         {text}
       </button>
     );
   };
-
   return (
-    <div className="flex items-center rounded-sm bg-black/30 backdrop-blur-sm border border-[#C9A87C]/15">
+    <div
+      className="fixed top-4 right-4 z-50 flex items-center rounded-full border border-[#C9A87C]/20 px-1.5"
+      style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(10px)' }}
+    >
       {opt('es', 'ES')}
       <span className="text-[#B8AA9A]/25 text-xs select-none">·</span>
       {opt('en', 'EN')}
@@ -131,114 +194,482 @@ const LanguageToggle = ({
 };
 
 // ─────────────────────────────────────────────────────────────
-// Hero media — image placeholder now, <video> once the file lands
+// Section 1 — Hero
 // ─────────────────────────────────────────────────────────────
-const HeroMedia = ({ lang }: { lang: Lang }) => {
-  const [loaded, setLoaded] = useState(false);
+const HeroSection = ({ lang, onNext }: { lang: Lang; onNext: () => void }) => {
+  // Three lines, each with its own tilt so the stack has rhythm
+  const lines =
+    lang === 'es'
+      ? [
+          { text: 'UN CHOQUE', skew: -8 },
+          { text: 'PUEDE SER', skew: -5 },
+          { text: 'UNA PESADILLA', skew: -9 },
+        ]
+      : [
+          { text: 'A CRASH', skew: -8 },
+          { text: 'CAN BE', skew: -5 },
+          { text: 'A NIGHTMARE', skew: -9 },
+        ];
 
   return (
-    <div className="relative w-full aspect-[4/5] sm:aspect-video overflow-hidden bg-[#1A0F0C]">
-      {/* Blur placeholder while the hero image decodes */}
+    <section
+      className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 py-24 overflow-hidden"
+      style={{ background: 'radial-gradient(ellipse at center, #2B1F1A 0%, #0F0806 100%)' }}
+    >
+      <Grain opacity={0.14} />
+      {/* Vignette pulls focus to the centre */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br from-[#2A1512] to-[#0F0806] transition-opacity duration-700 ${
-          loaded ? 'opacity-0' : 'opacity-100'
-        }`}
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ boxShadow: 'inset 0 0 180px 70px rgba(15,8,6,0.95)' }}
       />
 
-      {HERO_VIDEO_READY ? (
-        <video
-          src={HERO_VIDEO}
-          poster={HERO_IMAGE}
-          autoPlay
-          muted
-          loop
-          playsInline
-          onLoadedData={() => setLoaded(true)}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      ) : (
-        <>
-          <motion.img
-            src={HERO_IMAGE}
-            alt={
-              lang === 'es'
-                ? 'Hombre en pánico después de un accidente de auto'
-                : 'Man panicking after a car crash'
-            }
-            fetchPriority="high"
-            decoding="async"
-            onLoad={() => setLoaded(true)}
-            initial={{ scale: 1.02 }}
-            animate={{ scale: 1.12 }}
-            transition={{ duration: 18, ease: 'linear' }}
-            className="absolute inset-0 w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-          {/* Play affordance — becomes the real control when the video ships */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 18 }}
-              className="relative"
-            >
-              <span className="absolute inset-0 rounded-full bg-[#A03838]/40 animate-ping" />
-              <span className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#A03838]/90 border-2 border-[#C9A87C]/60 shadow-[0_0_40px_rgba(160,56,56,0.6)] backdrop-blur-sm">
-                <Play className="w-8 h-8 sm:w-10 sm:h-10 text-[#F5EFE6] ml-1" fill="currentColor" />
-              </span>
-            </motion.div>
-          </div>
-        </>
-      )}
-
-      {/* Cinematic vignette + bottom fade for headline legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0F0806] via-[#0F0806]/30 to-[#0F0806]/50" />
-      <div className="absolute inset-0 shadow-[inset_0_0_120px_60px_rgba(15,8,6,0.9)]" />
-
-      {/* Headline over the media */}
-      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 md:p-14">
+      {/* Wide enough that the longest line clears 8rem type even in the
+          fallback face, so nothing reflows when Anton swaps in. */}
+      <div className="relative z-10 w-full max-w-[1200px] m-auto text-center">
         <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="max-w-3xl text-[2rem] leading-[1.05] sm:text-5xl md:text-6xl font-serif font-bold text-[#F5EFE6] [text-shadow:0_4px_30px_rgba(0,0,0,0.9)]"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="select-none"
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontStyle: 'italic',
+            fontWeight: 900,
+            // Sized so the longest line ("UNA PESADILLA") still fits on one
+            // line in the fallback face, which is much wider than Anton.
+            // Otherwise the headline renders as 4 lines and reflows to 3 when
+            // the webfont swaps in — a visible jump on the LCP element.
+            fontSize: 'clamp(2.25rem, 9.5vw, 8rem)',
+            lineHeight: 0.85,
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase',
+            color: '#F5EFE6',
+            textShadow: TEXT_3D,
+            WebkitTextStroke: '1px #7C2D2D',
+          }}
         >
-          {lang === 'es' ? 'Un choque puede ser como una pesadilla' : 'A crash can feel like a nightmare'}
+          {lines.map((l) => (
+            <span
+              key={l.text}
+              className="block"
+              style={{ transform: `skewX(${l.skew}deg)` }}
+            >
+              {l.text}
+            </span>
+          ))}
         </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="mt-10 sm:mt-14 select-none"
+          style={{
+            fontFamily: DISPLAY_FONT,
+            fontStyle: 'italic',
+            fontSize: 'clamp(1.5rem, 4vw, 3rem)',
+            letterSpacing: '0.02em',
+            color: '#C9A87C',
+            transform: 'skewX(-6deg)',
+            textShadow: '0.03em 0.03em 0 #5A1F1F, 0.06em 0.06em 0.1em rgba(0,0,0,0.5)',
+          }}
+        >
+          {lang === 'es' ? 'Pero no la tuya.' : 'But not yours.'}
+        </motion.p>
       </div>
-    </div>
+
+      <ScrollCue
+        label={lang === 'es' ? 'Descubre cómo' : 'Discover how'}
+        onClick={onNext}
+        delay={1.2}
+      />
+    </section>
   );
 };
 
 // ─────────────────────────────────────────────────────────────
-// Secondary video placeholder (Mario explains the process)
+// Section 2 — Message
 // ─────────────────────────────────────────────────────────────
-const VideoPlayer = ({ lang }: { lang: Lang }) => (
-  <div className="relative w-full aspect-video overflow-hidden rounded-sm bg-gradient-to-br from-[#2A1512] to-[#0F0806] border border-[#C9A87C]/20">
-    {REQUISITOS_VIDEO_READY ? (
-      <video src={REQUISITOS_VIDEO} controls playsInline className="absolute inset-0 w-full h-full object-cover" />
-    ) : (
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-        <img
-          src={BULL_LOGO}
-          alt="Mario Yague Law"
-          loading="lazy"
-          className="w-20 h-20 object-contain opacity-30"
-          referrerPolicy="no-referrer"
-        />
-        <span className="flex items-center justify-center w-16 h-16 rounded-full bg-[#A03838]/90 border-2 border-[#C9A87C]/50 shadow-[0_0_30px_rgba(160,56,56,0.5)]">
-          <Play className="w-7 h-7 text-[#F5EFE6] ml-0.5" fill="currentColor" />
-        </span>
-        <span className="text-[#B8AA9A] text-[10px] uppercase tracking-[0.3em]">
-          {lang === 'es' ? 'Video próximamente' : 'Video coming soon'}
-        </span>
-      </div>
-    )}
-  </div>
+const MessageSection = ({ lang, onNext }: { lang: Lang; onNext: () => void }) => (
+  <section className="relative min-h-[100svh] flex px-6 pt-24 pb-24 bg-[#1A0F0C] overflow-hidden">
+    <Grain />
+    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A87C]/25 to-transparent" />
+
+    <div className="relative z-10 max-w-[700px] m-auto text-center">
+      <motion.p
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="text-[#F5EFE6]"
+        style={{ fontSize: 'clamp(1.25rem, 3vw, 2rem)', lineHeight: 1.4 }}
+      >
+        {lang === 'es'
+          ? 'Nosotros nos encargamos de que tu única preocupación sea sentirte mejor.'
+          : 'We make sure your only concern is getting better.'}
+      </motion.p>
+
+      <motion.p
+        initial={{ opacity: 0, y: 24, scale: 0.97 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-12 sm:mt-16 select-none"
+        style={{
+          fontFamily: DISPLAY_FONT,
+          fontStyle: 'italic',
+          fontSize: 'clamp(2rem, 5vw, 4rem)',
+          lineHeight: 0.95,
+          letterSpacing: '0.02em',
+          textTransform: 'uppercase',
+          color: '#C9A87C',
+          transform: 'skewX(-7deg)',
+          textShadow: '0.025em 0.025em 0 #7C2D2D, 0.05em 0.05em 0 #5A1F1F, 0.07em 0.07em 0.14em rgba(0,0,0,0.55)',
+        }}
+      >
+        {lang === 'es'
+          ? 'La verdadera pesadilla la tendrán los seguros.'
+          : 'The real nightmare will be for the insurance companies.'}
+      </motion.p>
+    </div>
+
+    <ScrollCue label={lang === 'es' ? 'Continuar' : 'Continue'} onClick={onNext} delay={0.6} />
+  </section>
 );
 
 // ─────────────────────────────────────────────────────────────
-// Application form
+// Section 3 — Mario's video
+// ─────────────────────────────────────────────────────────────
+const VideoSection = ({ lang, onNext }: { lang: Lang; onNext: () => void }) => {
+  const [notice, setNotice] = useState(false);
+
+  const handlePlay = () => {
+    trackEvent('pesadillas_video_play_attempt', { video: 'requisitos', language: lang });
+    setNotice(true);
+    setTimeout(() => setNotice(false), 2600);
+  };
+
+  return (
+    <section
+      className="relative min-h-[100svh] flex px-6 pt-24 pb-24 overflow-hidden"
+      style={{ background: 'linear-gradient(160deg, #2B1F1A 0%, #140907 55%, #0F0806 100%)' }}
+    >
+      <Grain opacity={0.1} />
+      <div className="relative z-10 w-full max-w-[700px] m-auto text-center">
+        <motion.span
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+          className="block text-[#C9A87C] text-[11px] sm:text-xs uppercase tracking-[0.35em] font-bold mb-4"
+        >
+          {lang === 'es' ? 'Escucha directamente a Mario' : 'Hear directly from Mario'}
+        </motion.span>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-[#F5EFE6] font-bold mb-10"
+          style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', lineHeight: 1.15 }}
+        >
+          {lang === 'es' ? '¿Cumples con lo que necesitamos?' : 'Do you qualify?'}
+        </motion.h2>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="relative mx-auto overflow-hidden rounded-lg"
+          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}
+        >
+          {REQUISITOS_VIDEO_READY ? (
+            <video
+              src={REQUISITOS_VIDEO}
+              poster={HERO_IMAGE}
+              controls
+              playsInline
+              className="w-full aspect-video object-cover bg-black"
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={handlePlay}
+              className="group relative block w-full aspect-video bg-black cursor-pointer"
+              aria-label={lang === 'es' ? 'Reproducir video' : 'Play video'}
+            >
+              <img
+                src={HERO_IMAGE}
+                alt={
+                  lang === 'es'
+                    ? 'Hombre en pánico después de un accidente de auto'
+                    : 'Man panicking after a car crash'
+                }
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-90 transition-opacity duration-300"
+                referrerPolicy="no-referrer"
+              />
+              <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="flex items-center justify-center w-20 h-20 rounded-full bg-[#F5EFE6] shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-110">
+                  <Play className="w-8 h-8 text-[#7C2D2D] ml-1" fill="currentColor" />
+                </span>
+              </span>
+              <AnimatePresence>
+                {notice && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-[#F5EFE6] text-xs uppercase tracking-[0.2em] px-4 py-2 rounded-sm backdrop-blur-sm"
+                  >
+                    {lang === 'es' ? 'Video próximamente' : 'Video coming soon'}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          )}
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="mt-6 text-base"
+          style={{ color: 'rgba(245,239,230,0.6)' }}
+        >
+          {lang === 'es'
+            ? 'En menos de 1 minuto Mario te explica los 5 requisitos.'
+            : 'In less than 1 minute Mario walks you through the 5 requirements.'}
+        </motion.p>
+      </div>
+
+      <ScrollCue label={lang === 'es' ? 'Cualificar' : 'Qualify'} onClick={onNext} delay={0.6} />
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────
+// Section 4 — Qualification checklist (the gate)
+// ─────────────────────────────────────────────────────────────
+const ChecklistSection = ({
+  lang,
+  checked,
+  onToggle,
+  onUnlock,
+  unlocked,
+}: {
+  lang: Lang;
+  checked: number[];
+  onToggle: (id: number) => void;
+  onUnlock: () => void;
+  unlocked: boolean;
+}) => {
+  const count = checked.length;
+  const qualified = count >= MIN_REQUIRED;
+  const complete = count === REQUIREMENTS.length;
+  const label = (es: string, en: string) => (lang === 'es' ? es : en);
+
+  // Sections use m-auto on the child rather than items-center: when content
+  // is taller than the viewport, align-items:center overflows the top and
+  // slides under the fixed toggle. Auto margins centre without that.
+  return (
+    <section className="relative min-h-[100svh] flex px-6 pt-24 pb-20 bg-[#F5EFE6]">
+      <div className="w-full max-w-[700px] m-auto">
+        <div className="text-center mb-8">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.5 }}
+            className="block text-[#7C2D2D] text-[11px] uppercase tracking-[0.35em] font-bold mb-3"
+          >
+            {label('Cualificación', 'Qualify')}
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            className="text-[#2B1F1A] font-bold leading-tight mb-3"
+            style={{ fontSize: 'clamp(1.6rem, 4.5vw, 2.75rem)' }}
+          >
+            {label('Palomea lo que aplique a tu caso', 'Check what applies to your case')}
+          </motion.h2>
+          <p className="text-[#2B1F1A]/55 text-sm sm:text-base">
+            {label(
+              `Necesitas al menos ${MIN_REQUIRED} de ${REQUIREMENTS.length} para continuar`,
+              `You need at least ${MIN_REQUIRED} out of ${REQUIREMENTS.length} to continue`,
+            )}
+          </p>
+        </div>
+
+        {/* Progress */}
+        <div className="mb-7">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-[#2B1F1A] text-sm font-bold">
+              {count} / {REQUIREMENTS.length} {label('requisitos', 'requirements')}
+            </span>
+            <AnimatePresence>
+              {qualified && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.85 }}
+                  className="flex items-center gap-1.5 text-[#A03838] text-xs font-bold uppercase tracking-wider"
+                >
+                  <Check className="w-4 h-4" strokeWidth={3} />
+                  {label('Calificas', 'You qualify')}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
+          <div className="h-2.5 w-full rounded-full overflow-hidden bg-[#2B1F1A]/10">
+            <motion.div
+              animate={{
+                width: `${(count / REQUIREMENTS.length) * 100}%`,
+                ...(complete ? { opacity: [1, 0.72, 1] } : { opacity: 1 }),
+              }}
+              transition={{
+                width: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                opacity: complete
+                  ? { duration: 1.4, repeat: Infinity, ease: 'easeInOut' }
+                  : { duration: 0.2 },
+              }}
+              className="h-full rounded-full"
+              style={{
+                background: qualified
+                  ? 'linear-gradient(90deg, #7C2D2D, #A03838)'
+                  : 'linear-gradient(90deg, #A08878, #C9A87C)',
+                boxShadow: qualified ? '0 0 16px rgba(160,56,56,0.55)' : 'none',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Items */}
+        <div className="space-y-3">
+          {REQUIREMENTS.map((r, i) => {
+            const on = checked.includes(r.id);
+            return (
+              <motion.button
+                key={r.id}
+                type="button"
+                onClick={() => onToggle(r.id)}
+                role="checkbox"
+                aria-checked={on}
+                data-requirement={r.id}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                animate={on ? { scale: [1, 1.02, 1] } : { scale: 1 }}
+                whileHover={on ? {} : { y: -2 }}
+                className={`w-full flex items-center gap-4 text-left cursor-pointer transition-colors duration-200 ${
+                  on ? 'border-[#7C2D2D] bg-[#FBF7EE]' : 'border-transparent bg-white hover:border-[#7C2D2D]/35'
+                }`}
+                style={{
+                  minHeight: 72,
+                  padding: '20px 24px',
+                  border: '2px solid',
+                  borderRadius: 12,
+                  boxShadow: on
+                    ? '0 6px 20px rgba(124,45,45,0.14)'
+                    : '0 2px 8px rgba(0,0,0,0.05)',
+                }}
+              >
+                <span
+                  className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                    on ? 'bg-[#7C2D2D] border-[#7C2D2D]' : 'border-[#2B1F1A]/25'
+                  }`}
+                  style={{ border: '2px solid' }}
+                >
+                  <AnimatePresence>
+                    {on && (
+                      <motion.span
+                        initial={{ scale: 0, rotate: -25 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        exit={{ scale: 0 }}
+                        transition={{ type: 'spring', stiffness: 420, damping: 18 }}
+                      >
+                        <Check className="w-3.5 h-3.5 text-white" strokeWidth={3.5} />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </span>
+                <span
+                  className={`text-base sm:text-lg leading-snug ${
+                    on ? 'text-[#2B1F1A] font-semibold' : 'text-[#2B1F1A]/70 font-medium'
+                  }`}
+                >
+                  {lang === 'es' ? r.es : r.en}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Gate */}
+        <div className="mt-9 text-center">
+          <AnimatePresence mode="wait">
+            {qualified ? (
+              <motion.button
+                key="unlock"
+                type="button"
+                onClick={onUnlock}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.99 }}
+                className="inline-flex items-center justify-center gap-3 w-full sm:w-auto text-white cursor-pointer"
+                style={{
+                  background: 'linear-gradient(135deg, #7C2D2D, #A03838)',
+                  padding: '20px 48px',
+                  minWidth: 300,
+                  minHeight: 56,
+                  fontSize: 'clamp(1.05rem, 3vw, 1.75rem)',
+                  fontWeight: 900,
+                  letterSpacing: '2px',
+                  textTransform: 'uppercase',
+                  borderRadius: 8,
+                  boxShadow: '0 12px 40px rgba(124,45,45,0.4)',
+                }}
+              >
+                {unlocked
+                  ? label('Ir al formulario', 'Go to form')
+                  : label('Desbloquear formulario', 'Unlock form')}
+                <ArrowRight className="w-5 h-5 flex-shrink-0" />
+              </motion.button>
+            ) : (
+              <motion.p
+                key="locked"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-[#2B1F1A]/40 text-sm font-bold uppercase tracking-wider py-5"
+              >
+                {label(
+                  `Palomea al menos ${MIN_REQUIRED} para desbloquear el formulario`,
+                  `Check at least ${MIN_REQUIRED} to unlock the form`,
+                )}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────
+// Application form — presentation reworked, submit logic unchanged
 // ─────────────────────────────────────────────────────────────
 interface FormProps {
   lang: Lang;
@@ -406,12 +837,21 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-center py-10 px-6"
+        className="text-center py-8"
       >
-        <div className="w-20 h-20 mx-auto mb-7 rounded-full bg-[#A03838] flex items-center justify-center shadow-[0_0_50px_rgba(160,56,56,0.55)]">
+        <div
+          className="w-20 h-20 mx-auto mb-7 rounded-full flex items-center justify-center"
+          style={{
+            background: 'linear-gradient(135deg, #7C2D2D, #A03838)',
+            boxShadow: '0 0 50px rgba(160,56,56,0.55)',
+          }}
+        >
           <CheckCircle2 className="w-11 h-11 text-[#F5EFE6]" />
         </div>
-        <h3 className="text-3xl sm:text-4xl font-serif font-bold text-[#F5EFE6] mb-5">
+        <h3
+          className="text-[#F5EFE6] font-bold mb-5"
+          style={{ fontSize: 'clamp(1.75rem, 5vw, 2.75rem)', lineHeight: 1.1 }}
+        >
           {label('Tu caso fue recibido', 'Your case was received')}
         </h3>
         <p className="text-[#B8AA9A] leading-relaxed max-w-lg mx-auto mb-3">
@@ -426,18 +866,52 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
         <a
           href={PHONE_HREF}
           onClick={() => trackPhoneClick('pesadillas_thankyou')}
-          className="inline-flex items-center justify-center gap-3 w-full sm:w-auto min-h-[56px] bg-[#A03838] text-[#F5EFE6] px-10 py-4 font-bold uppercase tracking-widest text-sm rounded-sm shadow-[0_0_40px_rgba(160,56,56,0.5)] hover:bg-[#B54242] transition-all duration-200"
+          className="inline-flex items-center justify-center gap-3 w-full sm:w-auto text-white"
+          style={{
+            background: 'linear-gradient(135deg, #7C2D2D, #A03838)',
+            padding: '18px 40px',
+            minHeight: 56,
+            fontWeight: 900,
+            letterSpacing: '1.5px',
+            textTransform: 'uppercase',
+            fontSize: '0.95rem',
+            borderRadius: 8,
+            boxShadow: '0 12px 40px rgba(124,45,45,0.4)',
+          }}
         >
           <Phone className="w-5 h-5" />
-          {label(`LLAMAR AHORA ${PHONE_DISPLAY}`, `CALL NOW ${PHONE_DISPLAY}`)}
+          {label(`Llamar ahora ${PHONE_DISPLAY}`, `Call now ${PHONE_DISPLAY}`)}
         </a>
       </motion.div>
     );
   }
 
-  const fieldBase =
-    'w-full min-h-[48px] px-4 py-3 bg-[#0F0806] border text-[#F5EFE6] placeholder-[#B8AA9A]/40 outline-none transition-colors duration-200 rounded-sm focus:border-[#C9A87C]';
-  const errCls = (k: string) => (errors[k] ? 'border-[#E06565]' : 'border-[#C9A87C]/25');
+  // Premium dark field styling
+  const fieldStyle: React.CSSProperties = {
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(201,168,124,0.3)',
+    color: '#F5EFE6',
+    padding: '16px 20px',
+    borderRadius: 6,
+    fontSize: 16, // 16px avoids iOS auto-zoom on focus
+    width: '100%',
+    outline: 'none',
+    transition: 'border-color 200ms, background 200ms, box-shadow 200ms',
+  };
+  const focusProps = {
+    onFocus: (e: React.FocusEvent<HTMLElement>) => {
+      e.currentTarget.style.borderColor = '#C9A87C';
+      e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(201,168,124,0.15)';
+    },
+    onBlur: (e: React.FocusEvent<HTMLElement>) => {
+      e.currentTarget.style.borderColor = 'rgba(201,168,124,0.3)';
+      e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+  };
+  const styleFor = (k: string): React.CSSProperties =>
+    errors[k] ? { ...fieldStyle, borderColor: '#E06565' } : fieldStyle;
 
   const Err = ({ k }: { k: string }) =>
     errors[k] ? (
@@ -448,7 +922,7 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
     ) : null;
 
   const Lbl = ({ children, req = true }: { children: React.ReactNode; req?: boolean }) => (
-    <label className="block text-[11px] uppercase tracking-[0.15em] font-bold text-[#C9A87C] mb-2">
+    <label className="block text-[11px] uppercase tracking-[0.18em] font-bold text-[#C9A87C] mb-2">
       {children}
       {req && <span className="text-[#A03838] ml-1">*</span>}
     </label>
@@ -456,12 +930,13 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      {/* Submit failed — the entered data is kept so retrying costs nothing */}
+      {/* Submit failed — entered data is kept so retrying costs nothing */}
       {status === 'error' && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="border border-[#E06565]/50 bg-[#E06565]/10 rounded-sm p-5"
+          className="rounded-md p-5"
+          style={{ border: '1px solid rgba(224,101,101,0.5)', background: 'rgba(224,101,101,0.1)' }}
         >
           <p className="flex items-start gap-2.5 text-[#F5EFE6] text-sm leading-relaxed mb-4">
             <AlertCircle className="w-5 h-5 text-[#E06565] flex-shrink-0 mt-0.5" />
@@ -474,15 +949,35 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             <a
               href={PHONE_HREF}
               onClick={() => trackPhoneClick('pesadillas_form_error')}
-              className="flex-1 inline-flex items-center justify-center gap-2 min-h-[52px] bg-[#A03838] text-[#F5EFE6] px-6 py-3 font-bold uppercase tracking-widest text-sm rounded-sm shadow-[0_0_30px_rgba(160,56,56,0.45)] hover:bg-[#B54242] transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 text-white"
+              style={{
+                background: 'linear-gradient(135deg, #7C2D2D, #A03838)',
+                minHeight: 52,
+                padding: '12px 24px',
+                fontWeight: 900,
+                letterSpacing: '1.2px',
+                textTransform: 'uppercase',
+                fontSize: '0.85rem',
+                borderRadius: 8,
+              }}
             >
               <Phone className="w-4 h-4" />
-              {label(`LLAMAR AHORA ${PHONE_DISPLAY}`, `CALL NOW ${PHONE_DISPLAY}`)}
+              {label(`Llamar ahora ${PHONE_DISPLAY}`, `Call now ${PHONE_DISPLAY}`)}
             </a>
             <button
               type="button"
               onClick={retry}
-              className="sm:flex-none inline-flex items-center justify-center min-h-[52px] border border-[#C9A87C]/40 text-[#C9A87C] px-6 py-3 font-bold uppercase tracking-widest text-xs rounded-sm hover:bg-[#C9A87C]/10 transition-all duration-200"
+              className="inline-flex items-center justify-center text-[#C9A87C] hover:bg-[#C9A87C]/10 transition-colors duration-200"
+              style={{
+                minHeight: 52,
+                padding: '12px 24px',
+                border: '1px solid rgba(201,168,124,0.4)',
+                borderRadius: 8,
+                fontWeight: 700,
+                letterSpacing: '1.2px',
+                textTransform: 'uppercase',
+                fontSize: '0.75rem',
+              }}
             >
               {label('Intentar de nuevo', 'Try again')}
             </button>
@@ -499,7 +994,8 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
           onChange={handleChange}
           autoComplete="name"
           placeholder={label('Juan Pérez', 'John Doe')}
-          className={`${fieldBase} ${errCls('name')}`}
+          style={styleFor('name')}
+          {...focusProps}
         />
         <Err k="name" />
       </div>
@@ -515,7 +1011,8 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             autoComplete="tel"
             inputMode="tel"
             placeholder="(915) 000-0000"
-            className={`${fieldBase} ${errCls('phone')}`}
+            style={styleFor('phone')}
+            {...focusProps}
           />
           <Err k="phone" />
         </div>
@@ -529,7 +1026,8 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             autoComplete="email"
             inputMode="email"
             placeholder={label('tu@correo.com', 'you@email.com')}
-            className={`${fieldBase} ${errCls('email')}`}
+            style={styleFor('email')}
+            {...focusProps}
           />
           <Err k="email" />
         </div>
@@ -542,11 +1040,12 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             name="accident_type"
             value={form.accident_type}
             onChange={handleChange}
-            className={`${fieldBase} ${errCls('accident_type')}`}
+            style={styleFor('accident_type')}
+            {...focusProps}
           >
             <option value="">{label('Selecciona…', 'Select…')}</option>
             {ACCIDENT_TYPES.map((o) => (
-              <option key={o.value} value={o.value}>
+              <option key={o.value} value={o.value} style={{ background: '#1A0F0C' }}>
                 {lang === 'es' ? o.es : o.en}
               </option>
             ))}
@@ -561,7 +1060,9 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             value={form.accident_date}
             onChange={handleChange}
             max={new Date().toISOString().split('T')[0]}
-            className={`${fieldBase} ${errCls('accident_date')} [color-scheme:dark]`}
+            className="[color-scheme:dark]"
+            style={styleFor('accident_date')}
+            {...focusProps}
           />
           <Err k="accident_date" />
         </div>
@@ -574,11 +1075,12 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             name="preferred_day"
             value={form.preferred_day}
             onChange={handleChange}
-            className={`${fieldBase} ${errCls('preferred_day')}`}
+            style={styleFor('preferred_day')}
+            {...focusProps}
           >
             <option value="">{label('Selecciona…', 'Select…')}</option>
             {DAYS.map((o) => (
-              <option key={o.value} value={o.value}>
+              <option key={o.value} value={o.value} style={{ background: '#1A0F0C' }}>
                 {lang === 'es' ? o.es : o.en}
               </option>
             ))}
@@ -591,11 +1093,12 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             name="preferred_time"
             value={form.preferred_time}
             onChange={handleChange}
-            className={`${fieldBase} ${errCls('preferred_time')}`}
+            style={styleFor('preferred_time')}
+            {...focusProps}
           >
             <option value="">{label('Selecciona…', 'Select…')}</option>
             {TIMES.map((o) => (
-              <option key={o.value} value={o.value}>
+              <option key={o.value} value={o.value} style={{ background: '#1A0F0C' }}>
                 {lang === 'es' ? o.es : o.en}
               </option>
             ))}
@@ -615,31 +1118,45 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
             'Cuéntanos qué pasó con tus palabras…',
             'Tell us what happened in your own words…',
           )}
-          className={`${fieldBase} border-[#C9A87C]/25 resize-y`}
+          style={{ ...fieldStyle, resize: 'vertical' }}
+          {...focusProps}
         />
       </div>
 
-      <button
+      <motion.button
         type="submit"
         disabled={status === 'loading'}
-        className={`w-full min-h-[56px] bg-[#A03838] text-[#F5EFE6] py-4 font-bold uppercase tracking-widest text-sm rounded-sm shadow-[0_8px_30px_rgba(160,56,56,0.35)] hover:bg-[#B54242] hover:shadow-[0_0_45px_rgba(160,56,56,0.6)] transition-all duration-200 flex items-center justify-center gap-3 ${
-          status === 'loading' ? 'opacity-70 cursor-not-allowed' : ''
-        }`}
+        whileHover={status === 'loading' ? {} : { scale: 1.02 }}
+        whileTap={status === 'loading' ? {} : { scale: 0.99 }}
+        className="w-full inline-flex items-center justify-center gap-3 text-white"
+        style={{
+          background: 'linear-gradient(135deg, #7C2D2D, #A03838)',
+          padding: '20px 32px',
+          minHeight: 56,
+          fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+          fontWeight: 900,
+          letterSpacing: '2px',
+          textTransform: 'uppercase',
+          borderRadius: 8,
+          boxShadow: '0 12px 40px rgba(124,45,45,0.4)',
+          opacity: status === 'loading' ? 0.7 : 1,
+          cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+        }}
       >
         {status === 'loading' ? (
           <>
-            <span className="w-5 h-5 border-2 border-[#F5EFE6]/30 border-t-[#F5EFE6] rounded-full animate-spin" />
+            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             {label('Enviando…', 'Sending…')}
           </>
         ) : (
           <>
-            {label('ENVIAR MI CASO', 'SUBMIT MY CASE')}
-            <ArrowRight className="w-4 h-4" />
+            {label('Enviar mi caso', 'Submit my case')}
+            <ArrowRight className="w-5 h-5" />
           </>
         )}
-      </button>
+      </motion.button>
 
-      <p className="text-center text-[#B8AA9A]/60 text-xs">
+      <p className="text-center text-xs" style={{ color: 'rgba(245,239,230,0.4)' }}>
         {label(
           '100% confidencial. Nunca compartimos tu información.',
           '100% confidential. We never share your information.',
@@ -655,7 +1172,14 @@ const ApplicationForm = ({ lang, checkedIds, onSubmitted }: FormProps) => {
 const PesadillasFunnelPage = () => {
   const [lang, setLang] = useState<Lang>(DEFAULT_FUNNEL_LANG);
   const [checked, setChecked] = useState<number[]>([]);
+  const [formUnlocked, setFormUnlocked] = useState(false);
+
+  const messageRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLDivElement>(null);
+  const checklistRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
+
+  useDisplayFont();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -678,9 +1202,8 @@ const PesadillasFunnelPage = () => {
     setLang(next);
   };
 
-  const label = (es: string, en: string) => (lang === 'es' ? es : en);
-  const count = checked.length;
-  const qualified = count >= MIN_REQUIRED;
+  const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) =>
+    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const toggle = (id: number) => {
     setChecked((prev) => {
@@ -695,279 +1218,97 @@ const PesadillasFunnelPage = () => {
     });
   };
 
-  const goToForm = () => {
-    trackEvent('pesadillas_apply_click', {
-      checked_count: count,
-      checked_items: checked.join(','),
-    });
-    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const unlockForm = () => {
+    if (!formUnlocked) {
+      trackEvent('pesadillas_form_unlocked', {
+        checked_count: checked.length,
+        checked_items: checked.join(','),
+      });
+      setFormUnlocked(true);
+      // Wait for the section to mount before scrolling to it
+      setTimeout(() => scrollTo(formRef), 120);
+    } else {
+      scrollTo(formRef);
+    }
   };
 
+  const label = (es: string, en: string) => (lang === 'es' ? es : en);
+
   return (
-    <div className="bg-[#0F0806] min-h-screen">
-      {/* ── HERO ── */}
-      <section className="relative">
-        <div
-          className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
-          style={{ backgroundImage: NOISE_TEXTURE }}
-        />
-        {/* Standalone brand mark + language toggle — no navbar on this page */}
-        <div className="relative z-20 flex items-center justify-center pt-7 pb-5 px-4">
-          <img
-            src={BULL_LOGO}
-            alt="Mario Yague Law"
-            width={48}
-            height={48}
-            className="w-12 h-12 object-contain opacity-80"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <LanguageToggle lang={lang} onChange={changeLang} />
-          </div>
-        </div>
-        <HeroMedia lang={lang} />
-      </section>
+    <div className="bg-[#0F0806]">
+      <LanguageToggle lang={lang} onChange={changeLang} />
 
-      {/* ── EL MENSAJE ── */}
-      <section className="relative bg-[#1A0F0C] py-16 sm:py-24 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.12] pointer-events-none mix-blend-overlay"
-          style={{ backgroundImage: NOISE_TEXTURE }}
-        />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A87C]/30 to-transparent" />
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 max-w-3xl mx-auto px-6 text-center"
-        >
-          <p className="text-[#B8AA9A] text-lg sm:text-2xl leading-relaxed mb-10">
-            {label(
-              'Pero nosotros nos encargamos de que tu única preocupación sea sentirte mejor mientras nosotros nos encargamos de todo lo demás.',
-              'But we make sure your only concern is getting better while we handle everything else.',
-            )}
-          </p>
-          <motion.p
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.7, delay: 0.25 }}
-            className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold text-[#C9A87C] leading-[1.1] [text-shadow:0_4px_40px_rgba(201,168,124,0.25)]"
-          >
-            {label(
-              'La verdadera pesadilla la tendrán los seguros.',
-              'The real nightmare will be for the insurance companies.',
-            )}
-          </motion.p>
-        </motion.div>
-      </section>
+      <HeroSection lang={lang} onNext={() => scrollTo(messageRef)} />
 
-      {/* ── CHECKLIST ── */}
-      <section className="bg-[#F5EFE6] py-16 sm:py-24">
-        <div className="max-w-2xl mx-auto px-6">
+      <div ref={messageRef}>
+        <MessageSection lang={lang} onNext={() => scrollTo(videoRef)} />
+      </div>
+
+      <div ref={videoRef}>
+        <VideoSection lang={lang} onNext={() => scrollTo(checklistRef)} />
+      </div>
+
+      <div ref={checklistRef}>
+        <ChecklistSection
+          lang={lang}
+          checked={checked}
+          onToggle={toggle}
+          onUnlock={unlockForm}
+          unlocked={formUnlocked}
+        />
+      </div>
+
+      {/* Section 5 — only exists in the DOM once the checklist unlocks it */}
+      <AnimatePresence>
+        {formUnlocked && (
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10"
+            ref={formRef}
+            key="form-section"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
           >
-            <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#1A0F0C] leading-tight mb-3">
-              {label(
-                'Antes de aplicar, palomea lo que aplique a tu caso:',
-                'Before applying, check what applies to your case:',
-              )}
-            </h2>
-            <p className="text-[#7C2D2D] text-sm font-bold uppercase tracking-wider">
-              {label(
-                `Necesitas al menos ${MIN_REQUIRED} de ${REQUIREMENTS.length} para prospectar contigo`,
-                `You need at least ${MIN_REQUIRED} out of ${REQUIREMENTS.length} to qualify`,
-              )}
-            </p>
+            <section className="relative min-h-[100svh] flex px-6 pt-24 pb-20 bg-[#1A0F0C] overflow-hidden">
+              <Grain />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A87C]/25 to-transparent" />
+              <div className="relative z-10 w-full max-w-[600px] m-auto">
+                <div className="text-center mb-9">
+                  <span className="block text-[#C9A87C] text-[11px] uppercase tracking-[0.35em] font-bold mb-3">
+                    {label('Último paso', 'Last step')}
+                  </span>
+                  <h2
+                    className="text-[#F5EFE6] font-bold leading-tight"
+                    style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}
+                  >
+                    {label('Cuéntanos tu caso', 'Tell us your case')}
+                  </h2>
+                </div>
+                <ApplicationForm
+                  lang={lang}
+                  checkedIds={checked}
+                  onSubmitted={() => scrollTo(formRef)}
+                />
+              </div>
+            </section>
           </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Progress */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-[#1A0F0C] text-sm font-bold">
-                {label(
-                  `${count} / ${REQUIREMENTS.length} requisitos cumplidos`,
-                  `${count} / ${REQUIREMENTS.length} requirements met`,
-                )}
-              </span>
-              {qualified && (
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex items-center gap-1.5 text-[#A03838] text-xs font-bold uppercase tracking-wider"
-                >
-                  <Check className="w-4 h-4" />
-                  {label('¡Calificas!', 'You qualify!')}
-                </motion.span>
-              )}
-            </div>
-            <div className="h-2 w-full bg-[#1A0F0C]/10 rounded-full overflow-hidden">
-              <motion.div
-                animate={{ width: `${(count / REQUIREMENTS.length) * 100}%` }}
-                transition={{ type: 'spring', stiffness: 180, damping: 22 }}
-                className={`h-full rounded-full ${qualified ? 'bg-[#A03838]' : 'bg-[#C9A87C]'}`}
-              />
-            </div>
-          </div>
-
-          {/* Items */}
-          <div className="space-y-3">
-            {REQUIREMENTS.map((r, i) => {
-              const on = checked.includes(r.id);
-              return (
-                <motion.button
-                  key={r.id}
-                  type="button"
-                  onClick={() => toggle(r.id)}
-                  role="checkbox"
-                  aria-checked={on}
-                  data-requirement={r.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                  whileTap={{ scale: 0.98 }}
-                  animate={{ scale: on ? 1.015 : 1 }}
-                  className={`w-full min-h-[64px] flex items-center gap-4 text-left p-4 sm:p-5 rounded-sm border-2 transition-colors duration-200 ${
-                    on
-                      ? 'bg-[#A03838] border-[#A03838] shadow-[0_6px_24px_rgba(160,56,56,0.3)]'
-                      : 'bg-white border-[#1A0F0C]/10 hover:border-[#C9A87C]'
-                  }`}
-                >
-                  <span
-                    className={`flex-shrink-0 w-7 h-7 rounded-sm border-2 flex items-center justify-center transition-colors duration-200 ${
-                      on ? 'bg-[#F5EFE6] border-[#F5EFE6]' : 'border-[#1A0F0C]/25'
-                    }`}
-                  >
-                    <AnimatePresence>
-                      {on && (
-                        <motion.span
-                          initial={{ scale: 0, rotate: -30 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          exit={{ scale: 0 }}
-                          transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-                        >
-                          <Check className="w-5 h-5 text-[#A03838]" strokeWidth={3.5} />
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </span>
-                  <span
-                    className={`text-base sm:text-lg font-medium leading-snug ${
-                      on ? 'text-[#F5EFE6]' : 'text-[#1A0F0C]'
-                    }`}
-                  >
-                    {lang === 'es' ? r.es : r.en}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          {/* CTA */}
-          <div className="mt-8">
-            <AnimatePresence mode="wait">
-              {qualified ? (
-                <motion.button
-                  key="active"
-                  type="button"
-                  onClick={goToForm}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="w-full min-h-[60px] bg-[#A03838] text-[#F5EFE6] py-4 px-6 font-bold uppercase tracking-widest text-sm sm:text-base rounded-sm shadow-[0_10px_35px_rgba(160,56,56,0.4)] hover:bg-[#B54242] hover:shadow-[0_0_50px_rgba(160,56,56,0.65)] transition-all duration-200 flex items-center justify-center gap-3"
-                >
-                  {label('¿ESTÁS LISTO? APLICA AHORA', 'ARE YOU READY? APPLY NOW')}
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
-              ) : (
-                <motion.div
-                  key="disabled"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="w-full min-h-[60px] bg-[#1A0F0C]/10 text-[#1A0F0C]/40 py-4 px-6 font-bold uppercase tracking-widest text-sm rounded-sm flex items-center justify-center text-center cursor-not-allowed select-none"
-                >
-                  {label(
-                    `Palomea al menos ${MIN_REQUIRED} para continuar`,
-                    `Check at least ${MIN_REQUIRED} to continue`,
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </section>
-
-      {/* ── VIDEO DE MARIO ── */}
-      <section className="relative bg-[#0F0806] py-16 sm:py-20 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.12] pointer-events-none mix-blend-overlay"
-          style={{ backgroundImage: NOISE_TEXTURE }}
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6 }}
-          className="relative z-10 max-w-2xl mx-auto px-6"
+      {/* Legal footer */}
+      <footer className="bg-black py-9 px-6">
+        <p
+          className="max-w-2xl mx-auto text-center text-[11px] leading-relaxed"
+          style={{ color: 'rgba(184,170,154,0.45)' }}
         >
-          <div className="bg-[#1A0F0C] border border-[#C9A87C]/20 rounded-sm p-5 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-            <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#F5EFE6] text-center mb-5">
-              {label('Escucha directamente a Mario', 'Hear directly from Mario')}
-            </h3>
-            <VideoPlayer lang={lang} />
-            <p className="text-[#B8AA9A] text-sm text-center mt-5">
-              {label(
-                'En 30 segundos Mario te explica cómo funciona el proceso',
-                'In 30 seconds Mario walks you through the process',
-              )}
-            </p>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ── FORMULARIO ── */}
-      <section ref={formRef} className="relative bg-[#1A0F0C] py-16 sm:py-24 scroll-mt-4 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.12] pointer-events-none mix-blend-overlay"
-          style={{ backgroundImage: NOISE_TEXTURE }}
-        />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A87C]/30 to-transparent" />
-        <div className="relative z-10 max-w-2xl mx-auto px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl sm:text-5xl font-serif font-bold text-[#F5EFE6] text-center mb-10"
-          >
-            {label('Cuéntanos tu caso', 'Tell us your case')}
-          </motion.h2>
-          <ApplicationForm
-            lang={lang}
-            checkedIds={checked}
-            onSubmitted={() =>
-              formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }
-          />
-        </div>
-      </section>
-
-      {/* ── LEGAL ── */}
-      <footer className="bg-[#0F0806] py-10 px-6 border-t border-[#C9A87C]/10">
-        <p className="max-w-2xl mx-auto text-center text-[#B8AA9A]/45 text-[11px] leading-relaxed">
           {label(
-            'Los resultados pasados no garantizan resultados futuros. Esta comunicación no crea una relación abogado-cliente. Consulta gratis y confidencial. Mario Yague Law · Texas Bar #24122235',
-            'Past results do not guarantee future outcomes. This communication does not create an attorney-client relationship. Free and confidential consultation. Mario Yague Law · Texas Bar #24122235',
+            'Los resultados pasados no garantizan resultados futuros. Esta comunicación no crea una relación abogado-cliente. Consulta gratis y confidencial.',
+            'Past results do not guarantee future outcomes. This communication does not create an attorney-client relationship. Free and confidential consultation.',
           )}
+          <br />
+          <span className="text-[#C9A87C]/50">
+            Mario Yague Law · Texas Bar #24122235 · © {new Date().getFullYear()}
+          </span>
         </p>
       </footer>
     </div>
