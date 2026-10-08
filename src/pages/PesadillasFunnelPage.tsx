@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, Check, ArrowRight, Phone, AlertCircle, X } from 'lucide-react';
+import { Check, ArrowRight, Phone, AlertCircle, X } from 'lucide-react';
 import { useNoIndexSeo } from '../hooks/useNoIndexSeo';
 import { trackEvent, trackPhoneClick } from '../lib/analytics';
 
@@ -23,9 +23,6 @@ const FIELD_ORDER = [
 
 const HERO_IMAGE =
   'https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1789850641/Man_panicking_after_car_crash_2K_20260919144322_nhkatl.jpg';
-
-const REQUISITOS_VIDEO = '/videos/pesadillas-requisitos.mp4';
-const REQUISITOS_VIDEO_READY = false;
 
 const NOISE_TEXTURE =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
@@ -254,7 +251,7 @@ const LanguageToggle = ({ lang, onChange }: { lang: Lang; onChange: (n: Lang) =>
 // ─────────────────────────────────────────────────────────────
 // LAYER 0 — Hero
 // ─────────────────────────────────────────────────────────────
-const HeroLayer = ({ lang, onWatch }: { lang: Lang; onWatch: () => void }) => {
+const HeroLayer = ({ lang, onStart }: { lang: Lang; onStart: () => void }) => {
   const line1 = lang === 'es' ? 'UN CHOQUE ES' : 'A CRASH IS';
   const line2 = lang === 'es' ? 'UNA PESADILLA.' : 'A NIGHTMARE.';
 
@@ -350,7 +347,7 @@ const HeroLayer = ({ lang, onWatch }: { lang: Lang; onWatch: () => void }) => {
 
         <motion.button
           type="button"
-          onClick={onWatch}
+          onClick={onStart}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 1, ease: EASE }}
@@ -364,7 +361,7 @@ const HeroLayer = ({ lang, onWatch }: { lang: Lang; onWatch: () => void }) => {
             minWidth: 'min(280px, 100%)',
           }}
         >
-          {lang === 'es' ? '▶  VER EL MENSAJE DE MARIO' : "▶  WATCH MARIO'S MESSAGE"}
+          {lang === 'es' ? 'INICIAR CUESTIONARIO →' : 'START QUESTIONNAIRE →'}
         </motion.button>
       </div>
 
@@ -387,161 +384,6 @@ const HeroLayer = ({ lang, onWatch }: { lang: Lang; onWatch: () => void }) => {
           : 'Texas Bar #24122235 · Bilingual · Free Consultation'}
       </motion.div>
     </div>
-  );
-};
-
-// ─────────────────────────────────────────────────────────────
-// LAYER 1 — Video
-// ─────────────────────────────────────────────────────────────
-const VideoLayer = ({
-  lang,
-  onClose,
-  onContinue,
-}: {
-  key?: string;
-  lang: Lang;
-  onClose: () => void;
-  onContinue: () => void;
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [notice, setNotice] = useState(false);
-  useFocusTrap(true, ref);
-
-  const label = (es: string, en: string) => (lang === 'es' ? es : en);
-
-  const handlePlay = () => {
-    trackEvent('pesadillas_video_play_attempt', { video: 'requisitos', language: lang });
-    setNotice(true);
-    // Placeholder behaviour: nudge into the checklist after the notice reads
-    setTimeout(onContinue, 2000);
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-      className="fixed inset-0 flex items-center justify-center"
-      style={{
-        zIndex: 50,
-        background: 'rgba(0,0,0,0.85)',
-        backdropFilter: 'blur(20px)',
-        padding: 'clamp(16px, 5vw, 60px)',
-      }}
-    >
-      <motion.div
-        ref={ref}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-label={label('Mensaje de Mario', "Mario's message")}
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        transition={{ duration: 0.5, ease: EASE }}
-        className="relative w-full outline-none"
-        style={{ maxWidth: 'min(90vw, 1000px)' }}
-      >
-        <div
-          className="relative overflow-hidden"
-          style={{
-            aspectRatio: '16 / 9',
-            maxHeight: '70vh',
-            borderRadius: 12,
-            boxShadow: '0 40px 100px rgba(0,0,0,0.8)',
-            background: '#000',
-          }}
-        >
-          {REQUISITOS_VIDEO_READY ? (
-            <video
-              src={REQUISITOS_VIDEO}
-              poster={HERO_IMAGE}
-              controls
-              autoPlay
-              playsInline
-              onEnded={onContinue}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <button
-              type="button"
-              onClick={handlePlay}
-              className="group relative block w-full h-full cursor-pointer"
-              aria-label={label('Reproducir video', 'Play video')}
-            >
-              <img
-                src={HERO_IMAGE}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-70"
-                referrerPolicy="no-referrer"
-              />
-              <span className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.35)' }} />
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="relative flex items-center justify-center">
-                  <span
-                    className="absolute rounded-full animate-ping"
-                    style={{ width: 100, height: 100, background: 'rgba(160,56,56,0.4)' }}
-                  />
-                  <span
-                    className="relative flex items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110"
-                    style={{
-                      width: 100,
-                      height: 100,
-                      background: 'rgba(245,239,230,0.95)',
-                      boxShadow: '0 10px 40px rgba(0,0,0,0.6)',
-                    }}
-                  >
-                    <Play className="w-10 h-10 text-[#7C2D2D] ml-1.5" fill="currentColor" />
-                  </span>
-                </span>
-              </span>
-              <AnimatePresence>
-                {notice && (
-                  <motion.span
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-x-4 bottom-4 mx-auto text-center"
-                    style={{
-                      maxWidth: 460,
-                      background: 'rgba(0,0,0,0.85)',
-                      color: '#F5EFE6',
-                      fontSize: '0.8rem',
-                      lineHeight: 1.45,
-                      padding: '12px 16px',
-                      borderRadius: 8,
-                      backdropFilter: 'blur(8px)',
-                    }}
-                  >
-                    {label(
-                      'Video próximamente. Mientras tanto, continúa para ver si cumples con los requisitos.',
-                      'Video coming soon. In the meantime, continue to see if you qualify.',
-                    )}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-          )}
-          <CloseButton onClick={onClose} label={label('Cerrar', 'Close')} />
-        </div>
-
-        <div className="flex justify-center" style={{ marginTop: 24 }}>
-          <button
-            type="button"
-            onClick={onContinue}
-            style={{
-              ...primaryBtn,
-              fontSize: 'clamp(0.75rem, 1.8vw, 0.95rem)',
-              padding: '14px 28px',
-              letterSpacing: '2px',
-            }}
-          >
-            {label('CONTINUAR AL CUESTIONARIO →', 'CONTINUE TO QUALIFICATION →')}
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
   );
 };
 
@@ -1487,13 +1329,8 @@ const PesadillasFunnelPage = () => {
     });
   }, []);
 
-  const openVideo = () => {
-    trackEvent('pesadillas_hero_video_click', { language: lang });
-    setLayer(1);
-  };
-
-  const videoContinue = () => {
-    trackEvent('pesadillas_video_continue', { language: lang });
+  const startQuestionnaire = () => {
+    trackEvent('pesadillas_start_questionnaire', { language: lang });
     setLayer(2);
   };
 
@@ -1510,17 +1347,9 @@ const PesadillasFunnelPage = () => {
       <LanguageToggle lang={lang} onChange={changeLang} />
 
       {/* Layer 0 stays mounted as the visual base */}
-      <HeroLayer lang={lang} onWatch={openVideo} />
+      <HeroLayer lang={lang} onStart={startQuestionnaire} />
 
       <AnimatePresence>
-        {layer === 1 && (
-          <VideoLayer
-            key="video"
-            lang={lang}
-            onClose={() => setLayer(0)}
-            onContinue={videoContinue}
-          />
-        )}
         {layer === 2 && (
           <ChecklistLayer
             key="checklist"
