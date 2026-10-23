@@ -46,7 +46,7 @@ export function ContactForm({ source }: { source: string }) {
     );
   }
 
-  const field = 'w-full rounded-xl border-2 border-ink/15 bg-paper px-4 py-3 text-[16px] outline-none transition focus:border-toro focus:bg-white';
+  const field = 'w-full rounded-xl border border-ink/15 bg-paper px-4 py-3 text-[16px] outline-none transition focus:border-toro focus:bg-white';
   const label = 'mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-ink/60';
   return (
     <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">

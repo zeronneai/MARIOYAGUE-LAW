@@ -59,7 +59,7 @@ export const PracticeAreaPage = ({ page }: PracticeAreaPageProps) => {
       {/* Resumen */}
       <section className="py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[auto_1fr]">
-          <div className="grid h-20 w-20 place-items-center rounded-3xl border-2 border-ink bg-toro text-white shadow-[5px_5px_0_var(--color-ink)]">
+          <div className="grid h-20 w-20 place-items-center rounded-3xl border border-ink/15 bg-toro text-white shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
             <Icon className="h-9 w-9" />
           </div>
           <div>
@@ -70,12 +70,12 @@ export const PracticeAreaPage = ({ page }: PracticeAreaPageProps) => {
       </section>
 
       {/* Casos */}
-      <section className="border-y-2 border-ink bg-bone py-20">
+      <section className="border-y border-ink/10 bg-bone py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <h2 className="poster text-[clamp(44px,6vw,80px)] text-ink">{labels.cases}</h2>
           <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {page.cases[language].map((caseType) => (
-              <li key={caseType} className="flex items-start gap-3 rounded-2xl border-2 border-ink bg-white p-4">
+              <li key={caseType} className="flex items-start gap-3 rounded-2xl border border-ink/15 bg-white p-4">
                 <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-guinda text-white"><Check className="h-3.5 w-3.5" strokeWidth={3} /></span>
                 <span className="font-semibold text-ink">{caseType}</span>
               </li>
@@ -113,7 +113,7 @@ export const PracticeAreaPage = ({ page }: PracticeAreaPageProps) => {
           <h2 className="poster text-[clamp(48px,7vw,96px)]">{labels.ctaTitle}</h2>
           <p className="mt-3 text-lg text-white/85">{labels.ctaSubtitle}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <a href="tel:+19154001099" onClick={() => trackPhoneClick(`practice_area_cta:${page.slug}`)} className="btn bg-white text-toro shadow-[4px_4px_0_var(--color-ink)]">
+            <a href="tel:+19154001099" onClick={() => trackPhoneClick(`practice_area_cta:${page.slug}`)} className="btn bg-white text-toro shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
               <Phone className="h-4 w-4" /> {labels.callCta} · (915) 400-1099
             </a>
             <a href="mailto:mario@myr-law.com" onClick={() => trackEmailClick(`practice_area_cta:${page.slug}`)} className="btn border-2 border-white text-white hover:bg-white hover:text-toro">

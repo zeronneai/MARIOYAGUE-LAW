@@ -54,7 +54,7 @@ export const FAQPage = () => {
           <h2 className="poster text-[clamp(48px,7vw,90px)]">{ctaHeading}</h2>
           <p className="mt-3 text-lg text-white/85">{ctaSubtext}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <a href="tel:+19154001099" onClick={() => trackPhoneClick('faq_cta')} className="btn bg-white text-toro shadow-[4px_4px_0_var(--color-ink)]">
+            <a href="tel:+19154001099" onClick={() => trackPhoneClick('faq_cta')} className="btn bg-white text-toro shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
               <Phone className="h-4 w-4" /> {ctaButton}
             </a>
             <button

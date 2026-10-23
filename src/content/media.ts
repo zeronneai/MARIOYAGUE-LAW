@@ -47,8 +47,8 @@ export const explainers: Reel[] = [
 ];
 
 /** Testimonios en video de clientes reales. */
-export const testimonials: Reel[] = [1, 2, 3, 4, 5, 6, 7].map((n) =>
-  local(`testimonial-${n}`, { en: `Client story #${n}`, es: `Historia de cliente #${n}` }, 'en'),
+export const testimonials: Reel[] = [1, 2, 3, 7].map((file, i) =>
+  local(`testimonial-${file}`, { en: `Client story #${i + 1}`, es: `Historia de cliente #${i + 1}` }, 'en'),
 );
 
 /** La historia de Mario (Nací en Juárez, crecí en El Paso). */

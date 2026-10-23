@@ -53,7 +53,7 @@ export function Nav() {
     );
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300 ${scrolled || open ? 'bg-paper/95 shadow-[0_2px_0_var(--color-ink)] backdrop-blur' : 'bg-transparent'}`}>
+    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300 ${scrolled || open ? 'bg-paper/95 shadow-[0_1px_0_rgba(29,21,19,0.08)] backdrop-blur' : 'bg-transparent'}`}>
       <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-4 px-4 sm:px-6">
         <Link to={lp('/')} className="flex items-center gap-2.5" aria-label="Mario Yague Law">
           <img src={media.logo} alt="" width={44} height={44} className="h-11 w-11 object-contain" />
@@ -83,14 +83,14 @@ export function Nav() {
           >
             {language === 'es' ? 'Consulta gratis' : 'Free consultation'}
           </button>
-          <button type="button" className="grid h-11 w-11 place-items-center rounded-full border-2 border-ink lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
+          <button type="button" className="grid h-11 w-11 place-items-center rounded-full border border-ink/15 lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
       {open ? (
-        <div className="border-t-2 border-ink bg-paper px-4 pb-6 pt-2 lg:hidden">
+        <div className="border-t border-ink/10 bg-paper px-4 pb-6 pt-2 lg:hidden">
           {LINKS[language].map(([href, label]) => link(href, label, 'block border-b border-ink/10 py-4 font-display text-3xl font-extrabold uppercase text-ink'))}
           <a href={PHONE_HREF} onClick={() => trackPhoneClick('nav_mobile')} className="btn-toro mt-5 w-full">
             <Phone className="h-4 w-4" /> {PHONE}

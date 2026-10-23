@@ -17,7 +17,7 @@ export const PageHero = ({ title, subtitle, eyebrow }: PageHeroProps) => {
   const { openDrawer } = useDrawer();
   const es = language === 'es';
   return (
-    <section className="grain relative overflow-hidden border-b-2 border-ink pb-16 pt-32 sm:pt-36">
+    <section className="grain relative overflow-hidden border-b border-ink/10 pb-16 pt-32 sm:pt-36">
       <img src={media.logoMark} alt="" aria-hidden width={400} height={400} className="pointer-events-none absolute -right-16 top-16 hidden w-[380px] opacity-[0.07] md:block" />
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
         {eyebrow ? (

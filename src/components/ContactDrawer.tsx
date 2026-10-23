@@ -31,7 +31,7 @@ export const ContactDrawer = () => {
         role="dialog"
         aria-modal="true"
         aria-label={es ? 'Consulta gratis' : 'Free consultation'}
-        className={`absolute inset-y-0 right-0 flex w-full max-w-lg flex-col overflow-y-auto border-l-2 border-ink bg-paper transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`absolute inset-y-0 right-0 flex w-full max-w-lg flex-col overflow-y-auto border-l border-ink/10 bg-paper transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex items-start justify-between gap-4 bg-guinda px-6 pb-6 pt-7 text-paper">
           <div>
@@ -47,7 +47,7 @@ export const ContactDrawer = () => {
         </div>
         <div className="flex-1 p-6">
           {isOpen ? <ContactForm source="contact_form_drawer" /> : null}
-          <a href={PHONE_HREF} onClick={() => trackPhoneClick('drawer')} className="mt-6 flex items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-white py-4 font-display text-2xl font-extrabold text-guinda">
+          <a href={PHONE_HREF} onClick={() => trackPhoneClick('drawer')} className="mt-6 flex items-center justify-center gap-2 rounded-2xl border border-ink/15 bg-white py-4 font-display text-2xl font-extrabold text-guinda">
             <Phone className="h-5 w-5" /> {es ? 'O llama:' : 'Or call:'} {PHONE}
           </a>
         </div>

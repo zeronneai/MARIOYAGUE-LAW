@@ -13,7 +13,7 @@ interface FAQAccordionProps {
 export const FAQAccordion = ({ items, lang }: FAQAccordionProps) => (
   <div className="mx-auto max-w-3xl space-y-3">
     {items.map((item, i) => (
-      <details key={i} open={i === 0} className="group rounded-[18px] border-2 border-ink bg-white transition-shadow open:shadow-[5px_5px_0_var(--color-ink)]">
+      <details key={i} open={i === 0} className="group rounded-[18px] border border-ink/15 bg-white transition-shadow open:shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
         <summary className="flex cursor-pointer list-none items-start justify-between gap-4 px-5 py-4 text-left [&::-webkit-details-marker]:hidden">
           <span className="text-[17px] font-bold leading-snug text-ink">{item[lang].q}</span>
           <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-toro text-white transition-transform group-open:rotate-45">

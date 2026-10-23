@@ -11,7 +11,7 @@ export function MobileBar() {
   const c = home[language].mobileBar;
   const wa = WHATSAPP_HREF + encodeURIComponent(language === 'es' ? 'Hola Toro, tuve un accidente y necesito ayuda.' : 'Hi Toro, I was in an accident and need help.');
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-ink bg-paper lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-paper lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <div className="grid grid-cols-3">
         <a href={PHONE_HREF} onClick={() => trackPhoneClick('mobile_bar')} className="flex flex-col items-center gap-0.5 bg-toro py-2.5 text-xs font-bold text-white">
           <Phone className="h-5 w-5" /> {c.call}

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, Bike, Car, Check, Footprints, MessageCircle, Phone, Play, Smartphone, Truck, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Bike, Car, Check, Footprints, MessageCircle, Phone, Play, Smartphone, Truck, X } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useDrawer } from '../../context/DrawerContext';
 import { home, PHONE, PHONE_HREF, WHATSAPP_HREF } from '../../content/home';
@@ -100,7 +100,7 @@ export function Hero() {
         </div>
 
         <div className="relative mx-auto w-full max-w-[520px] animate-rise [animation-delay:120ms]">
-          <div className="overflow-hidden rounded-[28px] border-2 border-ink bg-ink shadow-[10px_10px_0_var(--color-ink)] lg:rotate-[1.5deg]">
+          <div className="overflow-hidden rounded-[28px] border border-ink/15 bg-ink shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
             <img
               src={img(media.heroScene, 900)}
               srcSet={`${img(media.heroScene, 600)} 600w, ${img(media.heroScene, 900)} 900w, ${img(media.heroScene, 1300)} 1300w`}
@@ -115,7 +115,7 @@ export function Hero() {
           <div className="absolute -bottom-8 -left-6 sm:-left-10">
             <Stamp text={c.stamp} />
           </div>
-          <div className="absolute -right-2 top-6 rotate-[8deg] rounded-xl border-2 border-ink bg-paper px-4 py-2 shadow-[4px_4px_0_var(--color-ink)] sm:-right-6">
+          <div className="absolute -right-2 top-6 rounded-xl border border-ink/15 bg-paper px-4 py-2 shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)] sm:-right-6">
             <div className="poster text-3xl text-toro">{c.proof[1]}</div>
           </div>
         </div>
@@ -139,7 +139,7 @@ export function Ticker() {
     </div>
   );
   return (
-    <div className="-rotate-1 overflow-hidden border-y-2 border-ink bg-guinda py-3" aria-hidden>
+    <div className="overflow-hidden border-y border-ink/10 bg-guinda py-3" aria-hidden>
       <div className="flex w-max animate-marquee">{row}{row}</div>
     </div>
   );
@@ -158,12 +158,12 @@ export function Steps() {
         </Reveal>
         <ol className="mt-14 grid gap-6 md:grid-cols-3">
           {c.items.map((s, i) => (
-            <Reveal as="li" key={s.n} delay={i * 90} className={`card relative p-7 ${i === 1 ? 'md:-rotate-1 md:translate-y-4' : i === 2 ? 'md:rotate-1' : ''} ${i === 2 ? '!bg-guinda text-paper' : ''}`}>
+            <Reveal as="li" key={s.n} delay={i * 90} className={`card relative p-7 ${i === 1 ? 'md:translate-y-4' : ''} ${i === 2 ? '!bg-guinda text-paper' : ''}`}>
               <div className={`poster text-[88px] ${i === 2 ? 'text-paper/25' : 'stroke-ink'}`}>{s.n}</div>
               <h3 className={`poster mt-2 text-4xl ${i === 2 ? 'text-paper' : 'text-guinda'}`}>{s.title}</h3>
               <p className={`mt-3 leading-relaxed ${i === 2 ? 'text-paper/85' : 'text-ink/75'}`}>{s.body}</p>
               {i === 2 ? (
-                <a href={PHONE_HREF} onClick={() => trackPhoneClick('steps')} className="btn mt-6 bg-paper text-guinda shadow-[4px_4px_0_var(--color-ink)]">
+                <a href={PHONE_HREF} onClick={() => trackPhoneClick('steps')} className="btn mt-6 bg-paper text-guinda shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
                   <Phone className="h-4 w-4" /> {PHONE}
                 </a>
               ) : null}
@@ -201,13 +201,13 @@ function VideoModal({ reel, onClose }: { reel: Reel; onClose: () => void }) {
   );
 }
 
-function ReelCard({ reel, onOpen, tall = false }: { reel: Reel; onOpen: () => void; tall?: boolean }) {
+function ReelCard({ reel, onOpen, tall = false, fluid = false }: { reel: Reel; onOpen: () => void; tall?: boolean; fluid?: boolean }) {
   const { language } = useLanguage();
   return (
-    <button type="button" onClick={onOpen} className={`group relative shrink-0 snap-start overflow-hidden rounded-[22px] border-2 border-ink bg-ink text-left shadow-[5px_5px_0_var(--color-ink)] transition hover:-translate-y-1 ${tall ? 'w-[min(86vw,460px)]' : 'w-[min(80vw,380px)]'}`}>
+    <button type="button" onClick={onOpen} className={`group relative shrink-0 snap-start overflow-hidden rounded-[22px] border border-ink/15 bg-ink text-left shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)] transition ${fluid ? 'w-full' : tall ? 'w-[min(86vw,460px)]' : 'w-[min(80vw,380px)]'}`}>
       <img src={reel.poster} alt="" loading="lazy" width={540} height={304} className="aspect-video w-full object-cover opacity-90 transition group-hover:opacity-100" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-transparent" />
-      <span className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-toro text-white shadow-[3px_3px_0_var(--color-ink)] transition group-hover:scale-110">
+      <span className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-toro text-white shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)] transition group-hover:scale-110">
         <Play className="ml-1 h-7 w-7 fill-white" />
       </span>
       <span className="absolute left-3 top-3 flex gap-1.5">
@@ -219,23 +219,46 @@ function ReelCard({ reel, onOpen, tall = false }: { reel: Reel; onOpen: () => vo
   );
 }
 
-function ReelRow({ reels, tall }: { reels: Reel[]; tall?: boolean }) {
+function ReelRow({ reels, tall, grid = false }: { reels: Reel[]; tall?: boolean; grid?: boolean }) {
   const [open, setOpen] = useState<Reel | null>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const [edge, setEdge] = useState({ start: true, end: false });
+  const update = () => {
+    const el = track.current;
+    if (!el) return;
+    setEdge({ start: el.scrollLeft < 8, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 8 });
+  };
+  useEffect(update, [reels]);
+  const move = (dir: 1 | -1) => {
+    const el = track.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
+  };
+  const play = (r: Reel) => {
+    trackEvent('video_play', { video: r.id });
+    setOpen(r);
+  };
+  const arrow = 'grid h-12 w-12 place-items-center rounded-full border-2 border-ink bg-paper text-ink transition hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30';
   return (
     <>
-      <div className="no-scrollbar -mx-4 flex snap-x gap-5 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6">
-        {reels.map((r) => (
-          <ReelCard
-            key={r.id}
-            reel={r}
-            tall={tall}
-            onOpen={() => {
-              trackEvent('video_play', { video: r.id });
-              setOpen(r);
-            }}
-          />
-        ))}
-      </div>
+      {grid ? (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {reels.map((r) => <ReelCard key={r.id} reel={r} fluid onOpen={() => play(r)} />)}
+        </div>
+      ) : (
+        <div className="relative">
+          <div ref={track} onScroll={update} className="no-scrollbar -mx-4 flex snap-x gap-5 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6">
+            {reels.map((r) => <ReelCard key={r.id} reel={r} tall={tall} onOpen={() => play(r)} />)}
+          </div>
+          <div className="mt-4 hidden justify-end gap-3 md:flex">
+            <button type="button" onClick={() => move(-1)} disabled={edge.start} className={arrow} aria-label="Anterior / Previous">
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <button type="button" onClick={() => move(1)} disabled={edge.end} className={arrow} aria-label="Siguiente / Next">
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
       {open ? <VideoModal reel={open} onClose={() => setOpen(null)} /> : null}
     </>
   );
@@ -248,7 +271,7 @@ export function Videos() {
   // primero los que están en el idioma de quien visita
   const reels = [...explainers].sort((a, b) => Number(b.lang === language) - Number(a.lang === language));
   return (
-    <section id="videos" className="scroll-mt-24 border-y-2 border-ink bg-bone py-24">
+    <section id="videos" className="scroll-mt-24 border-y border-ink/10 bg-bone py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mb-12 grid items-end gap-6 lg:grid-cols-[1fr_auto]">
           <Reveal>
@@ -293,7 +316,7 @@ export function Cases() {
                 <Link
                   to={lp('/personal-injury')}
                   onClick={() => trackServiceCardClick(`accident_${it.key}`, 'home_cases')}
-                  className={`card group flex h-full flex-col justify-between p-7 transition hover:-translate-y-1 ${red ? '!bg-toro text-white' : ''} ${big ? 'min-h-[260px]' : 'min-h-[220px]'}`}
+                  className={`card group flex h-full flex-col justify-between p-7 transition ${red ? '!bg-toro text-white' : ''} ${big ? 'min-h-[260px]' : 'min-h-[220px]'}`}
                 >
                   <div className="flex items-start justify-between">
                     <span className={`grid h-14 w-14 place-items-center rounded-2xl border-2 ${red ? 'border-white/40 bg-white/10' : 'border-ink bg-paper'}`}>
@@ -350,7 +373,7 @@ export function Versus() {
               ))}
             </ul>
           </Reveal>
-          <Reveal delay={120} className="rounded-[22px] border-2 border-ink bg-paper p-7 text-ink shadow-[8px_8px_0_var(--color-ink)]">
+          <Reveal delay={120} className="rounded-[22px] border border-ink/15 bg-paper p-7 text-ink shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
             <div className="poster mb-6 flex items-center gap-3 text-4xl text-toro">
               <img src={media.logo} alt="" width={40} height={40} className="h-10 w-10 object-contain" loading="lazy" /> {c.us}
             </div>
@@ -385,7 +408,7 @@ export function Testimonials() {
           <Reveal delay={100}>
             <dl className="grid grid-cols-3 gap-3">
               {c.stats.map(([v, k]) => (
-                <div key={v} className="rounded-2xl border-2 border-ink bg-white px-3 py-4 shadow-[4px_4px_0_var(--color-guinda)] sm:px-5">
+                <div key={v} className="rounded-2xl border border-ink/15 bg-white px-3 py-4 shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)] sm:px-5">
                   <dt className="poster text-[clamp(34px,5vw,64px)] text-toro">{v}</dt>
                   <dd className="mt-1 text-xs font-semibold leading-snug text-ink/70 sm:text-sm">{k}</dd>
                 </div>
@@ -393,7 +416,7 @@ export function Testimonials() {
             </dl>
           </Reveal>
         </div>
-        <ReelRow reels={testimonials} />
+        <ReelRow reels={testimonials} grid />
         <p className="mt-4 text-xs text-ink/50">{c.disclaimer}</p>
       </div>
     </section>
@@ -410,10 +433,10 @@ export function MeetMario() {
   const { language } = useLanguage();
   const [story, setStory] = useState(false);
   return (
-    <section id="mario" className="scroll-mt-24 border-y-2 border-ink bg-bone py-24">
+    <section id="mario" className="scroll-mt-24 border-y border-ink/10 bg-bone py-24">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr]">
         <Reveal className="relative mx-auto w-full max-w-[460px]">
-          <div className="overflow-hidden rounded-[28px] border-2 border-ink shadow-[10px_10px_0_var(--color-guinda)] lg:-rotate-2">
+          <div className="overflow-hidden rounded-[28px] border border-ink/15 shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
             <img src={media.marioPhoto} alt="Mario Yague, abogado fundador de Mario Yague Law en El Paso, Texas" width={800} height={1000} loading="lazy" className="aspect-[4/5] w-full object-cover" />
           </div>
           <button
@@ -422,7 +445,7 @@ export function MeetMario() {
               trackEvent('video_play', { video: marioStory.id });
               setStory(true);
             }}
-            className="absolute -bottom-6 -right-3 flex rotate-[-4deg] items-center gap-3 rounded-2xl border-2 border-ink bg-toro px-5 py-3 text-left text-white shadow-[4px_4px_0_var(--color-ink)] transition hover:rotate-0"
+            className="absolute -bottom-6 -right-3 flex items-center gap-3 rounded-2xl border border-ink/15 bg-toro px-5 py-3 text-left text-white shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)] transition"
           >
             <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-toro"><Play className="ml-0.5 h-5 w-5 fill-toro" /></span>
             <span>
@@ -442,7 +465,7 @@ export function MeetMario() {
           ))}
           <dl className="mt-8 grid gap-3 sm:grid-cols-2">
             {c.creds.map(([k, v]) => (
-              <div key={k} className="rounded-2xl border-2 border-ink bg-paper px-4 py-3">
+              <div key={k} className="rounded-2xl border border-ink/15 bg-paper px-4 py-3">
                 <dt className="font-display text-2xl font-extrabold uppercase text-guinda">{k}</dt>
                 <dd className="text-sm text-ink/70">{v}</dd>
               </div>
@@ -481,11 +504,11 @@ export function Team() {
         <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {c.people.map((p, i) => (
             <Reveal key={p.name} delay={i * 80} className={i % 2 ? 'lg:translate-y-8' : ''}>
-              <figure className="group overflow-hidden rounded-[24px] border-2 border-ink bg-guinda shadow-[6px_6px_0_var(--color-ink)]">
+              <figure className="group overflow-hidden rounded-[24px] border border-ink/15 bg-guinda shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
                 <div className="overflow-hidden">
                   <img src={p.photo} alt={`${p.name}, ${p.role}, Mario Yague Law`} width={543} height={724} loading="lazy" className="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
                 </div>
-                <figcaption className="border-t-2 border-ink bg-paper px-4 py-3">
+                <figcaption className="border-t border-ink/10 bg-paper px-4 py-3">
                   <div className="poster text-2xl text-ink sm:text-3xl">{p.name}</div>
                   <div className="text-xs font-bold uppercase tracking-[0.14em] text-toro">{p.role}</div>
                 </figcaption>
@@ -537,7 +560,7 @@ export function ContactSection() {
             <a href={PHONE_HREF} onClick={() => trackPhoneClick('contact_section')} className="poster block text-[clamp(44px,6vw,72px)] text-white hover:underline">
               {PHONE}
             </a>
-            <a href={wa} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick('contact_section')} className="btn bg-white text-toro shadow-[4px_4px_0_var(--color-ink)]">
+            <a href={wa} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick('contact_section')} className="btn bg-white text-toro shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
               <MessageCircle className="h-5 w-5" /> WhatsApp
             </a>
             <p className="pt-4 text-white/80">1331 Wyoming Ave, El Paso, TX 79902 · {t.footer.hoursWeekdays}</p>
