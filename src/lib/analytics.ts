@@ -1,17 +1,25 @@
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
+    fbq?: (...args: unknown[]) => void;
     dataLayer?: unknown[];
   }
 }
 
 const MEASUREMENT_ID = 'G-G47X45BCTR';
 
+/** Meta Pixel: eventos estándar para que Meta optimice los anuncios a leads y llamadas. */
+function meta(event: string, params: Record<string, unknown> = {}) {
+  if (typeof window === 'undefined' || typeof window.fbq !== 'function') return;
+  window.fbq('track', event, params);
+}
+
 function isReady(): boolean {
   return typeof window !== 'undefined' && typeof window.gtag === 'function';
 }
 
 export function trackPageView(url: string, title?: string) {
+  meta('PageView');
   if (!isReady()) return;
   window.gtag!('event', 'page_view', {
     page_location: url,
@@ -22,11 +30,14 @@ export function trackPageView(url: string, title?: string) {
 }
 
 export function trackEvent(name: string, params: Record<string, unknown> = {}) {
+  // el formulario de /pesadillas es un lead
+  if (name === 'pesadillas_form_submit_success') meta('Lead', { content_name: 'pesadillas' });
   if (!isReady()) return;
   window.gtag!('event', name, params);
 }
 
 export function trackPhoneClick(location: string) {
+  meta('Contact', { method: 'phone', location });
   trackEvent('phone_click', {
     event_category: 'engagement',
     event_label: '+1-915-400-1099',
@@ -35,6 +46,7 @@ export function trackPhoneClick(location: string) {
 }
 
 export function trackEmailClick(location: string) {
+  meta('Contact', { method: 'email', location });
   trackEvent('email_click', {
     event_category: 'engagement',
     event_label: 'mario@myr-law.com',
@@ -43,6 +55,7 @@ export function trackEmailClick(location: string) {
 }
 
 export function trackWhatsAppClick(location: string) {
+  meta('Contact', { method: 'whatsapp', location });
   trackEvent('whatsapp_click', {
     event_category: 'engagement',
     click_location: location,
@@ -50,6 +63,7 @@ export function trackWhatsAppClick(location: string) {
 }
 
 export function trackFormSubmit(formName: string, params: Record<string, unknown> = {}) {
+  meta('Lead', { content_name: formName });
   trackEvent('form_submit', {
     event_category: 'lead',
     form_name: formName,

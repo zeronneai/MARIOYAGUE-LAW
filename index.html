@@ -251,6 +251,15 @@
     </script>
     <!-- Roots Engine: analítica web (sin cookies) -->
     <script defer src="https://roots-engine.vercel.app/t.js" data-site="598b3b3bf2942ed7afbcd95f604f0a1b"></script>
+    <!-- Meta Pixel (El Toro). El PageView lo manda src/lib/analytics.ts en cada cambio de página -->
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '722615560451456');
+    </script>
   </head>
   <body>
     <div id="root"></div>
