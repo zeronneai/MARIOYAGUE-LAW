@@ -1,46 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.marioyaguelaw.com/</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/"/>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/"/>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.marioyaguelaw.com/faq</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/faq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/faq"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es/faq</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/faq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/faq"/>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.marioyaguelaw.com/personal-injury</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/personal-injury"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/personal-injury"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/personal-injury"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es/personal-injury</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/personal-injury"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/personal-injury"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/personal-injury"/>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.marioyaguelaw.com/criminal-defense</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/criminal-defense"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/criminal-defense"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/criminal-defense"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es/criminal-defense</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/criminal-defense"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/criminal-defense"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/criminal-defense"/>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.marioyaguelaw.com/family-law</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/family-law"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/family-law"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/family-law"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es/family-law</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/family-law"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/family-law"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/family-law"/>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.marioyaguelaw.com/dwi-defense</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/dwi-defense"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/dwi-defense"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/dwi-defense"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es/dwi-defense</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/dwi-defense"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/dwi-defense"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/dwi-defense"/>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.marioyaguelaw.com/de-choque-a-cheque</loc>
-    <lastmod>2026-06-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/de-choque-a-cheque"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/de-choque-a-cheque"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/de-choque-a-cheque"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.marioyaguelaw.com/es/de-choque-a-cheque</loc>
+    <lastmod>2026-10-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.marioyaguelaw.com/de-choque-a-cheque"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.marioyaguelaw.com/es/de-choque-a-cheque"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.marioyaguelaw.com/de-choque-a-cheque"/>
+    <priority>0.8</priority>
   </url>
 </urlset>
