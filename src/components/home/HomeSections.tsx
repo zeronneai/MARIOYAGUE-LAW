@@ -377,10 +377,22 @@ export function Testimonials() {
   return (
     <section id="testimonials" className="scroll-mt-24 py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="mb-12">
-          <Kicker>{c.kicker}</Kicker>
-          <Title lines={c.title} />
-        </Reveal>
+        <div className="mb-12 grid items-end gap-10 lg:grid-cols-[1fr_1.2fr]">
+          <Reveal>
+            <Kicker>{c.kicker}</Kicker>
+            <Title lines={c.title} />
+          </Reveal>
+          <Reveal delay={100}>
+            <dl className="grid grid-cols-3 gap-3">
+              {c.stats.map(([v, k]) => (
+                <div key={v} className="rounded-2xl border-2 border-ink bg-white px-3 py-4 shadow-[4px_4px_0_var(--color-guinda)] sm:px-5">
+                  <dt className="poster text-[clamp(34px,5vw,64px)] text-toro">{v}</dt>
+                  <dd className="mt-1 text-xs font-semibold leading-snug text-ink/70 sm:text-sm">{k}</dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        </div>
         <ReelRow reels={testimonials} />
         <p className="mt-4 text-xs text-ink/50">{c.disclaimer}</p>
       </div>
@@ -447,6 +459,40 @@ export function MeetMario() {
             {cta} <ArrowRight className="h-4 w-4" />
           </button>
         </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────────── Equipo ───────────────────────────── */
+
+export function Team() {
+  const c = useCopy().team;
+  return (
+    <section id="team" className="scroll-mt-24 py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <Reveal className="mb-12 grid items-end gap-6 lg:grid-cols-2">
+          <div>
+            <Kicker>{c.kicker}</Kicker>
+            <Title lines={c.title} />
+          </div>
+          <p className="max-w-md text-lg leading-relaxed text-ink/70 lg:justify-self-end">{c.sub}</p>
+        </Reveal>
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+          {c.people.map((p, i) => (
+            <Reveal key={p.name} delay={i * 80} className={i % 2 ? 'lg:translate-y-8' : ''}>
+              <figure className="group overflow-hidden rounded-[24px] border-2 border-ink bg-guinda shadow-[6px_6px_0_var(--color-ink)]">
+                <div className="overflow-hidden">
+                  <img src={p.photo} alt={`${p.name}, ${p.role}, Mario Yague Law`} width={543} height={724} loading="lazy" className="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                </div>
+                <figcaption className="border-t-2 border-ink bg-paper px-4 py-3">
+                  <div className="poster text-2xl text-ink sm:text-3xl">{p.name}</div>
+                  <div className="text-xs font-bold uppercase tracking-[0.14em] text-toro">{p.role}</div>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -65,6 +65,22 @@ export const home = {
       kicker: 'From our clients',
       title: ['Real people.', 'Real stories.'],
       disclaimer: 'Past results do not guarantee future outcomes.',
+      stats: [
+        ['$10M+', 'Recovered for our clients'],
+        ['500+', 'Cases won'],
+        ['$0', 'Upfront. You pay nothing unless we win'],
+      ],
+    },
+    team: {
+      kicker: 'The herd',
+      title: ['The team', 'behind El Toro.'],
+      sub: 'When you call, you talk to real people who know your case by name. In English or in Spanish.',
+      people: [
+        { name: 'Viviana Romero', role: 'Office Manager', photo: '/team/viviana.jpg' },
+        { name: 'Claudia Terrazas', role: 'Paralegal', photo: '/team/claudia.jpg' },
+        { name: 'Alexis Martinez', role: 'Case Manager', photo: '/team/alexis.jpg' },
+        { name: 'Daya Méndez', role: 'Legal Assistant', photo: '/team/daya.jpg' },
+      ],
     },
     mario: {
       kicker: 'Meet El Toro',
@@ -152,6 +168,22 @@ export const home = {
       kicker: 'Nuestros clientes',
       title: ['Gente real.', 'Historias reales.'],
       disclaimer: 'Resultados anteriores no garantizan resultados futuros.',
+      stats: [
+        ['$10M+', 'Recuperados para nuestros clientes'],
+        ['500+', 'Casos ganados'],
+        ['$0', 'Por adelantado. Si no ganamos, no pagas'],
+      ],
+    },
+    team: {
+      kicker: 'La manada',
+      title: ['El equipo', 'detrás del Toro.'],
+      sub: 'Cuando llamas, te atiende gente real que conoce tu caso por tu nombre. En español o en inglés.',
+      people: [
+        { name: 'Viviana Romero', role: 'Gerente de oficina', photo: '/team/viviana.jpg' },
+        { name: 'Claudia Terrazas', role: 'Paralegal', photo: '/team/claudia.jpg' },
+        { name: 'Alexis Martinez', role: 'Gerente de casos', photo: '/team/alexis.jpg' },
+        { name: 'Daya Méndez', role: 'Asistente legal', photo: '/team/daya.jpg' },
+      ],
     },
     mario: {
       kicker: 'Conoce al Toro',

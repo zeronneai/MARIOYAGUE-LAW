@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useSeo } from '../seo/useSeo';
-import { Cases, ContactSection, Hero, HomeFaq, MeetMario, Steps, Testimonials, Ticker, Versus, Videos } from '../components/home/HomeSections';
+import { Cases, ContactSection, Hero, HomeFaq, MeetMario, Steps, Team, Testimonials, Ticker, Versus, Videos } from '../components/home/HomeSections';
 
 export const HomePage = () => {
   const { language } = useLanguage();
@@ -37,6 +37,7 @@ export const HomePage = () => {
       <Versus />
       <Testimonials />
       <MeetMario />
+      <Team />
       <HomeFaq />
       <ContactSection />
     </main>
