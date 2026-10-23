@@ -43,36 +43,29 @@ export const FAQPage = () => {
     <>
       <PageHero title={heroTitle} subtitle={heroSubtitle} eyebrow={eyebrow} />
 
-      <section className="py-20 bg-beige">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <FAQAccordion items={faqQuestions} lang={language} />
         </div>
       </section>
 
-      <section className="py-20 bg-charcoal text-beige">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif mb-3 text-beige">
-            {ctaHeading}
-          </h2>
-          <p className="text-beige/70 mb-8">{ctaSubtext}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+19154001099"
-              onClick={() => trackPhoneClick('faq_cta')}
-              className="inline-flex items-center justify-center gap-3 bg-burgundy text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-burgundy-dark transition-all shadow-xl shadow-burgundy/30 border border-gold/40 rounded-sm text-sm"
-            >
-              <Phone className="w-4 h-4" />
-              {ctaButton}
+      <section className="bg-toro py-20 text-white">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <h2 className="poster text-[clamp(48px,7vw,90px)]">{ctaHeading}</h2>
+          <p className="mt-3 text-lg text-white/85">{ctaSubtext}</p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <a href="tel:+19154001099" onClick={() => trackPhoneClick('faq_cta')} className="btn bg-white text-toro shadow-[4px_4px_0_var(--color-ink)]">
+              <Phone className="h-4 w-4" /> {ctaButton}
             </a>
             <button
+              type="button"
               onClick={() => {
                 trackEvent('form_drawer_open', { location: 'faq_cta' });
                 openDrawer('faq_cta');
               }}
-              className="inline-flex items-center justify-center gap-3 border border-gold/40 text-beige px-8 py-4 font-bold uppercase tracking-widest hover:bg-white/5 transition-all rounded-sm text-sm"
+              className="btn border-2 border-white text-white hover:bg-white hover:text-toro"
             >
-              {language === 'es' ? 'Formulario de Contacto' : 'Contact Form'}
-              <ArrowRight className="w-4 h-4" />
+              {language === 'es' ? 'Consulta gratis' : 'Free consultation'} <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>

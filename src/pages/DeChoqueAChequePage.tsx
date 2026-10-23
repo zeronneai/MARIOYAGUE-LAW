@@ -27,11 +27,11 @@ const faqItems: LocalizedQA[] = [
   {
     en: {
       q: 'What does "De Choque a Cheque" mean?',
-      a: '"De Choque a Cheque" is Spanish for "From Crash to Check." It is the campaign promise of Mario Yague Law: when you have been hurt in an accident in El Paso, we turn your crash into a check — the compensation you deserve. The phrase captures our entire process, from the moment of the accident to the moment you receive your settlement, with no fee unless we win.',
+      a: '"De Choque a Cheque" is Spanish for "From Crash to Check." It is the campaign promise of Mario Yague Law: when you have been hurt in an accident in El Paso, we turn your crash into a check, the compensation you deserve. The phrase captures our entire process, from the moment of the accident to the moment you receive your settlement, with no fee unless we win.',
     },
     es: {
       q: '¿Qué significa "De Choque a Cheque"?',
-      a: '"De Choque a Cheque" es la promesa de campaña de Mario Yague Law: cuando has sido lastimado en un accidente en El Paso, convertimos tu choque en un cheque — la compensación que mereces. La frase resume todo nuestro proceso, desde el momento del accidente hasta el momento en que recibes tu acuerdo, sin honorarios a menos que ganemos.',
+      a: '"De Choque a Cheque" es la promesa de campaña de Mario Yague Law: cuando has sido lastimado en un accidente en El Paso, convertimos tu choque en un cheque, la compensación que mereces. La frase resume todo nuestro proceso, desde el momento del accidente hasta el momento en que recibes tu acuerdo, sin honorarios a menos que ganemos.',
     },
   },
   {
@@ -47,21 +47,21 @@ const faqItems: LocalizedQA[] = [
   {
     en: {
       q: 'What are the attorney fees for De Choque a Cheque?',
-      a: 'You pay nothing upfront. Mario Yague Law works on a contingency fee — we only get paid if we win your case, typically 33–40% of the final settlement. The initial consultation is free and confidential. If we do not recover compensation for you, you owe us nothing. No fee unless we win.',
+      a: 'You pay nothing upfront. Mario Yague Law works on a contingency fee, we only get paid if we win your case, typically 33–40% of the final settlement. The initial consultation is free and confidential. If we do not recover compensation for you, you owe us nothing. No fee unless we win.',
     },
     es: {
       q: '¿Cuánto cobra Mario Yague Law?',
-      a: 'No pagas nada por adelantado. Mario Yague Law trabaja con honorarios de contingencia — solo cobramos si ganamos tu caso, típicamente entre 33% y 40% del acuerdo final. La consulta inicial es gratis y confidencial. Si no recuperamos compensación para ti, no nos debes nada. Sin honorarios a menos que ganemos.',
+      a: 'No pagas nada por adelantado. Mario Yague Law trabaja con honorarios de contingencia, solo cobramos si ganamos tu caso, típicamente entre 33% y 40% del acuerdo final. La consulta inicial es gratis y confidencial. Si no recuperamos compensación para ti, no nos debes nada. Sin honorarios a menos que ganemos.',
     },
   },
   {
     en: {
       q: 'What types of accidents qualify for De Choque a Cheque?',
-      a: 'Car accidents, truck and 18-wheeler accidents, motorcycle accidents, pedestrian and bicycle accidents, slip and fall injuries, workplace injuries, wrongful death, and other incidents where someone else\'s negligence caused you harm. If you are not sure whether your situation qualifies, call us — the consultation is free and we will tell you straight.',
+      a: 'Car accidents, truck and 18-wheeler accidents, motorcycle accidents, pedestrian and bicycle accidents, slip and fall injuries, workplace injuries, wrongful death, and other incidents where someone else\'s negligence caused you harm. If you are not sure whether your situation qualifies, call us, the consultation is free and we will tell you straight.',
     },
     es: {
       q: '¿Qué tipos de accidentes califican para De Choque a Cheque?',
-      a: 'Accidentes de auto, accidentes de camiones y tráileres de 18 ruedas, accidentes de motocicleta, accidentes peatonales y de bicicleta, resbalones y caídas, lesiones en el trabajo, muerte por negligencia, y otros incidentes donde la negligencia de alguien más te causó daño. Si no estás seguro si tu situación califica, llámanos — la consulta es gratis y te lo decimos directo.',
+      a: 'Accidentes de auto, accidentes de camiones y tráileres de 18 ruedas, accidentes de motocicleta, accidentes peatonales y de bicicleta, resbalones y caídas, lesiones en el trabajo, muerte por negligencia, y otros incidentes donde la negligencia de alguien más te causó daño. Si no estás seguro si tu situación califica, llámanos, la consulta es gratis y te lo decimos directo.',
     },
   },
   {
@@ -136,8 +136,8 @@ export const DeChoqueAChequePage = () => {
   useSeo({
     title:
       language === 'es'
-        ? 'De Choque a Cheque — Mario Yague Law | Abogado de Accidentes El Paso'
-        : 'De Choque a Cheque — Mario Yague Law | El Paso Accident Attorney',
+        ? 'De Choque a Cheque, Mario Yague Law | Abogado de Accidentes El Paso'
+        : 'De Choque a Cheque, Mario Yague Law | El Paso Accident Attorney',
     description:
       language === 'es'
         ? 'De Choque a Cheque: Mario Yague convierte tu accidente en tu compensación. $10M+ recuperados. Abogado bilingüe en El Paso, TX. Sin honorarios si no ganas. (915) 400-1099.'
@@ -167,8 +167,8 @@ export const DeChoqueAChequePage = () => {
     language === 'es' ? '¿Qué significa De Choque a Cheque?' : 'What does De Choque a Cheque mean?';
   const meaningBody =
     language === 'es'
-      ? '"De Choque a Cheque" es la promesa de Mario Yague Law a la gente de El Paso: tomamos tu accidente — el choque — y lo convertimos en tu compensación — el cheque. No es un eslogan vacío. Es nuestro proceso completo: investigamos, peleamos con la aseguradora, y no descansamos hasta que tienes en tus manos el cheque que mereces. Y lo hacemos con honorarios de contingencia. Eso significa que vas de Choque a Cheque sin pagar un solo centavo por adelantado. Si no ganamos, no nos debes nada. Así de simple es nuestra promesa De Choque a Cheque.'
-      : '"De Choque a Cheque" — Spanish for "From Crash to Check" — is Mario Yague Law\'s promise to the people of El Paso: we take your accident, the crash, and we turn it into your compensation, the check. It is not an empty slogan. It is our entire process: we investigate, we fight the insurance company, and we do not rest until the check you deserve is in your hand. And we do it on contingency. That means you go from Crash to Check without paying a single dollar upfront. If we do not win, you do not owe us anything. That is how simple our De Choque a Cheque promise is.';
+      ? '"De Choque a Cheque" es la promesa de Mario Yague Law a la gente de El Paso: tomamos tu accidente, el choque, y lo convertimos en tu compensación, el cheque. No es un eslogan vacío. Es nuestro proceso completo: investigamos, peleamos con la aseguradora, y no descansamos hasta que tienes en tus manos el cheque que mereces. Y lo hacemos con honorarios de contingencia. Eso significa que vas de Choque a Cheque sin pagar un solo centavo por adelantado. Si no ganamos, no nos debes nada. Así de simple es nuestra promesa De Choque a Cheque.'
+      : '"De Choque a Cheque", Spanish for "From Crash to Check", is Mario Yague Law\'s promise to the people of El Paso: we take your accident, the crash, and we turn it into your compensation, the check. It is not an empty slogan. It is our entire process: we investigate, we fight the insurance company, and we do not rest until the check you deserve is in your hand. And we do it on contingency. That means you go from Crash to Check without paying a single dollar upfront. If we do not win, you do not owe us anything. That is how simple our De Choque a Cheque promise is.';
 
   const processHeading =
     language === 'es' ? 'El proceso De Choque a Cheque' : 'The De Choque a Cheque process';
@@ -245,7 +245,7 @@ export const DeChoqueAChequePage = () => {
     },
     {
       icon: Award,
-      title: 'Top 40 Under 40 — NTLA 2024',
+      title: 'Top 40 Under 40, NTLA 2024',
       body:
         language === 'es'
           ? 'Reconocido por la National Trial Lawyers Association como uno de los 40 mejores abogados de demandantes civiles menores de 40 años.'

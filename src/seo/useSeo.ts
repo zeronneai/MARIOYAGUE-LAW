@@ -1,4 +1,6 @@
-import { useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { langFromPath, withLang } from '../context/LanguageContext';
 import type { LocalizedQA, PracticeAreaContent, Lang } from './pageContent';
 
 interface SeoOpts {
@@ -28,7 +30,23 @@ function getExistingSchemaTypes(): Set<string> {
   return types;
 }
 
-export function useSeo({ title, description, canonical, jsonLd }: SeoOpts) {
+/** Al prerenderizar en el servidor, aquí se junta el SEO de la página para escribirlo en el <head>. */
+export type SeoCollected = { title?: string; description?: string; canonical?: string; jsonLd?: object[]; noindex?: boolean };
+export const SeoCollectorContext = createContext<SeoCollected | null>(null);
+
+export function useSeo({ title, description, canonical: rawCanonical, jsonLd }: SeoOpts) {
+  const collector = useContext(SeoCollectorContext);
+  // la versión en español tiene su propia URL canónica (/es/...)
+  const { pathname } = useLocation();
+  const canonical = langFromPath(pathname) === 'es'
+    ? rawCanonical.replace(/^(https?:\/\/[^/]+)(\/.*)?$/, (_m, host: string, path = '/') => host + withLang(path, 'es'))
+    : rawCanonical;
+  if (collector) {
+    collector.title = title;
+    collector.description = description;
+    collector.canonical = canonical;
+    collector.jsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+  }
   useEffect(() => {
     const prevTitle = document.title;
     document.title = title;
@@ -72,7 +90,7 @@ export function useSeo({ title, description, canonical, jsonLd }: SeoOpts) {
             : undefined;
 
         if (type && existingTypes.has(type)) {
-          // Already present from prerender — leave the static one alone.
+          // Already present from prerender, leave the static one alone.
           return;
         }
 

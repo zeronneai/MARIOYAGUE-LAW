@@ -1,77 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap');
 @import "tailwindcss";
 
+/*
+ * El Toro · sistema visual "cartel de pelea"
+ * Fondo claro tipo papel, guinda y rojo toro protagonistas, titulares condensados gigantes,
+ * serif itálica de acento para la voz de Mario. Dorado solo en detalles.
+ */
 @theme {
-  --color-burgundy: #73312e;
-  --color-burgundy-dark: #4f221f;
-  --color-gold: #a28d6e;
-  --color-bronze: #cd7f32;
-  --color-beige: #e0d0be;
-  --color-charcoal: #2e2a28;
-  
-  --font-display: "Anton", sans-serif;
-  --font-serif: "Playfair Display", serif;
-  --font-sans: "Inter", sans-serif;
+  --color-paper: #f7f2ea;
+  --color-bone: #efe6da;
+  --color-ink: #1d1513;
+  --color-guinda: #7a1d22;
+  --color-guinda-deep: #4e1015;
+  --color-toro: #d7261e;
+  --color-toro-dark: #b11c15;
+  --color-brass: #b98a4e;
 
-  --animate-pulse-white: pulse-white 2s infinite;
-  --animate-pulse-gold: pulse-gold 2s infinite;
-  --animate-draw-line: draw-line 1.5s ease-out forwards;
+  /* nombres viejos, remapeados para que las páginas existentes combinen */
+  --color-burgundy: #7a1d22;
+  --color-burgundy-dark: #4e1015;
+  --color-gold: #b98a4e;
+  --color-bronze: #b98a4e;
+  --color-beige: #f3ece2;
+  --color-charcoal: #1d1513;
 
-  @keyframes pulse-white {
-    0% {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-    }
-    70% {
-      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    }
-  }
+  --font-display: "Big Shoulders Display Variable", "Arial Narrow", sans-serif;
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-accent: "Instrument Serif", Georgia, serif;
 
-  @keyframes pulse-gold {
-    0% {
-      box-shadow: 0 0 0 0 rgba(162, 141, 110, 0.7);
-    }
-    70% {
-      box-shadow: 0 0 0 15px rgba(162, 141, 110, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(162, 141, 110, 0);
-    }
-  }
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-rise: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-spin-slow: spin 22s linear infinite;
+  /* se conservan para las páginas que aún los usan */
+  --animate-pulse-white: none;
+  --animate-pulse-gold: none;
 
-  @keyframes draw-line {
-    0% { width: 0; left: 50%; opacity: 0; }
-    50% { opacity: 1; }
-    100% { width: 100%; left: 0; opacity: 0.8; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
-}
-
-@layer utilities {
-  .bg-paper-texture {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
-  }
-  
-  .glass-card {
-    @apply bg-charcoal/5 backdrop-blur-xl border border-bronze/30 shadow-inner;
-    box-shadow: inset 0 0 20px rgba(205, 127, 50, 0.05);
-  }
-  
-  .glass-card-hover {
-    @apply hover:border-bronze/60 hover:bg-charcoal/10 transition-all duration-700;
-    &:hover {
-      box-shadow: 0 0 30px rgba(205, 127, 50, 0.15), inset 0 0 20px rgba(205, 127, 50, 0.1);
-    }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 
 @layer base {
+  html { scroll-behavior: smooth; }
   body {
-    @apply bg-[#fdfcfb] text-charcoal font-sans antialiased;
+    @apply bg-paper text-ink font-sans antialiased;
+    font-optical-sizing: auto;
   }
-  
-  h1, h2, h3, h4, .serif {
-    @apply font-serif;
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  ::selection { background: var(--color-toro); color: white; }
+  :focus-visible { outline: 3px solid var(--color-toro); outline-offset: 3px; }
+}
+
+@layer components {
+  /* Titular de cartel */
+  .poster {
+    @apply font-display uppercase;
+    font-weight: 900;
+    line-height: 0.86;
+    letter-spacing: -0.015em;
+  }
+  .accent {
+    @apply font-accent italic normal-case;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .eyebrow {
+    @apply font-sans text-[11px] font-bold uppercase tracking-[0.22em];
+  }
+
+  /* Botones: sólidos, con sombra dura tipo sello. Nada de pulsos. */
+  .btn, .btn-toro, .btn-guinda, .btn-line {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-3.5 font-sans text-[15px] font-bold;
+    transition: transform 160ms, box-shadow 160ms, background-color 160ms, color 160ms;
+  }
+  .btn:active, .btn-toro:active, .btn-guinda:active, .btn-line:active { transform: translate(2px, 2px); box-shadow: none !important; }
+  .btn-toro { @apply bg-toro text-white; box-shadow: 4px 4px 0 var(--color-ink); }
+  .btn-toro:hover { @apply bg-toro-dark; transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--color-ink); }
+  .btn-guinda { @apply bg-guinda text-paper; box-shadow: 4px 4px 0 var(--color-ink); }
+  .btn-guinda:hover { @apply bg-guinda-deep; transform: translate(-1px, -1px); }
+  .btn-line { @apply border-2 border-ink bg-paper text-ink; }
+  .btn-line:hover { @apply bg-ink text-paper; }
+
+  .card, .glass-card {
+    @apply rounded-[22px] border-2 border-ink bg-white;
+    box-shadow: 6px 6px 0 var(--color-ink);
+  }
+  .tag {
+    @apply inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-paper px-3 py-1 text-xs font-bold;
   }
 }
+
+@layer utilities {
+  .grain, .bg-paper-texture {
+    background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  }
+  .stroke-ink { -webkit-text-stroke: 2px var(--color-ink); color: transparent; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  /* compatibilidad con clases viejas */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Aparecer al hacer scroll (solo con JS; sin JS todo se ve) */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.js .reveal.is-in { opacity: 1; transform: none; }

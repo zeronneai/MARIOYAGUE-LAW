@@ -11,7 +11,7 @@ export const translations = {
       badge: "The People's Bull",
       title1: 'The Bull',
       title2: 'Resolves',
-      desc: 'We fight for your rights with the force of a bull. Mario Yague Law — elite legal representation for the people of El Paso.',
+      desc: 'We fight for your rights with the force of a bull. Mario Yague Law, elite legal representation for the people of El Paso.',
       cta1: 'Speak with the Bull',
       cta2: 'Our Services',
       stat1: 'Recovered for clients',
@@ -22,7 +22,7 @@ export const translations = {
       stat3Val: '100%',
       urgency: 'Free · Confidential · We Respond in 24 Hours',
       statsDisclaimer: 'Past results do not guarantee future outcomes.',
-      sloganTagline: 'De Choque a Cheque — we turn your crash into your check.',
+      sloganTagline: 'De Choque a Cheque, we turn your crash into your check.',
     },
     marquee: 'No Fees Unless We Win! · Free Consultation · ',
     services: {
@@ -32,7 +32,7 @@ export const translations = {
       items: [
         {
           title: 'You Pay Nothing Upfront',
-          desc: 'Zero out-of-pocket costs — ever. We front every expense. If we don\'t win, you don\'t owe us a single dollar.',
+          desc: 'Zero out-of-pocket costs, ever. We front every expense. If we don\'t win, you don\'t owe us a single dollar.',
         },
         {
           title: 'We Cover Your Medical Bills',
@@ -44,7 +44,7 @@ export const translations = {
         },
         {
           title: 'We Handle Every Detail',
-          desc: 'Paperwork, calls, deadlines, court — all of it. Your only job is to get better. We take care of the rest.',
+          desc: 'Paperwork, calls, deadlines, court, all of it. Your only job is to get better. We take care of the rest.',
         },
       ],
       learnMore: 'Get Help Now',
@@ -56,12 +56,12 @@ export const translations = {
         {
           name: 'Maria R.',
           type: 'Personal Injury',
-          text: 'Mario fought for my case when no one else would. We won a settlement that changed my life. He is truly the people\'s bull — he never gave up on me.',
+          text: 'Mario fought for my case when no one else would. We won a settlement that changed my life. He is truly the people\'s bull, he never gave up on me.',
         },
         {
           name: 'Carlos M.',
           type: 'Criminal Defense',
-          text: 'All charges were dropped completely. The Bull delivered exactly what he promised — aggressive, relentless defense. I cannot thank him enough.',
+          text: 'All charges were dropped completely. The Bull delivered exactly what he promised, aggressive, relentless defense. I cannot thank him enough.',
         },
         {
           name: 'Ana L.',
@@ -76,14 +76,14 @@ export const translations = {
       name: 'Mario Yague, J.D.',
       subtitle: 'Founding Attorney · El Toro Law',
       paragraph1:
-        'Mario Yague is the founding attorney of Mario Yague Law in El Paso, Texas. Born and raised with a deep connection to the El Paso community, Mario built his practice around one principle: aggressive, ethical representation for every client — regardless of background or circumstance.',
+        'Mario Yague is the founding attorney of Mario Yague Law in El Paso, Texas. Born and raised with a deep connection to the El Paso community, Mario built his practice around one principle: aggressive, ethical representation for every client, regardless of background or circumstance.',
       paragraph2:
         "Bilingual in English and Spanish, Mario serves clients across the El Paso–Juárez Borderplex region in personal injury, criminal defense, and family law matters. Known as 'The People's Bull' for his relentless courtroom advocacy, Mario has earned recognition as one of the top emerging trial attorneys in the country.",
       photoAlt: 'Mario Yague, Founding Attorney at Mario Yague Law in El Paso, Texas',
       credentials: [
         { title: 'Doctor of Jurisprudence (J.D.)', subtitle: "St. Mary's University School of Law, 2021" },
         { title: 'Licensed Texas Attorney', subtitle: 'Texas Bar #24122235 · Since October 2021' },
-        { title: 'Top 40 Under 40', subtitle: 'Civil Plaintiff Attorneys — NTLA, 2024' },
+        { title: 'Top 40 Under 40', subtitle: 'Civil Plaintiff Attorneys, NTLA, 2024' },
         { title: 'Bilingual Practice', subtitle: 'English & Español' },
       ],
       cta: 'Schedule a Free Consultation',
@@ -91,14 +91,14 @@ export const translations = {
     about: {
       badge: 'Our Story',
       title: "The People's Bull: Your Legal Shield",
-      desc: 'At Mario Yague Law, we understand that every case is a battle for justice. We are nicknamed "The People\'s Bull" because we do not back down — ever. Our firm was born with the mission of providing elite legal representation to the people of El Paso.',
+      desc: 'At Mario Yague Law, we understand that every case is a battle for justice. We are nicknamed "The People\'s Bull" because we do not back down, ever. Our firm was born with the mission of providing elite legal representation to the people of El Paso.',
       list: [
         'Aggressive and Ethical Representation',
         '24/7 Personalized Attention',
         'Proven Results in Complex Cases',
         'Transparent Communication in Your Language',
       ],
-      cta: 'Talk to Mario Now — It\'s Free',
+      cta: 'Talk to Mario Now, It\'s Free',
     },
     contact: {
       title: 'Get Your Free Consultation',
@@ -129,7 +129,7 @@ export const translations = {
       },
     },
     footer: {
-      desc: 'Law firm dedicated to excellence and the protection of your rights. The People\'s Bull is here for you — 24/7.',
+      desc: 'Law firm dedicated to excellence and the protection of your rights. The People\'s Bull is here for you, 24/7.',
       links: 'Quick Links',
       legal: 'Legal',
       privacy: 'Privacy Policy',
@@ -175,7 +175,7 @@ export const translations = {
       badge: 'El Toro de la Gente',
       title1: 'El Toro',
       title2: 'Resuelve',
-      desc: 'Peleamos por tus derechos con la fuerza de un toro. Mario Yague Law — representación legal de élite para la gente de El Paso.',
+      desc: 'Peleamos por tus derechos con la fuerza de un toro. Mario Yague Law, representación legal de élite para la gente de El Paso.',
       cta1: 'Habla con el Toro',
       cta2: 'Nuestros Servicios',
       stat1: 'Recuperados para clientes',
@@ -186,7 +186,7 @@ export const translations = {
       stat3Val: '100%',
       urgency: 'Gratis · Confidencial · Respondemos en 24 Horas',
       statsDisclaimer: 'Resultados pasados no garantizan resultados futuros.',
-      sloganTagline: 'De Choque a Cheque — convertimos tu choque en tu cheque.',
+      sloganTagline: 'De Choque a Cheque, convertimos tu choque en tu cheque.',
     },
     marquee: '¡No cobramos si no ganamos! · Consulta Gratis · ',
     services: {
@@ -196,7 +196,7 @@ export const translations = {
       items: [
         {
           title: 'No Pagas Nada Por Adelantado',
-          desc: 'Cero gastos de tu bolsillo — nunca. Nosotros cubrimos todo. Si no ganamos, no nos debes un solo centavo.',
+          desc: 'Cero gastos de tu bolsillo, nunca. Nosotros cubrimos todo. Si no ganamos, no nos debes un solo centavo.',
         },
         {
           title: 'Nosotros Pagamos los Medical Bills',
@@ -208,7 +208,7 @@ export const translations = {
         },
         {
           title: 'Nosotros Manejamos Todo',
-          desc: 'Papeleo, llamadas, fechas, corte — todo. Tu único trabajo es recuperarte. Nosotros nos encargamos del resto.',
+          desc: 'Papeleo, llamadas, fechas, corte, todo. Tu único trabajo es recuperarte. Nosotros nos encargamos del resto.',
         },
       ],
       learnMore: 'Pide Ayuda Ahora',
@@ -220,12 +220,12 @@ export const translations = {
         {
           name: 'María R.',
           type: 'Lesiones Personales',
-          text: 'Mario luchó por mi caso cuando nadie más quiso. Ganamos un acuerdo que cambió mi vida. Él es verdaderamente el toro de la gente — nunca se rindió.',
+          text: 'Mario luchó por mi caso cuando nadie más quiso. Ganamos un acuerdo que cambió mi vida. Él es verdaderamente el toro de la gente, nunca se rindió.',
         },
         {
           name: 'Carlos M.',
           type: 'Defensa Criminal',
-          text: 'Los cargos se retiraron completamente. El Toro cumplió exactamente lo que prometió — defensa agresiva e incansable. No puedo agradecerle suficiente.',
+          text: 'Los cargos se retiraron completamente. El Toro cumplió exactamente lo que prometió, defensa agresiva e incansable. No puedo agradecerle suficiente.',
         },
         {
           name: 'Ana L.',
@@ -240,14 +240,14 @@ export const translations = {
       name: 'Mario Yague, J.D.',
       subtitle: 'Abogado Fundador · El Toro Law',
       paragraph1:
-        'Mario Yague es el abogado fundador de Mario Yague Law en El Paso, Texas. Nacido y criado con una profunda conexión con la comunidad de El Paso, Mario construyó su práctica en torno a un principio: representación agresiva y ética para cada cliente — sin importar su origen o circunstancia.',
+        'Mario Yague es el abogado fundador de Mario Yague Law en El Paso, Texas. Nacido y criado con una profunda conexión con la comunidad de El Paso, Mario construyó su práctica en torno a un principio: representación agresiva y ética para cada cliente, sin importar su origen o circunstancia.',
       paragraph2:
         "Bilingüe en inglés y español, Mario atiende a clientes en toda la región Borderplex El Paso–Juárez en casos de lesiones personales, defensa criminal y derecho familiar. Conocido como 'El Toro del Pueblo' por su defensa incansable en los tribunales, Mario ha sido reconocido como uno de los principales abogados litigantes emergentes del país.",
       photoAlt: 'Mario Yague, Abogado Fundador de Mario Yague Law en El Paso, Texas',
       credentials: [
         { title: 'Doctor en Jurisprudencia (J.D.)', subtitle: "St. Mary's University School of Law, 2021" },
         { title: 'Abogado Licenciado en Texas', subtitle: 'Texas Bar #24122235 · Desde Octubre 2021' },
-        { title: 'Top 40 Under 40', subtitle: 'Civil Plaintiff Attorneys — NTLA, 2024' },
+        { title: 'Top 40 Under 40', subtitle: 'Civil Plaintiff Attorneys, NTLA, 2024' },
         { title: 'Práctica Bilingüe', subtitle: 'Inglés & Español' },
       ],
       cta: 'Agenda una Consulta Gratuita',
@@ -255,14 +255,14 @@ export const translations = {
     about: {
       badge: 'Nuestra Historia',
       title: 'El Toro de la Gente: Tu Escudo Legal',
-      desc: 'En Mario Yague Law, entendemos que cada caso es una batalla por la justicia. Nos apodan "El Toro de la Gente" porque no retrocedemos — jamás. Nuestra firma nació con la misión de brindar representación legal de élite a la gente de El Paso.',
+      desc: 'En Mario Yague Law, entendemos que cada caso es una batalla por la justicia. Nos apodan "El Toro de la Gente" porque no retrocedemos, jamás. Nuestra firma nació con la misión de brindar representación legal de élite a la gente de El Paso.',
       list: [
         'Representación Agresiva y Ética',
         'Atención Personalizada 24/7',
         'Resultados Probados en Casos Complejos',
         'Comunicación Transparente en tu Idioma',
       ],
-      cta: 'Habla con Mario Ahora — Es Gratis',
+      cta: 'Habla con Mario Ahora, Es Gratis',
     },
     contact: {
       title: 'Obtén tu Consulta Gratis',
@@ -293,7 +293,7 @@ export const translations = {
       },
     },
     footer: {
-      desc: 'Firma de abogados dedicada a la excelencia y la protección de tus derechos. El Toro de la Gente está aquí para ti — 24/7.',
+      desc: 'Firma de abogados dedicada a la excelencia y la protección de tus derechos. El Toro de la Gente está aquí para ti, 24/7.',
       links: 'Enlaces',
       legal: 'Legal',
       privacy: 'Política de Privacidad',

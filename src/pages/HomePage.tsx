@@ -1,22 +1,15 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Hero, Marquee, Services, MeetMario, About, Contact } from '../App';
 import { useSeo } from '../seo/useSeo';
+import { Cases, ContactSection, Hero, HomeFaq, MeetMario, Steps, Testimonials, Ticker, Versus, Videos } from '../components/home/HomeSections';
 
-interface HomePageProps {
-  isLoading: boolean;
-}
-
-export const HomePage = ({ isLoading }: HomePageProps) => {
+export const HomePage = () => {
   const { language } = useLanguage();
 
   useEffect(() => {
     if (window.location.hash) {
-      const id = window.location.hash.slice(1);
-      const el = document.getElementById(id);
-      if (el) {
-        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 50);
-      }
+      const el = document.getElementById(window.location.hash.slice(1));
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 50);
     } else {
       window.scrollTo(0, 0);
     }
@@ -25,23 +18,27 @@ export const HomePage = ({ isLoading }: HomePageProps) => {
   useSeo({
     title:
       language === 'es'
-        ? 'Mario Yague Law — Abogado de Lesiones Personales y Defensa Criminal en El Paso, TX | El Toro Law'
-        : 'Mario Yague Law — Personal Injury & Criminal Defense Attorney in El Paso, TX | El Toro Law',
+        ? 'Abogado de Accidentes en El Paso, TX | Mario Yague "El Toro" Law'
+        : 'El Paso Car Accident & Personal Injury Lawyer | Mario Yague "El Toro" Law',
     description:
       language === 'es'
-        ? 'Mario Yague Law, también conocido como El Toro Law, es una firma bilingüe de lesiones personales, defensa criminal y derecho familiar en El Paso, Texas. Consulta gratis. Sin honorarios a menos que ganemos. Llama al (915) 400-1099.'
-        : 'Mario Yague Law, also known as El Toro Law, is a bilingual personal injury, criminal defense, and family law firm in El Paso, Texas. Free consultation. No fees unless we win. Hablamos español. Call (915) 400-1099.',
+        ? 'Abogado de accidentes en El Paso: autos, tráileres, motos y peatones en Texas y Nuevo México. Consulta gratis, si no ganamos no pagas, hablamos español. Llama al (915) 400-1099.'
+        : 'El Paso personal injury lawyer for car, 18-wheeler, motorcycle and pedestrian accidents in Texas and New Mexico. Free consultation, no fee unless we win, se habla español. Call (915) 400-1099.',
     canonical: 'https://www.marioyaguelaw.com/',
   });
 
   return (
     <main>
-      <Hero startAnimation={!isLoading} />
-      <Marquee />
-      <Services />
+      <Hero />
+      <Ticker />
+      <Steps />
+      <Videos />
+      <Cases />
+      <Versus />
+      <Testimonials />
       <MeetMario />
-      <About />
-      <Contact />
+      <HomeFaq />
+      <ContactSection />
     </main>
   );
 };

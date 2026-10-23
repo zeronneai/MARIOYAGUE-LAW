@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Plus, Minus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import type { LocalizedQA, Lang } from '../seo/pageContent';
 
 interface FAQAccordionProps {
@@ -8,49 +6,22 @@ interface FAQAccordionProps {
   lang: Lang;
 }
 
-export const FAQAccordion = ({ items, lang }: FAQAccordionProps) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  return (
-    <div className="max-w-3xl mx-auto space-y-3">
-      {items.map((item, i) => {
-        const isOpen = openIndex === i;
-        return (
-          <div
-            key={i}
-            className="border border-burgundy/15 bg-white rounded-sm overflow-hidden shadow-sm"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenIndex(isOpen ? null : i)}
-              aria-expanded={isOpen}
-              className="w-full px-6 py-5 flex items-start justify-between gap-4 text-left hover:bg-beige/30 transition-colors"
-            >
-              <span className="font-serif text-base md:text-lg text-charcoal leading-snug">
-                {item[lang].q}
-              </span>
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center mt-0.5">
-                {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              </span>
-            </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-6 pb-6 pt-1 text-charcoal/75 leading-relaxed text-sm md:text-[15px]">
-                    {item[lang].a}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+/**
+ * Preguntas con <details>: las respuestas están en el HTML aunque estén cerradas,
+ * así Google y las IAs las leen completas. Funciona sin JavaScript.
+ */
+export const FAQAccordion = ({ items, lang }: FAQAccordionProps) => (
+  <div className="mx-auto max-w-3xl space-y-3">
+    {items.map((item, i) => (
+      <details key={i} open={i === 0} className="group rounded-[18px] border-2 border-ink bg-white transition-shadow open:shadow-[5px_5px_0_var(--color-ink)]">
+        <summary className="flex cursor-pointer list-none items-start justify-between gap-4 px-5 py-4 text-left [&::-webkit-details-marker]:hidden">
+          <span className="text-[17px] font-bold leading-snug text-ink">{item[lang].q}</span>
+          <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-toro text-white transition-transform group-open:rotate-45">
+            <Plus className="h-4 w-4" />
+          </span>
+        </summary>
+        <p className="px-5 pb-5 leading-relaxed text-ink/75">{item[lang].a}</p>
+      </details>
+    ))}
+  </div>
+);
