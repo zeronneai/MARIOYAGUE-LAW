@@ -293,7 +293,7 @@ export const DeChoqueAChequePage = () => {
           className="absolute inset-0 opacity-[0.06] pointer-events-none bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
-              'url(https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1773424907/my_law_logo_transparent_gvtvdw.png)',
+              'url(/img/logo-mark.webp)',
           }}
         />
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />

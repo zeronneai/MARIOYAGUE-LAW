@@ -1,24 +1,13 @@
 /**
- * Fotos y videos del sitio. Cloudinary entrega el tamaño y formato justo para cada pantalla.
- * Para agregar un video: súbelo a Cloudinary y agrégalo a `explainers` o `testimonials`.
+ * Fotos y videos del sitio. Todo vive en el propio sitio (public/img y public/media),
+ * ya comprimido, para no depender de Cloudinary.
  */
-const CLOUD = 'https://res.cloudinary.com/dsprn0ew4';
-
-/** Imagen con ancho fijo, formato y calidad automáticos. */
-export const img = (path: string, w: number) => `${CLOUD}/image/upload/f_auto,q_auto,w_${w}/${path}`;
-/** Video comprimido para web (720 de ancho máx). */
-export const vid = (path: string, w = 720) => `${CLOUD}/video/upload/f_auto,q_auto,w_${w}/${path}.mp4`;
-/** Portada del video: un cuadro del segundo `at`. */
-export const poster = (path: string, w = 540, at = 1) => `${CLOUD}/video/upload/so_${at},f_auto,q_auto,w_${w}/${path}.jpg`;
-
 export const media = {
-  logo: `${CLOUD}/image/upload/f_auto,q_auto,w_160/v1774036245/TORO_wiossl.png`,
-  logoMark: `${CLOUD}/image/upload/f_auto,q_auto,w_400/v1773424907/my_law_logo_transparent_gvtvdw.png`,
-  /** la escena de Mario del hero */
-  heroScene: 'v1775165505/genera_esa_misma_202604021530_cqegpo.jpg',
+  logo: '/img/toro-logo.webp',
+  logoMark: '/img/logo-mark.webp',
+  /** la escena de Mario del hero, en 3 tamaños */
+  hero: { src: '/img/hero-900.webp', srcSet: '/img/hero-600.webp 600w, /img/hero-900.webp 900w, /img/hero-1300.webp 1300w' },
   marioPhoto: '/mario.jpg',
-  /** video corto de Mario para el hero (sin sonido, en loop) */
-  heroVideo: 'v1775164758/Mario_Yague_El_Toro_Final_ohedjn',
 };
 
 export type Reel = { id: string; title: { en: string; es: string }; src: string; poster: string; lang: 'en' | 'es'; duration?: string };

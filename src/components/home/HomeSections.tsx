@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Bike, Car, Check, Footprints, Mess
 import { useLanguage } from '../../context/LanguageContext';
 import { useDrawer } from '../../context/DrawerContext';
 import { home, PHONE, PHONE_HREF, WHATSAPP_HREF } from '../../content/home';
-import { explainers, img, marioStory, media, testimonials, type Reel } from '../../content/media';
+import { explainers, marioStory, media, testimonials, type Reel } from '../../content/media';
 import { faqQuestions } from '../../seo/pageContent';
 import { trackEvent, trackPhoneClick, trackServiceCardClick, trackWhatsAppClick } from '../../lib/analytics';
 import { FAQAccordion } from '../FAQAccordion';
@@ -102,8 +102,8 @@ export function Hero() {
         <div className="relative mx-auto w-full max-w-[520px] animate-rise [animation-delay:120ms]">
           <div className="overflow-hidden rounded-[28px] border border-ink/15 bg-ink shadow-[0_18px_40px_-22px_rgba(29,21,19,0.35)]">
             <img
-              src={img(media.heroScene, 900)}
-              srcSet={`${img(media.heroScene, 600)} 600w, ${img(media.heroScene, 900)} 900w, ${img(media.heroScene, 1300)} 1300w`}
+              src={media.hero.src}
+              srcSet={media.hero.srcSet}
               sizes="(min-width: 1024px) 520px, 92vw"
               alt="Mario Yague, El Toro, abogado de accidentes en El Paso"
               width={900}

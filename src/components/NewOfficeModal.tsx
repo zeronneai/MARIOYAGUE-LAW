@@ -79,7 +79,7 @@ export const NewOfficeModal = () => {
             <button onClick={goToForm} className="block w-full text-left cursor-pointer group">
               <div className="relative overflow-hidden">
                 <img
-                  src="https://res.cloudinary.com/dsprn0ew4/image/upload/f_auto,q_auto/v1787936945/OFFICE_dnxpyh.jpg"
+                  src="/img/office.webp"
                   alt={language === 'es' ? 'Nueva oficina de Mario Yague Law — 1331 Wyoming Ave, El Paso' : 'Mario Yague Law new office — 1331 Wyoming Ave, El Paso'}
                   className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
