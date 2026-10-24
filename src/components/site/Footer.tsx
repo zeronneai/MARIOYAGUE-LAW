@@ -80,6 +80,10 @@ export function Footer() {
         <p className="mt-4 leading-relaxed">
           <b>{t.footer.disclaimerLabel}:</b> {t.footer.disclaimerText}
         </p>
+        <a href="https://purpleroots.agency" target="_blank" rel="noopener" className="mt-5 inline-flex items-center gap-2 text-[11px] text-paper/55 transition hover:text-paper/90">
+          {es ? 'Sitio creado por' : 'Website created by'}
+          <img src="/img/purple-roots.png" alt="Purple Roots Agency" width={120} height={12} loading="lazy" className="h-[11px] w-auto opacity-80" />
+        </a>
       </div>
     </footer>
   );
