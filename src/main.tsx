@@ -8,6 +8,10 @@ import '@fontsource/instrument-serif/latin-400';
 import '@fontsource/instrument-serif/latin-400-italic';
 import './index.css';
 import { LanguageProvider } from './context/LanguageContext';
+import { inject } from '@vercel/analytics';
+
+// Vercel Web Analytics (visitas en el panel de Vercel); sigue los cambios de página solo
+inject({ mode: import.meta.env.PROD ? 'production' : 'development' });
 
 const root = document.getElementById('root')!;
 const tree = (
