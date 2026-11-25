@@ -1,5 +1,16 @@
 {
   "rewrites": [
-    { "source": "/((?!api/|sitemap\\.xml|robots\\.txt|.*\\.(?:txt|xml|jpg|png|ico|svg|webp|json)$).*)", "destination": "/index.html" }
+    {
+      "source": "/portal",
+      "destination": "https://el-toro-intake.vercel.app/portal"
+    },
+    {
+      "source": "/api/portal/:path*",
+      "destination": "https://el-toro-intake.vercel.app/api/portal/:path*"
+    },
+    {
+      "source": "/((?!api/|sitemap\\.xml|robots\\.txt|.*\\.(?:txt|xml|jpg|png|ico|svg|webp|json)$).*)",
+      "destination": "/index.html"
+    }
   ]
 }
