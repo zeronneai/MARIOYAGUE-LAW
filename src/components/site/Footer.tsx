@@ -77,6 +77,10 @@ export function Footer() {
           <p>{t.footer.copyright}</p>
           <p>{t.footer.barCard}</p>
         </div>
+        {/* Private team portal (proxied to the intake project, see vercel.json). Full page link, not a router route. */}
+        <a href="/portal" rel="nofollow" className="mt-3 inline-block text-[11px] text-paper/45 transition hover:text-paper/85">
+          {es ? 'Acceso del equipo' : 'Team login'}
+        </a>
         <p className="mt-4 leading-relaxed">
           <b>{t.footer.disclaimerLabel}:</b> {t.footer.disclaimerText}
         </p>
